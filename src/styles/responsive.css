@@ -4,16 +4,16 @@
 
 /* ─── Tablet & Small Laptop (<= 1024px) ─────────────────── */
 @media (max-width: 1024px) {
-  .app-layout,
-  .app-layout.sidebar-collapsed {
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
-
   .sidebar,
   .sidebar.collapsed {
+    position: fixed;
+    left: 0;
+    top: 64px;
+    margin-left: 0;
     transform: translateX(-100%);
     box-shadow: var(--shadow-xl);
     width: 280px;
+    z-index: var(--z-sidebar);
   }
 
   .sidebar.open {

@@ -4,27 +4,21 @@
 
 /* ─── App Shell Layout ─────────────────────────────────── */
 .app-layout {
-  display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
+  display: flex;
   min-height: 100vh;
-  transition: grid-template-columns 250ms cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
-}
-
-.app-layout.sidebar-collapsed {
-  grid-template-columns: 0px minmax(0, 1fr);
-}
-
-.app-layout.no-sidebar {
-  grid-template-columns: minmax(0, 1fr);
+  position: relative;
 }
 
 .main-content {
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 100%;
   padding: var(--space-2xl) var(--space-xl);
   margin-top: 64px;
   min-height: calc(100vh - 64px);
-  min-width: 0;
   overflow-x: hidden;
+  background-color: var(--color-bg);
 }
 
 .app-layout.no-sidebar .main-content {
@@ -202,21 +196,23 @@
 
 /* ─── Sidebar ──────────────────────────────────────────── */
 .sidebar {
-  position: fixed;
-  left: 0;
-  top: 64px;
   width: 260px;
+  min-width: 260px;
+  max-width: 260px;
   height: calc(100vh - 64px);
+  position: sticky;
+  top: 64px;
   background-color: var(--color-surface);
   border-right: 1px solid var(--color-border);
   overflow-y: auto;
   z-index: var(--z-sidebar);
-  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: margin-left 250ms cubic-bezier(0.4, 0, 0.2, 1), transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
   padding: var(--space-md) var(--space-sm);
+  flex-shrink: 0;
 }
 
 .sidebar.collapsed {
-  transform: translateX(-100%);
+  margin-left: -260px;
 }
 
 .sidebar-nav {

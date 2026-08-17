@@ -51,7 +51,6 @@ export function toggleTheme() {
 
 export function toggleSidebar() {
   const isMobile = window.innerWidth <= 1024;
-  const layout = document.querySelector('.app-layout');
   const sidebar = document.querySelector('.sidebar');
   const overlay = document.querySelector('.sidebar-overlay');
 
@@ -61,7 +60,6 @@ export function toggleSidebar() {
     if (overlay) overlay.classList.toggle('visible', appState.sidebarOpen);
   } else {
     appState.sidebarCollapsed = !appState.sidebarCollapsed;
-    if (layout) layout.classList.toggle('sidebar-collapsed', appState.sidebarCollapsed);
     if (sidebar) sidebar.classList.toggle('collapsed', appState.sidebarCollapsed);
   }
 }
@@ -125,17 +123,12 @@ export async function renderApp() {
 
   // ─── 2. Protected App Shell ──────────────────────────────────
   const showSidebar = !isPublicRoute(cleanPath);
-  const layoutClass = showSidebar 
-    ? (appState.sidebarCollapsed ? 'sidebar-collapsed' : '') 
-    : 'no-sidebar';
 
   app.innerHTML = `
     ${renderNavbar(appState.profile)}
-    <div class="app-layout ${layoutClass}">
-      ${showSidebar ? `
-        <div class="sidebar-overlay" id="sidebar-overlay"></div>
-        ${renderSidebar(appState.profile)}
-      ` : ''}
+    ${showSidebar ? `<div class="sidebar-overlay" id="sidebar-overlay"></div>` : ''}
+    <div class="app-layout">
+      ${showSidebar ? renderSidebar(appState.profile) : ''}
       <main class="main-content" id="page-content">
         <div class="page-loader" id="page-loader" style="text-align: center; padding: 4rem;">
           <i class="mdi mdi-loading mdi-spin" style="font-size: 2.5rem; color: var(--color-primary);"></i>
