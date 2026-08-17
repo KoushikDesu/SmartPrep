@@ -3,26 +3,30 @@ import { showToast } from '../components/toast.js';
 
 export function renderSignup() {
   return `
-    <div class="auth-page full-page">
+    <div class="auth-page">
+      <a href="#/" class="back-bubble-btn" title="Back to Home" aria-label="Back to Home">
+        <span class="mdi mdi-arrow-left"></span>
+      </a>
+
       <div class="auth-card">
         <div class="auth-header text-center">
           <a href="#/" class="logo-link">
-            <span class="mdi mdi-school"></span>
+            <span class="mdi mdi-school-outline"></span>
             <h2>SmartPrep</h2>
           </a>
-          <h3 class="auth-title">Create your account</h3>
-          <p class="auth-subtitle">Start your placement preparation journey</p>
+          <h3 class="auth-title">Create Account</h3>
+          <p class="auth-subtitle">Start your placement preparation journey today</p>
         </div>
         
         <form id="signup-form" class="auth-form">
           <div class="form-group">
             <label for="signup-name">Full Name</label>
-            <input type="text" id="signup-name" class="form-control" required placeholder="John Doe">
+            <input type="text" id="signup-name" class="form-control" required placeholder="e.g. Rahul Sharma" autocomplete="name">
           </div>
 
           <div class="form-group">
             <label for="signup-username">Username</label>
-            <input type="text" id="signup-username" class="form-control" required placeholder="johndoe">
+            <input type="text" id="signup-username" class="form-control" required placeholder="e.g. rahul21" autocomplete="username">
           </div>
 
           <div class="form-group">
@@ -32,21 +36,23 @@ export function renderSignup() {
           
           <div class="form-group">
             <label for="signup-password">Password</label>
-            <input type="password" id="signup-password" class="form-control" required placeholder="Min. 6 characters">
+            <input type="password" id="signup-password" class="form-control" required placeholder="Min. 6 characters" autocomplete="new-password">
           </div>
 
           <div class="form-group">
             <label for="signup-confirm-password">Confirm Password</label>
-            <input type="password" id="signup-confirm-password" class="form-control" required placeholder="Re-enter password">
+            <input type="password" id="signup-confirm-password" class="form-control" required placeholder="Re-enter your password" autocomplete="new-password">
           </div>
 
           <div id="signup-error" class="error-message hidden"></div>
           
-          <button type="submit" id="signup-submit-btn" class="btn btn-primary btn-block">Create Account</button>
+          <button type="submit" id="signup-submit-btn" class="btn btn-primary btn-block btn-lg">
+            Create Account <span class="mdi mdi-arrow-right"></span>
+          </button>
         </form>
         
         <div class="auth-footer text-center">
-          <p>Already have an account? <a href="#/login">Sign in</a></p>
+          <p>Already have an account? <a href="#/login" style="font-weight: 600;">Sign in</a></p>
         </div>
       </div>
     </div>
@@ -69,22 +75,22 @@ export function bindSignup() {
       const submitBtn = document.getElementById('signup-submit-btn');
 
       if (!name || !username || !rollNumber || !password || !confirmPassword) {
-        showError('Please fill in all fields');
+        showError('Please fill in all fields.');
         return;
       }
 
       if (password.length < 6) {
-        showError('Password must be at least 6 characters');
+        showError('Password must be at least 6 characters.');
         return;
       }
 
       if (password !== confirmPassword) {
-        showError('Passwords do not match');
+        showError('Passwords do not match.');
         return;
       }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Creating account...';
+      submitBtn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Creating account...`;
       hideError();
 
       try {
@@ -92,15 +98,14 @@ export function bindSignup() {
         if (result.error) {
           showError(result.error.message || 'Registration failed');
           submitBtn.disabled = false;
-          submitBtn.textContent = 'Create Account';
+          submitBtn.innerHTML = `Create Account <span class="mdi mdi-arrow-right"></span>`;
         } else {
-          showToast('Account created successfully!', 'success');
-          // Auth state change listener will handle redirect
+          showToast('Account created successfully! Welcome to SmartPrep 🎉', 'success');
         }
       } catch (err) {
-        showError(err.message || 'An error occurred during sign up');
+        showError(err.message || 'An error occurred during registration');
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Create Account';
+        submitBtn.innerHTML = `Create Account <span class="mdi mdi-arrow-right"></span>`;
       }
     });
   }

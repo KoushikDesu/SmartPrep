@@ -1,24 +1,7 @@
 import { supabase } from './supabase.js';
 
 /**
- * @typedef {Object} UserProfile
- * @property {string} id
- * @property {string} email
- * @property {string} full_name
- * @property {string} username
- * @property {string} roll_number
- * @property {string} role
- */
-
-/**
- * Signs up a new user (student)
- * @param {Object} params
- * @param {string} params.email
- * @param {string} params.password
- * @param {string} params.fullName
- * @param {string} params.username
- * @param {string} params.rollNumber
- * @returns {Promise<{user: any, error: any}>}
+ * Signs up a new student
  */
 export async function signUp(params, maybePassword) {
   try {
@@ -33,7 +16,8 @@ export async function signUp(params, maybePassword) {
       password = maybePassword;
     }
 
-    const email = `${username}@smartprep.local`;
+    const cleanUsername = (username || '').trim().toLowerCase();
+    const email = `${cleanUsername}@smartprep.local`;
     
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
@@ -41,15 +25,34 @@ export async function signUp(params, maybePassword) {
       options: {
         data: {
           full_name: fullName || username,
-          username,
+          username: cleanUsername,
           roll_number: rollNumber || '',
           role: 'student',
         },
       },
     });
     
-    if (authError) throw authError;
+    if (authError) {
+      if (authError.message?.toLowerCase().includes('already registered')) {
+        throw new Error('This username is already registered. Please sign in.');
+      }
+      throw authError;
+    }
+    
     if (!authData.user) throw new Error('User creation failed');
+
+    // Also explicitly ensure profile entry exists
+    try {
+      await supabase.from('profiles').upsert({
+        id: authData.user.id,
+        username: cleanUsername,
+        full_name: fullName || username,
+        roll_number: rollNumber || '',
+        role: 'student'
+      });
+    } catch (profileErr) {
+      console.warn('Profile upsert fallback warning:', profileErr);
+    }
     
     return { user: authData.user, error: null };
   } catch (error) {
@@ -59,7 +62,7 @@ export async function signUp(params, maybePassword) {
 }
 
 /**
- * Signs in a user
+ * Signs in a user by Username, Roll Number, or Email
  */
 export async function signIn(params, maybePassword) {
   try {
@@ -72,21 +75,27 @@ export async function signIn(params, maybePassword) {
       password = maybePassword;
     }
 
-    let emailToUse = userId;
+    const cleanInput = (userId || '').trim();
+    let emailToUse = cleanInput;
     
-    if (!userId.includes('@')) {
-      // Look up by username or roll_number
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('username')
-        .or(`username.eq.${userId},roll_number.eq.${userId}`)
-        .limit(1)
-        .single();
-        
-      if (error || !data) {
-        throw new Error('User not found. Check your username or roll number.');
+    if (!cleanInput.includes('@')) {
+      // First check profiles table
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('username')
+          .or(`username.ilike.${cleanInput},roll_number.ilike.${cleanInput}`)
+          .limit(1)
+          .maybeSingle();
+          
+        if (data && data.username) {
+          emailToUse = `${data.username.toLowerCase()}@smartprep.local`;
+        } else {
+          emailToUse = `${cleanInput.toLowerCase()}@smartprep.local`;
+        }
+      } catch (e) {
+        emailToUse = `${cleanInput.toLowerCase()}@smartprep.local`;
       }
-      emailToUse = `${data.username}@smartprep.local`;
     }
     
     const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
@@ -94,7 +103,12 @@ export async function signIn(params, maybePassword) {
       password,
     });
     
-    if (authError) throw authError;
+    if (authError) {
+      if (authError.message?.toLowerCase().includes('invalid login credentials')) {
+        throw new Error('Invalid username, roll number, or password. Please check and try again.');
+      }
+      throw authError;
+    }
     
     return { user: authData.user, error: null };
   } catch (error) {
@@ -105,7 +119,6 @@ export async function signIn(params, maybePassword) {
 
 /**
  * Signs out the current user
- * @returns {Promise<{error: any}>}
  */
 export async function signOut() {
   const { error } = await supabase.auth.signOut();
@@ -114,17 +127,18 @@ export async function signOut() {
 
 /**
  * Returns current user from Supabase session
- * @returns {Promise<any|null>}
  */
 export async function getCurrentUser() {
-  const { data: { session } } = await supabase.auth.getSession();
-  return session?.user || null;
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    return session?.user || null;
+  } catch (e) {
+    return null;
+  }
 }
 
 /**
  * Fetches profile from profiles table
- * @param {string} userId
- * @returns {Promise<UserProfile|null>}
  */
 export async function getUserProfile(userId) {
   try {
@@ -132,9 +146,21 @@ export async function getUserProfile(userId) {
       .from('profiles')
       .select('*')
       .eq('id', userId)
-      .single();
+      .maybeSingle();
       
-    if (error) throw error;
+    if (error || !data) {
+      // Fallback from user metadata
+      const user = await getCurrentUser();
+      if (user && user.id === userId) {
+        return {
+          id: user.id,
+          username: user.user_metadata?.username || user.email?.split('@')[0],
+          full_name: user.user_metadata?.full_name || 'User',
+          role: user.user_metadata?.role || 'student',
+          roll_number: user.user_metadata?.roll_number || ''
+        };
+      }
+    }
     return data;
   } catch (error) {
     console.error('Get profile error:', error);
@@ -144,7 +170,6 @@ export async function getUserProfile(userId) {
 
 /**
  * Gets current user's profile
- * @returns {Promise<UserProfile|null>}
  */
 export async function getCurrentProfile() {
   const user = await getCurrentUser();
@@ -152,49 +177,23 @@ export async function getCurrentProfile() {
   return await getUserProfile(user.id);
 }
 
-/**
- * Wraps supabase.auth.onAuthStateChange
- * @param {Function} callback
- * @returns {Object} Subscription object
- */
 export function onAuthStateChange(callback) {
   const { data: { subscription } } = supabase.auth.onAuthStateChange(callback);
   return subscription;
 }
 
-/**
- * Checks if profile has admin role
- * @param {UserProfile} profile
- * @returns {boolean}
- */
 export function isAdmin(profile) {
   return profile?.role === 'admin';
 }
 
-/**
- * Checks if profile has teacher role
- * @param {UserProfile} profile
- * @returns {boolean}
- */
 export function isTeacher(profile) {
   return profile?.role === 'teacher';
 }
 
-/**
- * Checks if profile has student role
- * @param {UserProfile} profile
- * @returns {boolean}
- */
 export function isStudent(profile) {
   return profile?.role === 'student';
 }
 
-/**
- * Updates profile data
- * @param {string} userId
- * @param {Object} updates
- * @returns {Promise<{data: any, error: any}>}
- */
 export async function updateProfile(userId, updates) {
   try {
     const { data, error } = await supabase
@@ -211,11 +210,6 @@ export async function updateProfile(userId, updates) {
   }
 }
 
-/**
- * Changes current user's password
- * @param {string} newPassword
- * @returns {Promise<{error: any}>}
- */
 export async function changePassword(newPassword) {
   try {
     const { error } = await supabase.auth.updateUser({ password: newPassword });
@@ -227,12 +221,6 @@ export async function changePassword(newPassword) {
   }
 }
 
-/**
- * Admin changes another user's password
- * @param {string} userId
- * @param {string} newPassword
- * @returns {Promise<{error: any}>}
- */
 export async function adminChangePassword(userId, newPassword) {
   try {
     const { error } = await supabase.rpc('admin_update_user_password', { 
@@ -247,11 +235,6 @@ export async function adminChangePassword(userId, newPassword) {
   }
 }
 
-/**
- * Admin deletes a user
- * @param {string} userId
- * @returns {Promise<{error: any}>}
- */
 export async function adminDeleteUser(userId) {
   try {
     const { error } = await supabase.rpc('admin_delete_user', { target_user_id: userId });
@@ -263,25 +246,16 @@ export async function adminDeleteUser(userId) {
   }
 }
 
-/**
- * Admin creates a teacher account
- * @param {Object} params
- * @param {string} params.fullName
- * @param {string} params.username
- * @param {string} params.password
- * @param {string} params.rollNumber
- * @returns {Promise<{data: any, error: any}>}
- */
 export async function adminCreateTeacher({ fullName, username, password, rollNumber }) {
   try {
-    const email = `${username}@smartprep.local`;
+    const email = `${username.toLowerCase().trim()}@smartprep.local`;
     
     const { data, error } = await supabase.rpc('admin_create_user', {
       user_email: email,
       user_password: password,
       user_full_name: fullName,
-      user_username: username,
-      user_roll_number: rollNumber,
+      user_username: username.toLowerCase().trim(),
+      user_roll_number: rollNumber || '',
       user_role: 'teacher'
     });
     

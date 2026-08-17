@@ -1,146 +1,143 @@
 import { appState } from '../main.js';
 import { supabase } from '../lib/supabase.js';
-import { showToast } from '../components/toast.js';
 
 export async function renderProfile() {
-  const user = appState?.user;
+  const profile = appState?.profile || {};
+  const user = appState?.user || {};
   
-  const name = user?.user_metadata?.name || 'Guest User';
-  const username = user?.user_metadata?.username || 'guest';
-  const rollNumber = user?.user_metadata?.rollNumber || 'N/A';
-  const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+  const name = profile.full_name || user.user_metadata?.full_name || user.user_metadata?.name || 'Student';
+  const username = profile.username || user.user_metadata?.username || 'student';
+  const rollNumber = profile.roll_number || user.user_metadata?.roll_number || user.user_metadata?.rollNumber || 'N/A';
+  const role = (profile.role || user.user_metadata?.role || 'student').toUpperCase();
+  const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'U';
+
+  let totalAnswered = 0;
+  let correctAnswers = 0;
+  let accuracy = 0;
+
+  try {
+    if (supabase && user.id) {
+      const { data: progress } = await supabase
+        .from('user_progress')
+        .select('*')
+        .eq('user_id', user.id);
+        
+      if (progress && progress.length > 0) {
+        totalAnswered = progress.length;
+        correctAnswers = progress.filter(p => p.is_correct).length;
+        accuracy = Math.round((correctAnswers / totalAnswered) * 100);
+      }
+    }
+  } catch (e) {
+    console.log('Error fetching user progress stats:', e);
+  }
 
   return `
     <div class="page-container profile-page">
       <div class="page-header">
-        <h2>My Profile</h2>
+        <h2>My Learning Profile</h2>
+        <p class="subtitle">Track your placement preparation performance & credentials</p>
       </div>
 
-      <div class="profile-layout">
-        <!-- Sidebar / User Info -->
-        <div class="profile-sidebar">
-          <div class="profile-card">
-            <div class="avatar-large">${initials}</div>
-            <h3>${name}</h3>
-            <p class="text-muted">@${username}</p>
-            <div class="badge badge-primary badge-outline" style="margin-top: 0.5rem;">Student</div>
-            
-            <hr class="divider">
-            
-            <div class="profile-details">
-              <div class="detail-item">
-                <span class="mdi mdi-identifier"></span>
-                <span>Roll No: <strong>${rollNumber}</strong></span>
-              </div>
-              <div class="detail-item">
-                <span class="mdi mdi-email-outline"></span>
-                <span>Not provided</span>
-              </div>
+      <div class="profile-layout" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+        <!-- User Info Card -->
+        <div class="card profile-card" style="text-align: center;">
+          <div class="avatar avatar-lg" style="margin: 0 auto 1rem; width: 72px; height: 72px; font-size: 1.5rem;">
+            ${initials}
+          </div>
+          <h3>${name}</h3>
+          <p style="color: var(--color-text-secondary); margin-top: 2px;">@${username}</p>
+          <div style="margin-top: 8px;">
+            <span class="badge badge-primary">${role}</span>
+          </div>
+          
+          <div style="margin-top: 1.5rem; text-align: left; padding: 1rem; background: var(--color-surface-alt); border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <span style="color: var(--color-text-secondary); font-size: var(--text-sm);">Roll Number:</span>
+              <strong style="font-size: var(--text-sm);">${rollNumber}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--color-text-secondary); font-size: var(--text-sm);">Account Status:</span>
+              <strong style="color: var(--color-success); font-size: var(--text-sm);">Active</strong>
             </div>
           </div>
 
-          <div class="settings-card">
-            <h4>Account Settings</h4>
+          <div style="margin-top: 1.5rem; text-align: left;">
+            <h4 style="font-size: var(--text-base); margin-bottom: 12px;">Change Password</h4>
             <form id="change-password-form">
-              <div class="form-group">
-                <label>New Password</label>
-                <input type="password" id="new-password" class="form-control" placeholder="Enter new password">
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label style="font-size: var(--text-xs);">New Password</label>
+                <input type="password" id="new-password" class="form-control" placeholder="Enter at least 6 characters" required>
               </div>
-              <button type="submit" class="btn btn-outline btn-block">Update Password</button>
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label style="font-size: var(--text-xs);">Confirm Password</label>
+                <input type="password" id="confirm-new-password" class="form-control" placeholder="Re-enter new password" required>
+              </div>
+              <div id="password-error" class="error-message hidden" style="font-size: var(--text-xs); padding: 6px 10px;"></div>
+              <button type="submit" class="btn btn-secondary btn-block btn-sm">Update Password</button>
             </form>
           </div>
         </div>
 
-        <!-- Main Content / Stats -->
-        <div class="profile-main">
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-icon" style="background: #e6f7f5; color: #2a9d8f;">
-                <span class="mdi mdi-check-all"></span>
+        <!-- Performance Stats -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-bottom: 0;">
+            <div class="stat-card" style="padding: 1.25rem;">
+              <div class="stat-icon" style="background: rgba(37, 99, 235, 0.1); color: var(--color-primary); width: 44px; height: 44px; font-size: 1.25rem;">
+                <span class="mdi mdi-clipboard-text-clock-outline"></span>
               </div>
-              <div class="stat-content">
-                <p class="stat-label">Total Answered</p>
-                <h3 class="stat-value">124</h3>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon" style="background: #e2f0e9; color: #00b894;">
-                <span class="mdi mdi-target"></span>
-              </div>
-              <div class="stat-content">
-                <p class="stat-label">Correct Answers</p>
-                <h3 class="stat-value">98</h3>
+              <div>
+                <div class="stat-value" style="font-size: 1.75rem;">${totalAnswered}</div>
+                <div class="stat-label" style="font-size: 12px;">Questions Solved</div>
               </div>
             </div>
-            <div class="stat-card">
-              <div class="stat-icon" style="background: #fdf0ed; color: #e76f51;">
-                <span class="mdi mdi-percent"></span>
+
+            <div class="stat-card" style="padding: 1.25rem;">
+              <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--color-success); width: 44px; height: 44px; font-size: 1.25rem;">
+                <span class="mdi mdi-check-circle-outline"></span>
               </div>
-              <div class="stat-content">
-                <p class="stat-label">Accuracy</p>
-                <h3 class="stat-value">79%</h3>
+              <div>
+                <div class="stat-value" style="font-size: 1.75rem; color: var(--color-success);">${correctAnswers}</div>
+                <div class="stat-label" style="font-size: 12px;">Correct Answers</div>
               </div>
             </div>
-            <div class="stat-card">
-              <div class="stat-icon" style="background: #efecfc; color: #6c5ce7;">
-                <span class="mdi mdi-bookshelf"></span>
+
+            <div class="stat-card" style="padding: 1.25rem;">
+              <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--color-warning); width: 44px; height: 44px; font-size: 1.25rem;">
+                <span class="mdi mdi-percent-outline"></span>
               </div>
-              <div class="stat-content">
-                <p class="stat-label">Categories Explored</p>
-                <h3 class="stat-value">4</h3>
+              <div>
+                <div class="stat-value" style="font-size: 1.75rem;">${accuracy}%</div>
+                <div class="stat-label" style="font-size: 12px;">Overall Accuracy</div>
               </div>
             </div>
           </div>
 
-          <div class="progress-section">
-            <h4>Category Progress</h4>
-            <div class="progress-list">
-              <div class="progress-item">
-                <div class="progress-header">
-                  <span>General Aptitude</span>
-                  <span>45/150</span>
+          <div class="card" style="padding: 1.5rem;">
+            <h3 style="font-size: var(--text-lg); margin-bottom: 1rem;">Preparation Recommendations</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div style="padding: 12px; border-radius: var(--radius-md); background: var(--color-surface-alt); border: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong>Arithmetic Aptitude: Problems on Trains</strong>
+                  <p style="font-size: 12px; color: var(--color-text-secondary); margin-top: 2px;">Key formulas for relative speed & bridge crossings</p>
                 </div>
-                <div class="progress-track">
-                  <div class="progress-bar" style="width: 30%; background: #2a9d8f;"></div>
-                </div>
+                <a href="#/practice/problems-on-trains" class="btn btn-primary btn-sm">Practice</a>
               </div>
-              <div class="progress-item">
-                <div class="progress-header">
-                  <span>Verbal & Reasoning</span>
-                  <span>20/120</span>
-                </div>
-                <div class="progress-track">
-                  <div class="progress-bar" style="width: 16%; background: #e76f51;"></div>
-                </div>
-              </div>
-              <div class="progress-item">
-                <div class="progress-header">
-                  <span>Programming</span>
-                  <span>59/200</span>
-                </div>
-                <div class="progress-track">
-                  <div class="progress-bar" style="width: 29.5%; background: #00b894;"></div>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <div class="notifications-section">
-            <h4>Recent Notifications</h4>
-            <div class="notification-list">
-              <div class="notification-item unread">
-                <div class="notif-icon"><span class="mdi mdi-bell-outline"></span></div>
-                <div class="notif-content">
-                  <p><strong>Admin</strong> added new questions to <em>Data Structures</em>.</p>
-                  <span class="notif-time">2 hours ago</span>
+              <div style="padding: 12px; border-radius: var(--radius-md); background: var(--color-surface-alt); border: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong>Logical Reasoning: Blood Relations</strong>
+                  <p style="font-size: 12px; color: var(--color-text-secondary); margin-top: 2px;">Frequently tested in TCS, Infosys & Wipro rounds</p>
                 </div>
+                <a href="#/practice/blood-relations" class="btn btn-primary btn-sm">Practice</a>
               </div>
-              <div class="notification-item">
-                <div class="notif-icon"><span class="mdi mdi-trophy-outline"></span></div>
-                <div class="notif-content">
-                  <p>You reached a 3-day streak! Keep it up!</p>
-                  <span class="notif-time">Yesterday</span>
+
+              <div style="padding: 12px; border-radius: var(--radius-md); background: var(--color-surface-alt); border: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <strong>Programming: C & Pointer Basics</strong>
+                  <p style="font-size: 12px; color: var(--color-text-secondary); margin-top: 2px;">Core pointer arithmetic & dynamic allocation</p>
                 </div>
+                <a href="#/practice/c-pointers" class="btn btn-primary btn-sm">Practice</a>
               </div>
             </div>
           </div>

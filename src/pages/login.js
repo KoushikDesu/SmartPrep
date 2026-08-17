@@ -3,38 +3,44 @@ import { showToast } from '../components/toast.js';
 
 export function renderLogin() {
   return `
-    <div class="auth-page full-page">
+    <div class="auth-page">
+      <a href="#/" class="back-bubble-btn" title="Back to Home" aria-label="Back to Home">
+        <span class="mdi mdi-arrow-left"></span>
+      </a>
+
       <div class="auth-card">
         <div class="auth-header text-center">
           <a href="#/" class="logo-link">
-            <span class="mdi mdi-school"></span>
+            <span class="mdi mdi-school-outline"></span>
             <h2>SmartPrep</h2>
           </a>
-          <h3 class="auth-title">Welcome back</h3>
-          <p class="auth-subtitle">Sign in to continue your preparation</p>
+          <h3 class="auth-title">Welcome Back</h3>
+          <p class="auth-subtitle">Sign in to continue your placement preparation</p>
         </div>
         
         <form id="login-form" class="auth-form">
           <div class="form-group">
-            <label for="login-userid">User ID (Username or Roll Number)</label>
-            <input type="text" id="login-userid" class="form-control" required placeholder="Enter username or roll number">
+            <label for="login-userid">Username or Roll Number</label>
+            <input type="text" id="login-userid" class="form-control" required placeholder="e.g. admin or 21CS101" autocomplete="username">
           </div>
           
           <div class="form-group">
             <label for="login-password">Password</label>
             <div class="password-input-group">
-              <input type="password" id="login-password" class="form-control" required placeholder="Enter password">
-              <button type="button" class="toggle-password mdi mdi-eye-outline" tabindex="-1"></button>
+              <input type="password" id="login-password" class="form-control" required placeholder="Enter your password" autocomplete="current-password">
+              <button type="button" class="toggle-password mdi mdi-eye-outline" tabindex="-1" aria-label="Toggle password visibility"></button>
             </div>
           </div>
 
           <div id="login-error" class="error-message hidden"></div>
           
-          <button type="submit" id="login-submit-btn" class="btn btn-primary btn-block">Sign In</button>
+          <button type="submit" id="login-submit-btn" class="btn btn-primary btn-block btn-lg">
+            Sign In <span class="mdi mdi-login-variant"></span>
+          </button>
         </form>
         
         <div class="auth-footer text-center">
-          <p>Don't have an account? <a href="#/signup">Sign up</a></p>
+          <p>Don't have an account? <a href="#/signup" style="font-weight: 600;">Sign up for free</a></p>
         </div>
       </div>
     </div>
@@ -65,28 +71,27 @@ export function bindLogin() {
       const submitBtn = document.getElementById('login-submit-btn');
 
       if (!userId || !password) {
-        showError('Please fill in all fields');
+        showError('Please enter both your User ID and password.');
         return;
       }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Signing in...';
+      submitBtn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Signing in...`;
       hideError();
 
       try {
-        const result = await signIn(userId, password);
+        const result = await signIn({ userId, password });
         if (result.error) {
           showError(result.error.message || 'Invalid credentials');
           submitBtn.disabled = false;
-          submitBtn.textContent = 'Sign In';
+          submitBtn.innerHTML = `Sign In <span class="mdi mdi-login-variant"></span>`;
         } else {
           showToast('Signed in successfully!', 'success');
-          // Auth state change listener in main.js will handle redirect
         }
       } catch (err) {
         showError(err.message || 'An error occurred during login');
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Sign In';
+        submitBtn.innerHTML = `Sign In <span class="mdi mdi-login-variant"></span>`;
       }
     });
   }
