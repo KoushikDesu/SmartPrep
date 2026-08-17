@@ -1,20 +1,20 @@
 /* ============================================================
-   SmartPrep — Modern Design System (index.css)
+   SmartPrep — Cognitive Focus & Learning Design Tokens (index.css)
    ============================================================ */
 
 :root {
-  /* Brand & Core Palette (Modern Slate + Emerald/Teal & Indigo) */
-  --color-primary: #0d9488;
-  --color-primary-hover: #0f766e;
-  --color-primary-light: #ccfbf1;
-  --color-primary-glow: rgba(13, 148, 136, 0.25);
+  /* Cognitive Learning Palette: Royal Blue + Dopamine Amber + Emerald */
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-light: #eff6ff;
+  --color-primary-glow: rgba(37, 99, 235, 0.22);
   
   --color-accent: #f59e0b;
   --color-accent-hover: #d97706;
-  --color-accent-light: #fef3c7;
+  --color-accent-light: #fffbeb;
 
-  --color-secondary: #6366f1;
-  --color-secondary-light: #e0e7ff;
+  --color-secondary: #059669;
+  --color-secondary-light: #ecfdf5;
 
   --color-bg: #f8fafc;
   --color-surface: #ffffff;
@@ -22,8 +22,8 @@
   --color-surface-alt: #f8fafc;
   
   --color-text: #0f172a;
-  --color-text-secondary: #475569;
-  --color-text-tertiary: #94a3b8;
+  --color-text-secondary: #334155;
+  --color-text-tertiary: #64748b;
   --color-border: #e2e8f0;
   --color-border-hover: #cbd5e1;
 
@@ -39,7 +39,7 @@
   --color-warning-bg: #fffbeb;
   
   --color-white: #ffffff;
-  --color-overlay: rgba(15, 23, 42, 0.6);
+  --color-overlay: rgba(15, 23, 42, 0.65);
 
   /* Spacing Scale */
   --space-2xs: 2px;
@@ -50,7 +50,6 @@
   --space-xl: 32px;
   --space-2xl: 48px;
   --space-3xl: 64px;
-  --space-4xl: 80px;
 
   /* Border Radii */
   --radius-xs: 4px;
@@ -63,11 +62,11 @@
 
   /* Elevation Shadows */
   --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-  --shadow-glow: 0 0 20px rgba(13, 148, 136, 0.2);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.09), 0 4px 6px -4px rgba(15, 23, 42, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
+  --shadow-glow: 0 0 24px rgba(37, 99, 235, 0.25);
 
   /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -94,7 +93,7 @@
   --weight-bold: 700;
   --weight-extrabold: 800;
 
-  --leading-tight: 1.25;
+  --leading-tight: 1.2;
   --leading-normal: 1.5;
   --leading-relaxed: 1.65;
 
@@ -109,10 +108,10 @@
 
 /* Dark Theme Overrides */
 [data-theme='dark'] {
-  --color-bg: #0b0f19;
-  --color-surface: #131b2e;
-  --color-surface-hover: #1a243b;
-  --color-surface-alt: #101726;
+  --color-bg: #0a0f1d;
+  --color-surface: #111827;
+  --color-surface-hover: #1f293d;
+  --color-surface-alt: #0d1322;
   
   --color-text: #f8fafc;
   --color-text-secondary: #94a3b8;
@@ -120,8 +119,10 @@
   --color-border: #1e293b;
   --color-border-hover: #334155;
 
-  --color-primary-light: rgba(13, 148, 136, 0.2);
-  --color-primary-glow: rgba(13, 148, 136, 0.35);
+  --color-primary: #3b82f6;
+  --color-primary-hover: #60a5fa;
+  --color-primary-light: rgba(59, 130, 246, 0.18);
+  --color-primary-glow: rgba(59, 130, 246, 0.3);
 
   --color-success-bg: rgba(16, 185, 129, 0.15);
   --color-success-border: rgba(16, 185, 129, 0.3);
@@ -129,10 +130,10 @@
   --color-error-bg: rgba(239, 68, 68, 0.15);
   --color-error-border: rgba(239, 68, 68, 0.3);
 
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.7);
 }
 
 /* Modern CSS Reset */
@@ -145,7 +146,6 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px;
-  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -159,13 +159,13 @@ body {
   overflow-x: hidden;
 }
 
-/* Typography Hierarchy */
+/* Typography */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   color: var(--color-text);
   font-weight: var(--weight-bold);
   line-height: var(--leading-tight);
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
 }
 
 h1 { font-size: var(--text-4xl); font-weight: var(--weight-extrabold); }
@@ -214,7 +214,7 @@ button {
 /* Utility Classes */
 .container {
   width: 100%;
-  max-width: 1240px;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
   padding-left: var(--space-lg);
@@ -228,11 +228,8 @@ button {
 .hidden { display: none !important; }
 .no-underline { text-decoration: none !important; }
 
-.flex { display: flex; }
-.flex-col { display: flex; flex-direction: column; }
-.items-center { align-items: center; }
-.justify-center { justify-content: center; }
-.justify-between { justify-content: space-between; }
-.gap-sm { gap: var(--space-sm); }
-.gap-md { gap: var(--space-md); }
-.gap-lg { gap: var(--space-lg); }
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-primary), #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

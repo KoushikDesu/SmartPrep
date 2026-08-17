@@ -1,21 +1,21 @@
-import { getCurrentProfile } from './lib/auth.js';
+/**
+ * SmartPrep — SPA Router
+ * Clean hash-based routing with parameter extraction and route dispatch.
+ */
 
 class Router {
   constructor() {
     this.routes = [];
-    this.currentPath = null;
-    this.root = null;
-    
-    window.addEventListener('hashchange', () => this.handleRoute());
+    this.currentPath = '/';
   }
 
   /**
-   * Adds a route to the router
-   * @param {string} path Pattern (e.g. '/categories', '/category/:slug')
-   * @param {Function} handler Function that renders the page
-   * @param {Object} options Route options (requiresAuth, roles)
+   * Register a route handler
+   * @param {string} path 
+   * @param {Function} handler 
+   * @param {Object} options 
    */
-  addRoute(path, handler, options = { requiresAuth: false, roles: null }) {
+  addRoute(path, handler, options = {}) {
     this.routes.push({
       path,
       handler,
@@ -24,11 +24,6 @@ class Router {
     });
   }
 
-  /**
-   * Converts a path string with parameters to a RegExp
-   * @param {string} path 
-   * @returns {RegExp}
-   */
   _pathToRegex(path) {
     const pattern = path
       .replace(/\//g, '\\/')
@@ -36,12 +31,6 @@ class Router {
     return new RegExp(`^${pattern}$`);
   }
 
-  /**
-   * Extracts parameters from a matched route
-   * @param {Object} route 
-   * @param {string} urlPath 
-   * @returns {Object}
-   */
   _extractParams(route, urlPath) {
     const paramNames = (route.path.match(/:[^\s/]+/g) || []).map(p => p.slice(1));
     const match = urlPath.match(route.regex);
@@ -56,73 +45,40 @@ class Router {
   }
 
   /**
-   * Initializes the router
-   */
-  init() {
-    this.handleRoute();
-  }
-
-  /**
-   * Programmatically navigate to a path
+   * Navigate to a hash route
    * @param {string} path 
    */
   navigate(path) {
-    window.location.hash = path;
+    const target = path.startsWith('#') ? path : `#${path.startsWith('/') ? path : '/' + path}`;
+    if (window.location.hash === target) {
+      window.dispatchEvent(new HashChangeEvent('hashchange'));
+    } else {
+      window.location.hash = target;
+    }
   }
 
   /**
-   * Handles route change logic
+   * Get matching route and params
    */
-  async handleRoute() {
-    const rawPath = window.location.hash.slice(1) || '/';
-    const path = rawPath.startsWith('/') ? rawPath : `/${rawPath}`;
+  match(urlPath) {
+    const cleanPath = urlPath.replace('#', '') || '/';
+    const normalized = cleanPath.startsWith('/') ? cleanPath : `/${cleanPath}`;
     
-    this.currentPath = path;
-
-    const route = this.routes.find(r => path.match(r.regex));
-    
-    if (!route) {
-      console.error(`Route not found for path: ${path}`);
-      this.navigate('/');
-      return;
-    }
-
-    if (route.options.requiresAuth) {
-      try {
-        const profile = await getCurrentProfile();
-        
-        if (!profile) {
-          this.navigate('/login');
-          return;
-        }
-
-        if (route.options.roles && route.options.roles.length > 0) {
-          if (!route.options.roles.includes(profile.role)) {
-            console.warn(`User role ${profile.role} not authorized for ${path}`);
-            if (profile.role === 'admin') this.navigate('/admin');
-            else if (profile.role === 'teacher') this.navigate('/teacher');
-            else this.navigate('/categories');
-            return;
-          }
-        }
-      } catch (err) {
-        console.error('Auth check error during routing:', err);
-        this.navigate('/login');
-        return;
+    for (const route of this.routes) {
+      if (normalized.match(route.regex)) {
+        return {
+          route,
+          params: this._extractParams(route, normalized),
+          path: normalized
+        };
       }
     }
-
-    const params = this._extractParams(route, path);
-    await route.handler(params);
+    return null;
   }
 }
 
 export const router = new Router();
 
-/**
- * Helper to navigate to a specific path
- * @param {string} path 
- */
 export function navigateTo(path) {
   router.navigate(path);
 }
