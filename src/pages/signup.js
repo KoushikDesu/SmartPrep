@@ -21,7 +21,7 @@ export function renderSignup() {
         <form id="signup-form" class="auth-form">
           <div class="form-group">
             <label for="signup-name">Full Name</label>
-            <input type="text" id="signup-name" class="form-control" required placeholder="Enter your name (e.g. Rahul Sharma)" autocomplete="name">
+            <input type="text" id="signup-name" class="form-control" required placeholder="Enter your name (e.g. Robert Downey)" autocomplete="name">
           </div>
 
           <div class="form-group">

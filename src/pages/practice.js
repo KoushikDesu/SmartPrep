@@ -1,6 +1,7 @@
 import { showToast } from '../components/toast.js';
 import { supabase } from '../lib/supabase.js';
 import { getSeedQuestions } from '../data/seed-questions.js';
+import { getTopicConcept } from '../data/topic-concepts.js';
 import { saveProgress, hasAnswered } from '../lib/progress.js';
 import { appState } from '../main.js';
 
@@ -75,6 +76,15 @@ export async function renderPractice(topicSlug) {
   lastAnsweredIndex = currentIndex;
 
   const topicTitle = formatTitle(topicSlug);
+  const concept = getTopicConcept(topicSlug);
+
+  const formulasHtml = (concept.formulas || []).map(f => `<li style="margin-bottom: 8px;">${f}</li>`).join('');
+  const tipsHtml = (concept.tips || []).map(t => `<li style="margin-bottom: 6px;">${t}</li>`).join('');
+  const linksHtml = (concept.studyLinks || []).map(l => `
+    <a href="${l.url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="font-size: 11px; padding: 4px 10px;">
+      <span class="mdi mdi-open-in-new"></span> ${l.title}
+    </a>
+  `).join('');
 
   return `
     <div class="page-container practice-page">
@@ -94,7 +104,10 @@ export async function renderPractice(topicSlug) {
         </div>
 
         <!-- 2 Top Navigation Action Buttons -->
-        <div style="display: flex; gap: 8px;">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button id="toggle-concept-btn" class="btn btn-secondary btn-sm" style="background: rgba(37, 99, 235, 0.08); border-color: rgba(37, 99, 235, 0.25); color: var(--color-primary);">
+            <span class="mdi mdi-book-open-outline"></span> Formulas & Concept
+          </button>
           <button id="btn-jump-first" class="btn btn-secondary btn-sm">
             <span class="mdi mdi-page-first"></span> First Question
           </button>
@@ -104,6 +117,47 @@ export async function renderPractice(topicSlug) {
         </div>
       </div>
 
+      <!-- Collapsible Formulas & Key Concepts Reference Card -->
+      <div id="concept-reference-card" class="card" style="margin-bottom: 1.5rem; border-left: 4px solid var(--color-primary); background: var(--color-surface); padding: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 8px;">
+          <h3 style="font-size: var(--text-lg); display: flex; align-items: center; gap: 8px; margin: 0;">
+            <span class="mdi mdi-lightbulb-on-outline" style="color: var(--color-warning);"></span>
+            ${concept.title}
+          </h3>
+          <button id="close-concept-btn" class="btn-icon" title="Hide Formulas">
+            <span class="mdi mdi-chevron-up"></span>
+          </button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+          <div>
+            <h4 style="font-size: var(--text-sm); text-transform: uppercase; color: var(--color-primary); margin-bottom: 8px; letter-spacing: 0.05em;">
+              Core Formulas & Theorems
+            </h4>
+            <ul style="padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+              ${formulasHtml}
+            </ul>
+          </div>
+
+          <div>
+            <h4 style="font-size: var(--text-sm); text-transform: uppercase; color: var(--color-success); margin-bottom: 8px; letter-spacing: 0.05em;">
+              Placement Exam Shortcuts & Tips
+            </h4>
+            <ul style="padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text-secondary);">
+              ${tipsHtml}
+            </ul>
+
+            <h4 style="font-size: var(--text-sm); text-transform: uppercase; color: var(--color-text-secondary); margin-top: 12px; margin-bottom: 8px; letter-spacing: 0.05em;">
+              Official Study References
+            </h4>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+              ${linksHtml}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Practice Question Container -->
       <div class="practice-container">
         <div class="practice-header">
           <div>
@@ -178,6 +232,21 @@ export function bindPractice() {
   const numSpan = document.getElementById('current-q-num');
   const jumpFirstBtn = document.getElementById('btn-jump-first');
   const jumpResumeBtn = document.getElementById('btn-jump-resume');
+  const toggleConceptBtn = document.getElementById('toggle-concept-btn');
+  const closeConceptBtn = document.getElementById('close-concept-btn');
+  const conceptCard = document.getElementById('concept-reference-card');
+
+  if (toggleConceptBtn && conceptCard) {
+    toggleConceptBtn.addEventListener('click', () => {
+      conceptCard.classList.toggle('hidden');
+    });
+  }
+
+  if (closeConceptBtn && conceptCard) {
+    closeConceptBtn.addEventListener('click', () => {
+      conceptCard.classList.add('hidden');
+    });
+  }
 
   function attachOptionListeners() {
     const q = questions[currentIndex];

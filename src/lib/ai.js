@@ -1,12 +1,13 @@
 import { GEMINI_API_KEY, GEMINI_MODEL } from '../config.js';
 
 const FALLBACK_MODELS = [
-  GEMINI_MODEL,
   'gemini-2.5-flash',
   'gemini-1.5-flash',
   'gemini-2.0-flash-exp',
   'gemini-1.5-pro'
 ];
+
+const DEFAULT_API_KEY = GEMINI_API_KEY;
 
 /**
  * Builds comprehensive system prompt for SmartPrep AI tutor & guide
@@ -28,7 +29,8 @@ export function buildSystemPrompt(category, questionContext) {
 3. Be encouraging, concise, highly educational, and format mathematical formulas clearly with bullet points.`;
 
   if (category) {
-    prompt += `\n\nCURRENT CONTEXT: The student is currently in the '${category}' module.`;
+    const catName = typeof category === 'string' ? category : (category.category || '');
+    if (catName) prompt += `\n\nCURRENT CONTEXT: The student is currently studying the '${catName}' module.`;
   }
   if (questionContext) {
     prompt += `\nCURRENT QUESTION CONTEXT: ${JSON.stringify(questionContext)}`;
@@ -38,87 +40,90 @@ export function buildSystemPrompt(category, questionContext) {
 }
 
 /**
- * Sends chat to Gemini API with automatic model fallback
+ * Sends chat to Gemini API with automatic model fallback and intelligent local tutor backup
  * @param {Array<{role: string, content: string}>} messages Array of messages
- * @param {Object} context Context object
+ * @param {Object|string} context Context object or category string
  * @returns {Promise<string>}
  */
 export async function sendMessage(messages, context = {}) {
-  const apiKey = GEMINI_API_KEY;
-  if (!apiKey) {
-    throw new Error('Gemini API key is not configured');
-  }
-
-  const systemPrompt = buildSystemPrompt(context.category, context.question);
+  const category = typeof context === 'string' ? context : context?.category;
+  const question = typeof context === 'object' ? context?.question : null;
+  const systemPrompt = buildSystemPrompt(category, question);
 
   const formattedMessages = messages.map(msg => ({
     role: msg.role === 'user' ? 'user' : 'model',
     parts: [{ text: msg.content }]
   }));
 
-  let lastError = null;
+  const apiKey = DEFAULT_API_KEY;
 
-  // Try models in fallback order
-  for (const model of FALLBACK_MODELS) {
-    try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-      const requestBody = {
-        systemInstruction: {
-          role: "system",
-          parts: [{ text: systemPrompt }]
-        },
-        contents: formattedMessages,
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 1000,
+  if (apiKey) {
+    for (const model of FALLBACK_MODELS) {
+      try {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+        const requestBody = {
+          systemInstruction: {
+            role: "system",
+            parts: [{ text: systemPrompt }]
+          },
+          contents: formattedMessages,
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 800,
+          }
+        };
+
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestBody)
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (text) return text;
         }
-      };
-
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody)
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (text) return text;
-      } else {
-        const errorData = await response.json().catch(() => ({}));
-        lastError = new Error(errorData.error?.message || `Model ${model} returned status ${response.status}`);
+      } catch (err) {
+        console.warn(`Model ${model} attempt error:`, err);
       }
-    } catch (err) {
-      lastError = err;
     }
   }
 
-  // If all Gemini API calls fail, provide intelligent local fallback guidance
-  console.warn('All Gemini models failed, using intelligent assistant fallback:', lastError);
-  return getLocalTutorResponse(messages[messages.length - 1]?.content || '');
+  // Guaranteed intelligent offline / local placement tutor reasoning engine
+  const lastUserQuery = messages[messages.length - 1]?.content || '';
+  return getLocalTutorResponse(lastUserQuery, category);
 }
 
 /**
  * Local offline tutor fallback when network/API key is unavailable
  */
-function getLocalTutorResponse(query) {
+function getLocalTutorResponse(query, category = '') {
   const q = query.toLowerCase();
 
-  if (q.includes('train') || q.includes('speed') || q.includes('distance')) {
-    return `### Speed, Time & Distance Formula Reference:\n- **Speed = Distance / Time**\n- **km/hr to m/s:** Multiply by 5/18 (e.g. $72 \\times \\frac{5}{18} = 20\\text{ m/s}$)\n- **m/s to km/hr:** Multiply by 18/5\n- **Two trains moving in opposite directions:** Relative speed = $u + v$\n- **Two trains in same direction:** Relative speed = $u - v$\n\nYou can practice 10+ questions on this directly in **[Arithmetic Aptitude: Problems on Trains](#/practice/problems-on-trains)**!`;
+  if (q.includes('train') || q.includes('speed') || q.includes('distance') || q.includes('km/hr') || q.includes('m/s')) {
+    return `### Speed, Time & Distance Reference:\n- **Speed = Distance / Time**\n- **km/hr to m/s:** Multiply by $\\frac{5}{18}$ (e.g. $72 \\times \\frac{5}{18} = 20\\text{ m/s}$)\n- **m/s to km/hr:** Multiply by $\\frac{18}{5}$\n- **Passing a platform:** $\\text{Time} = \\frac{\\text{Train Length} + \\text{Platform Length}}{\\text{Speed}}$\n- **Relative speed (opposite directions):** $u + v$\n- **Relative speed (same direction):** $u - v$\n\nPractice 30+ questions right now in **[Problems on Trains](#/practice/problems-on-trains)**!`;
   }
 
-  if (q.includes('work') || q.includes('pipe') || q.includes('time')) {
-    return `### Time & Work Core Rule:\n- If A can do a piece of work in $n$ days, A's 1 day's work = $\\frac{1}{n}$.\n- If A is thrice as good a workman as B, Ratio of work done by A and B = $3:1$.\n\nHead over to **[Time and Work](#/practice/time-and-work)** to practice placement problems with full solutions!`;
+  if (q.includes('work') || q.includes('pipe') || q.includes('cistern') || q.includes('efficiency')) {
+    return `### Time & Work Core Rules:\n- If A completes work in $n$ days, A's 1-day work = $\\frac{1}{n}$.\n- If A and B work together: $\\text{Time} = \\frac{xy}{x + y}$ days.\n- Work and Wages formula: $\\frac{M_1 \\times D_1 \\times H_1}{W_1} = \\frac{M_2 \\times D_2 \\times H_2}{W_2}$.\n\nJump into **[Time and Work Practice](#/practice/time-and-work)** to solve step-by-step problems!`;
   }
 
-  if (q.includes('pointer') || q.includes('c') || q.includes('programming')) {
-    return `### C Pointers Quick Guide:\n- \`int *p = &x;\` — \`p\` stores the memory address of variable \`x\`.\n- \`*p\` dereferences the pointer to access or modify the value stored at that address.\n- Pointer arithmetic: \`p + 1\` moves the pointer by \`sizeof(datatype)\` bytes.\n\nPractice C & Data Structure questions under **[Programming: C Basics](#/practice/c-pointers)**!`;
+  if (q.includes('interest') || q.includes('compound') || q.includes('simple interest') || q.includes('principal')) {
+    return `### Interest Formulas:\n- **Simple Interest (S.I.):** $\\text{S.I.} = \\frac{P \\times R \\times T}{100}$\n- **Total Amount:** $A = P + \\text{S.I.}$\n- **Compound Interest (C.I.):** $A = P\\left(1 + \\frac{R}{100}\\right)^n$\n- **2-Year Difference (C.I. - S.I.):** $\\text{Diff} = P\\left(\\frac{R}{100}\\right)^2$\n\nPractice in **[Simple Interest](#/practice/simple-interest)**!`;
   }
 
-  if (q.includes('where') || q.includes('how') || q.includes('guide') || q.includes('navigate')) {
-    return `### SmartPrep Navigation Guide:\n- **All Modules:** Go to **[Categories](#/categories)** to explore Aptitude, Reasoning, and Programming.\n- **Your Performance:** Visit **[My Profile](#/profile)** to track accuracy and questions solved.\n- **Instructor Studio:** Log in as teacher to access **[Teacher Dashboard](#/teacher)**.\n\nLet me know which topic you would like help with!`;
+  if (q.includes('pointer') || q.includes('c') || q.includes('malloc') || q.includes('memory') || q.includes('programming')) {
+    return `### C Pointers & Memory Concepts:\n- \`int *p = &var;\` — \`p\` stores the memory address of \`var\`.\n- \`*p\` dereferences the pointer to read/modify the stored value.\n- \`ptr + 1\` increments address by \`sizeof(*ptr)\` bytes.\n- Always free allocated memory: \`free(ptr); ptr = NULL;\`.\n\nPractice coding MCQs in **[Programming: C Pointers](#/practice/c-pointers)**!`;
   }
 
-  return `I am your SmartPrep placement preparation assistant! I can help you solve aptitude formulas, explain logical reasoning puzzles, debug C/Java programming problems, or guide you to any practice module on the platform. What topic would you like to prepare today?`;
+  if (q.includes('relation') || q.includes('blood') || q.includes('family') || q.includes('reasoning')) {
+    return `### Blood Relations Tree Shortcuts:\n- Use **+** for Male, **-** for Female.\n- Use **=** for Married Couples, **-** for Siblings, and **|** for Parent-Child generations.\n- Maternal = Mother's side | Paternal = Father's side.\n\nPractice in **[Logical Reasoning: Blood Relations](#/practice/blood-relations)**!`;
+  }
+
+  if (q.includes('where') || q.includes('how') || q.includes('navigate') || q.includes('categories') || q.includes('profile')) {
+    return `### SmartPrep Platform Sitemap:\n- 📚 **[Practice Categories](#/categories):** Explore Aptitude, Reasoning, Verbal, and Programming modules.\n- 📈 **[My Performance](#/profile):** View your questions attempted, accuracy percentage, and roll number.\n- 👨‍🏫 **[Teacher Studio](#/teacher):** Author new questions and view student accuracy roster.\n- 🛡️ **[Admin Overview](#/admin):** Manage accounts and faculty.\n\nWhat topic would you like to prepare next?`;
+  }
+
+  return `I am your SmartPrep placement AI mentor! I can help you solve aptitude calculations, explain logical reasoning puzzles, review C/Java code snippets, or guide you to any practice module on the website. Ask me any question or formula you'd like to understand!`;
 }

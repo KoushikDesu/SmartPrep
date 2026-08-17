@@ -6,31 +6,32 @@ export function renderSidebar(profile) {
 
   const POPULAR_SLUGS = new Set(['arithmetic-aptitude', 'verbal-ability', 'logical-reasoning', 'c-programming', 'database']);
 
-  // Fetch recent modules from localStorage
+  // Fetch recent student practice modules from localStorage (only for student view)
   let recentLinks = '';
-  try {
-    const raw = localStorage.getItem('smartprep_recent_modules');
-    const recent = raw ? JSON.parse(raw) : [];
-    // Filter out items that are already in popular modules
-    const uniqueRecents = recent.filter(item => !POPULAR_SLUGS.has(item.slug));
+  if (role === 'student') {
+    try {
+      const raw = localStorage.getItem('smartprep_recent_modules');
+      const recent = raw ? JSON.parse(raw) : [];
+      const uniqueRecents = recent.filter(item => !POPULAR_SLUGS.has(item.slug));
 
-    if (uniqueRecents.length > 0) {
-      recentLinks = `
-        <div class="sidebar-divider"></div>
-        <div class="sidebar-section-title">Recently Visited</div>
-        ${uniqueRecents.map(item => `
-          <a href="${item.path || `#/practice/${item.slug}`}" class="sidebar-link ${isActive(item.path)}">
-            <span class="mdi ${item.icon || 'mdi-history'}"></span>
-            <span>${item.title}</span>
-          </a>
-        `).join('')}
-      `;
+      if (uniqueRecents.length > 0) {
+        recentLinks = `
+          <div class="sidebar-divider"></div>
+          <div class="sidebar-section-title">Recently Practiced</div>
+          ${uniqueRecents.map(item => `
+            <a href="${item.path || `#/practice/${item.slug}`}" class="sidebar-link ${isActive(item.path)}">
+              <span class="mdi ${item.icon || 'mdi-history'}"></span>
+              <span>${item.title}</span>
+            </a>
+          `).join('')}
+        `;
+      }
+    } catch (e) {
+      recentLinks = '';
     }
-  } catch (e) {
-    recentLinks = '';
   }
 
-  const studentSection = `
+  const studentNav = `
     <div class="sidebar-section-title">Study Hub</div>
     <a href="#/categories" class="sidebar-link ${isActive('#/categories')}">
       <span class="mdi mdi-grid-large"></span>
@@ -67,8 +68,7 @@ export function renderSidebar(profile) {
     ${recentLinks}
   `;
 
-  const teacherSection = `
-    <div class="sidebar-divider"></div>
+  const teacherNav = `
     <div class="sidebar-section-title">Instructor Studio</div>
     <a href="#/teacher" class="sidebar-link ${isActive('#/teacher')}">
       <span class="mdi mdi-view-dashboard-outline"></span>
@@ -86,9 +86,16 @@ export function renderSidebar(profile) {
       <span class="mdi mdi-bullhorn-outline"></span>
       <span>Announcements</span>
     </a>
+
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-title">Curriculum Reference</div>
+    <a href="#/categories" class="sidebar-link ${isActive('#/categories')}">
+      <span class="mdi mdi-book-open-variant"></span>
+      <span>Student Syllabus</span>
+    </a>
   `;
 
-  const adminSection = `
+  const adminNav = `
     <div class="sidebar-section-title">Administration</div>
     <a href="#/admin" class="sidebar-link ${isActive('#/admin')}">
       <span class="mdi mdi-shield-crown-outline"></span>
@@ -102,16 +109,24 @@ export function renderSidebar(profile) {
       <span class="mdi mdi-school-outline"></span>
       <span>Faculty Members</span>
     </a>
+
     <div class="sidebar-divider"></div>
+    <div class="sidebar-section-title">Studio Shortcuts</div>
+    <a href="#/teacher" class="sidebar-link ${isActive('#/teacher')}">
+      <span class="mdi mdi-presentation"></span>
+      <span>Teacher Studio</span>
+    </a>
+    <a href="#/categories" class="sidebar-link ${isActive('#/categories')}">
+      <span class="mdi mdi-grid-large"></span>
+      <span>Syllabus Hub</span>
+    </a>
   `;
 
-  let navContent = '';
+  let navContent = studentNav;
   if (role === 'admin') {
-    navContent = adminSection + teacherSection + studentSection;
+    navContent = adminNav;
   } else if (role === 'teacher') {
-    navContent = teacherSection + studentSection;
-  } else {
-    navContent = studentSection;
+    navContent = teacherNav;
   }
 
   return `
