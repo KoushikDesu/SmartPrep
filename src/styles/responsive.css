@@ -1,0 +1,110 @@
+/* ============================================================
+   SmartPrep — Responsive Breakpoints & Overrides (responsive.css)
+   ============================================================ */
+
+/* ─── Tablet & Below (<= 1024px) ────────────────────────── */
+@media (max-width: 1024px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay.visible {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background-color: var(--color-overlay);
+    backdrop-filter: blur(4px);
+    z-index: calc(var(--z-sidebar) - 1);
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding: var(--space-xl) var(--space-md);
+  }
+}
+
+/* ─── Mobile Large (<= 768px) ───────────────────────────── */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: var(--text-3xl);
+  }
+
+  .hero-subtitle {
+    font-size: var(--text-base);
+  }
+
+  .landing-header {
+    padding: 0 var(--space-md);
+  }
+
+  .navbar-inner {
+    padding: 0 var(--space-md);
+  }
+
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .topics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .practice-container {
+    padding: var(--space-lg);
+    border-radius: var(--radius-xl);
+  }
+
+  .question-text {
+    font-size: var(--text-base);
+  }
+
+  .chatbot-panel {
+    width: calc(100vw - 32px);
+    right: 16px;
+    bottom: 86px;
+    height: 480px;
+  }
+
+  .chatbot-fab {
+    bottom: 18px;
+    right: 18px;
+    width: 52px;
+    height: 52px;
+    font-size: 1.5rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Mobile Small (<= 480px) ───────────────────────────── */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: var(--space-lg);
+  }
+
+  .hero-ctas {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-ctas .btn {
+    width: 100%;
+  }
+
+  .practice-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+}
