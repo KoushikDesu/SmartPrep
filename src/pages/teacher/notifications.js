@@ -44,13 +44,20 @@ export async function renderTeacherNotifications() {
   return `
     <div class="page-container teacher-notifications">
       <div class="page-header" style="margin-bottom: 2rem;">
-        <nav class="breadcrumb">
-          <a href="#/teacher">Instructor Studio</a>
-          <span class="mdi mdi-chevron-right"></span>
-          <span>Announcements</span>
-        </nav>
-        <h2>Broadcast Announcements</h2>
-        <p class="subtitle">Publish test alerts, recruitment drive updates, and study material reminders to students</p>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button class="back-bubble-btn" style="position: static; box-shadow: none;" onclick="window.history.back()" title="Back">
+            <span class="mdi mdi-arrow-left"></span>
+          </button>
+          <div>
+            <nav class="breadcrumb" style="margin-bottom: 2px;">
+              <a href="#/teacher">Instructor Studio</a>
+              <span class="mdi mdi-chevron-right"></span>
+              <span>Announcements</span>
+            </nav>
+            <h2>Broadcast Announcements</h2>
+            <p class="subtitle">Publish test alerts, recruitment drive updates, and study material reminders to students</p>
+          </div>
+        </div>
       </div>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">

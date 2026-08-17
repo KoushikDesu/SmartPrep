@@ -28,14 +28,19 @@ export async function renderAdminUsers() {
   return `
     <div class="page-container admin-users">
       <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-        <div>
-          <nav class="breadcrumb">
-            <a href="#/admin">Admin Overview</a>
-            <span class="mdi mdi-chevron-right"></span>
-            <span>User Accounts</span>
-          </nav>
-          <h2>User Management</h2>
-          <p class="subtitle">Search, edit roles, reset passwords, and manage all accounts</p>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button class="back-bubble-btn" style="position: static; box-shadow: none;" onclick="window.history.back()" title="Back">
+            <span class="mdi mdi-arrow-left"></span>
+          </button>
+          <div>
+            <nav class="breadcrumb" style="margin-bottom: 2px;">
+              <a href="#/admin">Admin Overview</a>
+              <span class="mdi mdi-chevron-right"></span>
+              <span>User Accounts</span>
+            </nav>
+            <h2>User Management</h2>
+            <p class="subtitle">Search, edit roles, reset passwords, and manage all accounts</p>
+          </div>
         </div>
       </div>
 

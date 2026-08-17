@@ -35,14 +35,19 @@ export async function renderTeacherQuestions() {
   return `
     <div class="page-container teacher-questions">
       <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-        <div>
-          <nav class="breadcrumb">
-            <a href="#/teacher">Instructor Studio</a>
-            <span class="mdi mdi-chevron-right"></span>
-            <span>Question Bank</span>
-          </nav>
-          <h2>Question Bank Studio</h2>
-          <p class="subtitle">Author, review, and manage practice multiple-choice questions</p>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button class="back-bubble-btn" style="position: static; box-shadow: none;" onclick="window.history.back()" title="Back">
+            <span class="mdi mdi-arrow-left"></span>
+          </button>
+          <div>
+            <nav class="breadcrumb" style="margin-bottom: 2px;">
+              <a href="#/teacher">Instructor Studio</a>
+              <span class="mdi mdi-chevron-right"></span>
+              <span>Question Bank</span>
+            </nav>
+            <h2>Question Bank Studio</h2>
+            <p class="subtitle">Author, review, and manage practice multiple-choice questions</p>
+          </div>
         </div>
         <button id="add-question-btn" class="btn btn-primary">
           <span class="mdi mdi-plus-circle-outline"></span> Create Question

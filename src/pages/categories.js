@@ -160,9 +160,14 @@ export async function renderCategories() {
 
   return `
     <div class="page-container">
-      <div class="page-header">
-        <h2>Practice Categories</h2>
-        <p class="subtitle">Select a subject and subcategory to start training</p>
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem;">
+        <button class="back-bubble-btn" style="position: static; box-shadow: none;" onclick="window.location.hash='#/'" title="Back to Home">
+          <span class="mdi mdi-arrow-left"></span>
+        </button>
+        <div>
+          <h2 style="font-size: var(--text-2xl); margin-bottom: 2px;">Practice Categories</h2>
+          <p class="subtitle" style="font-size: var(--text-sm);">Select a subject and subcategory to start placement training</p>
+        </div>
       </div>
       
       <div class="categories-grid">

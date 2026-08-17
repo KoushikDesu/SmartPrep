@@ -26,9 +26,14 @@ export async function renderTeacherDashboard() {
   return `
     <div class="page-container teacher-dashboard">
       <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-        <div>
-          <h2>Instructor Dashboard</h2>
-          <p class="subtitle">Welcome back, <strong>${teacherName}</strong>! Manage test syllabus, student progress, and announcements.</p>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button class="back-bubble-btn" style="position: static; box-shadow: none;" onclick="window.history.back()" title="Back">
+            <span class="mdi mdi-arrow-left"></span>
+          </button>
+          <div>
+            <h2>Instructor Dashboard</h2>
+            <p class="subtitle">Welcome back, <strong>${teacherName}</strong>! Manage test syllabus, student progress, and announcements.</p>
+          </div>
         </div>
         <div style="display: flex; gap: 8px;">
           <a href="#/teacher/questions" class="btn btn-primary btn-sm">

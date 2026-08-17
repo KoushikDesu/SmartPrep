@@ -32,14 +32,14 @@ const FALLBACK_TOPICS = {
     { name: 'Stocks and Shares', slug: 'stocks-shares', questionCount: 12 },
     { name: 'Probability', slug: 'probability', questionCount: 25 },
     { name: 'True Discount', slug: 'true-discount', questionCount: 10 },
-    { name: 'Banker\'s Discount', slug: 'bankers-discount', questionCount: 8 },
+    { name: "Banker's Discount", slug: 'bankers-discount', questionCount: 8 },
     { name: 'Odd Man Out and Series', slug: 'odd-man-out', questionCount: 30 },
   ],
   'default': [
-    { name: 'Basics', slug: 'basics', questionCount: 20 },
-    { name: 'Intermediate', slug: 'intermediate', questionCount: 30 },
-    { name: 'Advanced', slug: 'advanced', questionCount: 15 },
-    { name: 'Mock Test', slug: 'mock-test', questionCount: 50 },
+    { name: 'Basics & Fundamental Concepts', slug: 'basics', questionCount: 20 },
+    { name: 'Intermediate Placement Problems', slug: 'intermediate', questionCount: 30 },
+    { name: 'Advanced Company Test Questions', slug: 'advanced', questionCount: 15 },
+    { name: 'Comprehensive Mock Test', slug: 'mock-test', questionCount: 50 },
   ]
 };
 
@@ -51,10 +51,21 @@ function formatTitle(slug) {
 }
 
 export async function renderTopics(categorySlug) {
-  // Use categorySlug to fetch topics, fallback to dictionary
   let topics = FALLBACK_TOPICS[categorySlug] || FALLBACK_TOPICS['default'];
-  
   const categoryTitle = formatTitle(categorySlug);
+
+  // Track recent category
+  try {
+    const recent = JSON.parse(localStorage.getItem('smartprep_recent_modules') || '[]');
+    const existing = recent.filter(r => r.slug !== categorySlug);
+    existing.unshift({
+      title: categoryTitle,
+      slug: categorySlug,
+      path: `#/category/${categorySlug}`,
+      icon: 'mdi-folder-open-outline'
+    });
+    localStorage.setItem('smartprep_recent_modules', JSON.stringify(existing.slice(0, 5)));
+  } catch (e) {}
 
   const topicCards = topics.map(topic => `
     <a href="#/practice/${topic.slug}" class="topic-card no-underline">
@@ -73,15 +84,19 @@ export async function renderTopics(categorySlug) {
 
   return `
     <div class="page-container">
-      <nav class="breadcrumb">
-        <a href="#/categories">Categories</a>
-        <span class="mdi mdi-chevron-right"></span>
-        <span>${categoryTitle}</span>
-      </nav>
-
-      <div class="page-header">
-        <h2>${categoryTitle}</h2>
-        <p class="subtitle">Select a topic to start practicing</p>
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem;">
+        <button class="back-bubble-btn" style="position: static; box-shadow: none;" onclick="window.history.back()" title="Back">
+          <span class="mdi mdi-arrow-left"></span>
+        </button>
+        <div>
+          <nav class="breadcrumb" style="margin-bottom: 2px;">
+            <a href="#/categories">Categories</a>
+            <span class="mdi mdi-chevron-right"></span>
+            <span>${categoryTitle}</span>
+          </nav>
+          <h2 style="font-size: var(--text-2xl);">${categoryTitle}</h2>
+          <p class="subtitle" style="font-size: var(--text-sm);">Select a topic to start practicing with step-by-step solutions</p>
+        </div>
       </div>
       
       <div class="topics-grid">

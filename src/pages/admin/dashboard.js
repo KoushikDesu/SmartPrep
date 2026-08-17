@@ -53,9 +53,14 @@ export async function renderAdminDashboard() {
   return `
     <div class="page-container admin-dashboard">
       <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-        <div>
-          <h2>System Control Center</h2>
-          <p class="subtitle">Platform overview and user administration</p>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button class="back-bubble-btn" style="position: static; box-shadow: none;" onclick="window.history.back()" title="Back">
+            <span class="mdi mdi-arrow-left"></span>
+          </button>
+          <div>
+            <h2>System Control Center</h2>
+            <p class="subtitle">Platform overview and user administration</p>
+          </div>
         </div>
         <div style="display: flex; gap: 8px;">
           <a href="#/admin/users" class="btn btn-secondary btn-sm">

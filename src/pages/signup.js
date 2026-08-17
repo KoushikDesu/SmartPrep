@@ -21,27 +21,27 @@ export function renderSignup() {
         <form id="signup-form" class="auth-form">
           <div class="form-group">
             <label for="signup-name">Full Name</label>
-            <input type="text" id="signup-name" class="form-control" required placeholder="e.g. Rahul Sharma" autocomplete="name">
+            <input type="text" id="signup-name" class="form-control" required placeholder="Enter your name (e.g. Rahul Sharma)" autocomplete="name">
           </div>
 
           <div class="form-group">
             <label for="signup-username">Username</label>
-            <input type="text" id="signup-username" class="form-control" required placeholder="e.g. rahul21" autocomplete="username">
+            <input type="text" id="signup-username" class="form-control" required placeholder="@username (e.g. developer)" autocomplete="username">
           </div>
 
           <div class="form-group">
             <label for="signup-rollnumber">College Roll Number</label>
-            <input type="text" id="signup-rollnumber" class="form-control" required placeholder="e.g. 21CS101">
+            <input type="text" id="signup-rollnumber" class="form-control" required placeholder="Roll number (e.g. 21CS101)">
           </div>
           
           <div class="form-group">
             <label for="signup-password">Password</label>
-            <input type="password" id="signup-password" class="form-control" required placeholder="Min. 6 characters" autocomplete="new-password">
+            <input type="password" id="signup-password" class="form-control" required placeholder="••••••••" autocomplete="new-password">
           </div>
 
           <div class="form-group">
             <label for="signup-confirm-password">Confirm Password</label>
-            <input type="password" id="signup-confirm-password" class="form-control" required placeholder="Re-enter your password" autocomplete="new-password">
+            <input type="password" id="signup-confirm-password" class="form-control" required placeholder="••••••••" autocomplete="new-password">
           </div>
 
           <div id="signup-error" class="error-message hidden"></div>

@@ -1,7 +1,7 @@
 import { showToast } from '../components/toast.js';
 import { supabase } from '../lib/supabase.js';
 import { getSeedQuestions } from '../data/seed-questions.js';
-import { saveProgress } from '../lib/progress.js';
+import { saveProgress, hasAnswered } from '../lib/progress.js';
 import { appState } from '../main.js';
 
 function formatTitle(slug) {
@@ -15,11 +15,25 @@ function formatTitle(slug) {
 let currentIndex = 0;
 let questions = [];
 let currentTopicSlug = '';
+let lastAnsweredIndex = 0;
 
 export async function renderPractice(topicSlug) {
   currentTopicSlug = topicSlug;
-  currentIndex = 0;
   
+  // Track this topic in recently visited list
+  try {
+    const recent = JSON.parse(localStorage.getItem('smartprep_recent_modules') || '[]');
+    const formatted = formatTitle(topicSlug);
+    const existing = recent.filter(r => r.slug !== topicSlug);
+    existing.unshift({
+      title: formatted,
+      slug: topicSlug,
+      path: `#/practice/${topicSlug}`,
+      icon: 'mdi-file-document-outline'
+    });
+    localStorage.setItem('smartprep_recent_modules', JSON.stringify(existing.slice(0, 5)));
+  } catch (e) {}
+
   // 1. Try to load from Supabase DB first
   try {
     if (supabase) {
@@ -55,26 +69,48 @@ export async function renderPractice(topicSlug) {
     questions = getSeedQuestions('problems-on-trains');
   }
 
+  // Read saved resume index
+  const savedResumeIndex = parseInt(localStorage.getItem(`smartprep_resume_${topicSlug}`) || '0', 10);
+  currentIndex = (savedResumeIndex >= 0 && savedResumeIndex < questions.length) ? savedResumeIndex : 0;
+  lastAnsweredIndex = currentIndex;
+
   const topicTitle = formatTitle(topicSlug);
 
   return `
     <div class="page-container practice-page">
-      <nav class="breadcrumb">
-        <a href="#/categories">Categories</a>
-        <span class="mdi mdi-chevron-right"></span>
-        <a href="#/category/general-aptitude">General Aptitude</a>
-        <span class="mdi mdi-chevron-right"></span>
-        <span>${topicTitle}</span>
-      </nav>
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button class="back-bubble-btn" style="position: static; box-shadow: none;" onclick="window.history.back()" title="Back">
+            <span class="mdi mdi-arrow-left"></span>
+          </button>
+          <div>
+            <nav class="breadcrumb" style="margin-bottom: 2px;">
+              <a href="#/categories">Categories</a>
+              <span class="mdi mdi-chevron-right"></span>
+              <span>${topicTitle}</span>
+            </nav>
+            <h2 style="font-size: var(--text-2xl);">${topicTitle}</h2>
+          </div>
+        </div>
+
+        <!-- 2 Top Navigation Action Buttons -->
+        <div style="display: flex; gap: 8px;">
+          <button id="btn-jump-first" class="btn btn-secondary btn-sm">
+            <span class="mdi mdi-page-first"></span> First Question
+          </button>
+          <button id="btn-jump-resume" class="btn btn-primary btn-sm">
+            <span class="mdi mdi-restore"></span> Resume (Q${lastAnsweredIndex + 1})
+          </button>
+        </div>
+      </div>
 
       <div class="practice-container">
         <div class="practice-header">
           <div>
-            <h2>${topicTitle}</h2>
-            <p class="text-sm" style="color: var(--color-text-secondary); margin-top: 2px;">Multiple Choice Questions & Solutions</p>
+            <span class="badge badge-primary">Practice Mode</span>
           </div>
           <div class="progress-info">
-            Question <span id="current-q-num">1</span> of ${questions.length}
+            Question <span id="current-q-num">${currentIndex + 1}</span> of ${questions.length}
           </div>
         </div>
         
@@ -140,10 +176,15 @@ export function bindPractice() {
   const prevBtn = document.getElementById('btn-prev');
   const nextBtn = document.getElementById('btn-next');
   const numSpan = document.getElementById('current-q-num');
+  const jumpFirstBtn = document.getElementById('btn-jump-first');
+  const jumpResumeBtn = document.getElementById('btn-jump-resume');
 
   function attachOptionListeners() {
     const q = questions[currentIndex];
     if (!q) return;
+
+    // Check if previously answered
+    checkExistingAnswer(q);
 
     const options = container.querySelectorAll('.option-btn');
     const solutionPanel = container.querySelector('.solution-panel');
@@ -169,16 +210,42 @@ export function bindPractice() {
         // Show explanation
         if (solutionPanel) solutionPanel.classList.remove('hidden');
 
-        // Save progress if logged in
-        if (appState.user && q.id) {
-          try {
-            await saveProgress(appState.user.id, q.id, selected, isCorrect);
-          } catch (e) {
-            console.log('Progress save status:', e);
-          }
+        // Save position to localStorage
+        localStorage.setItem(`smartprep_resume_${currentTopicSlug}`, currentIndex);
+        lastAnsweredIndex = currentIndex;
+        if (jumpResumeBtn) jumpResumeBtn.innerHTML = `<span class="mdi mdi-restore"></span> Resume (Q${lastAnsweredIndex + 1})`;
+
+        // Save progress to Supabase and LocalStorage
+        try {
+          const userId = appState.user?.id || 'guest';
+          await saveProgress(userId, q.id || `local_${currentTopicSlug}_${currentIndex}`, selected, isCorrect, currentTopicSlug);
+        } catch (e) {
+          console.warn('Progress save status:', e);
         }
       });
     });
+  }
+
+  async function checkExistingAnswer(q) {
+    try {
+      const userId = appState.user?.id || 'guest';
+      const qId = q.id || `local_${currentTopicSlug}_${currentIndex}`;
+      const res = await hasAnswered(userId, qId);
+      if (res && res.answered) {
+        const solutionPanel = container.querySelector('.solution-panel');
+        if (solutionPanel) solutionPanel.classList.remove('hidden');
+
+        const selectedBtn = container.querySelector(`.option-btn[data-option="${res.selectedOption}"]`);
+        const correctBtn = container.querySelector(`.option-btn[data-option="${q.correct_option}"]`);
+
+        if (res.isCorrect) {
+          if (selectedBtn) selectedBtn.classList.add('correct');
+        } else {
+          if (selectedBtn) selectedBtn.classList.add('wrong');
+          if (correctBtn) correctBtn.classList.add('correct');
+        }
+      }
+    } catch (e) {}
   }
 
   function updateView() {
@@ -188,7 +255,25 @@ export function bindPractice() {
     if (prevBtn) prevBtn.disabled = (currentIndex === 0);
     if (nextBtn) nextBtn.disabled = (currentIndex === questions.length - 1);
     
+    localStorage.setItem(`smartprep_resume_${currentTopicSlug}`, currentIndex);
     attachOptionListeners();
+  }
+
+  if (jumpFirstBtn) {
+    jumpFirstBtn.addEventListener('click', () => {
+      currentIndex = 0;
+      updateView();
+      showToast('Jumped to Question 1', 'info');
+    });
+  }
+
+  if (jumpResumeBtn) {
+    jumpResumeBtn.addEventListener('click', () => {
+      const savedIndex = parseInt(localStorage.getItem(`smartprep_resume_${currentTopicSlug}`) || '0', 10);
+      currentIndex = (savedIndex >= 0 && savedIndex < questions.length) ? savedIndex : 0;
+      updateView();
+      showToast(`Resumed at Question ${currentIndex + 1}`, 'info');
+    });
   }
 
   if (prevBtn) {

@@ -4,6 +4,32 @@ export function renderSidebar(profile) {
   
   const isActive = (path) => currentHash === path ? 'active' : '';
 
+  const POPULAR_SLUGS = new Set(['arithmetic-aptitude', 'verbal-ability', 'logical-reasoning', 'c-programming', 'database']);
+
+  // Fetch recent modules from localStorage
+  let recentLinks = '';
+  try {
+    const raw = localStorage.getItem('smartprep_recent_modules');
+    const recent = raw ? JSON.parse(raw) : [];
+    // Filter out items that are already in popular modules
+    const uniqueRecents = recent.filter(item => !POPULAR_SLUGS.has(item.slug));
+
+    if (uniqueRecents.length > 0) {
+      recentLinks = `
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-section-title">Recently Visited</div>
+        ${uniqueRecents.map(item => `
+          <a href="${item.path || `#/practice/${item.slug}`}" class="sidebar-link ${isActive(item.path)}">
+            <span class="mdi ${item.icon || 'mdi-history'}"></span>
+            <span>${item.title}</span>
+          </a>
+        `).join('')}
+      `;
+    }
+  } catch (e) {
+    recentLinks = '';
+  }
+
   const studentSection = `
     <div class="sidebar-section-title">Study Hub</div>
     <a href="#/categories" class="sidebar-link ${isActive('#/categories')}">
@@ -37,6 +63,8 @@ export function renderSidebar(profile) {
       <span class="mdi mdi-database-outline"></span>
       <span>Database & SQL</span>
     </a>
+
+    ${recentLinks}
   `;
 
   const teacherSection = `

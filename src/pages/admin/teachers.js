@@ -29,14 +29,19 @@ export async function renderAdminTeachers() {
   return `
     <div class="page-container admin-teachers">
       <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-        <div>
-          <nav class="breadcrumb">
-            <a href="#/admin">Admin Overview</a>
-            <span class="mdi mdi-chevron-right"></span>
-            <span>Faculty Members</span>
-          </nav>
-          <h2>Faculty Management</h2>
-          <p class="subtitle">Create and manage instructor accounts for syllabus & question authoring</p>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button class="back-bubble-btn" style="position: static; box-shadow: none;" onclick="window.history.back()" title="Back">
+            <span class="mdi mdi-arrow-left"></span>
+          </button>
+          <div>
+            <nav class="breadcrumb" style="margin-bottom: 2px;">
+              <a href="#/admin">Admin Overview</a>
+              <span class="mdi mdi-chevron-right"></span>
+              <span>Faculty Members</span>
+            </nav>
+            <h2>Faculty Management</h2>
+            <p class="subtitle">Create and manage instructor accounts for syllabus & question authoring</p>
+          </div>
         </div>
         <button id="create-teacher-btn" class="btn btn-primary">
           <span class="mdi mdi-account-plus"></span> Add New Teacher

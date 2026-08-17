@@ -20,27 +20,26 @@ export function renderLogin() {
         
         <form id="login-form" class="auth-form">
           <div class="form-group">
-            <label for="login-userid">Username or Roll Number</label>
-            <input type="text" id="login-userid" class="form-control" required placeholder="e.g. admin or 21CS101" autocomplete="username">
+            <label for="login-id">Username or Roll Number</label>
+            <input type="text" id="login-id" class="form-control" required placeholder="e.g. developer or 21CS101" autocomplete="username">
           </div>
           
           <div class="form-group">
-            <label for="login-password">Password</label>
-            <div class="password-input-group">
-              <input type="password" id="login-password" class="form-control" required placeholder="Enter your password" autocomplete="current-password">
-              <button type="button" class="toggle-password mdi mdi-eye-outline" tabindex="-1" aria-label="Toggle password visibility"></button>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <label for="login-password">Password</label>
             </div>
+            <input type="password" id="login-password" class="form-control" required placeholder="••••••••" autocomplete="current-password">
           </div>
 
           <div id="login-error" class="error-message hidden"></div>
           
           <button type="submit" id="login-submit-btn" class="btn btn-primary btn-block btn-lg">
-            Sign In <span class="mdi mdi-login-variant"></span>
+            Sign In <span class="mdi mdi-arrow-right"></span>
           </button>
         </form>
         
         <div class="auth-footer text-center">
-          <p>Don't have an account? <a href="#/signup" style="font-weight: 600;">Sign up for free</a></p>
+          <p>Don't have an account? <a href="#/signup" style="font-weight: 600;">Sign up</a></p>
         </div>
       </div>
     </div>
@@ -50,28 +49,17 @@ export function renderLogin() {
 export function bindLogin() {
   const form = document.getElementById('login-form');
   const errorEl = document.getElementById('login-error');
-  const toggleBtn = document.querySelector('.toggle-password');
-  const passInput = document.getElementById('login-password');
-
-  if (toggleBtn && passInput) {
-    toggleBtn.addEventListener('click', () => {
-      const type = passInput.getAttribute('type') === 'password' ? 'text' : 'password';
-      passInput.setAttribute('type', type);
-      toggleBtn.classList.toggle('mdi-eye-outline');
-      toggleBtn.classList.toggle('mdi-eye-off-outline');
-    });
-  }
 
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
-      const userId = document.getElementById('login-userid').value.trim();
-      const password = passInput.value;
+      const userId = document.getElementById('login-id').value.trim();
+      const password = document.getElementById('login-password').value;
       const submitBtn = document.getElementById('login-submit-btn');
 
       if (!userId || !password) {
-        showError('Please enter both your User ID and password.');
+        showError('Please enter your username/roll number and password.');
         return;
       }
 
@@ -80,18 +68,18 @@ export function bindLogin() {
       hideError();
 
       try {
-        const result = await signIn({ userId, password });
+        const result = await signIn(userId, password);
         if (result.error) {
           showError(result.error.message || 'Invalid credentials');
           submitBtn.disabled = false;
-          submitBtn.innerHTML = `Sign In <span class="mdi mdi-login-variant"></span>`;
+          submitBtn.innerHTML = `Sign In <span class="mdi mdi-arrow-right"></span>`;
         } else {
-          showToast('Signed in successfully!', 'success');
+          showToast('Welcome back to SmartPrep! 🎉', 'success');
         }
       } catch (err) {
-        showError(err.message || 'An error occurred during login');
+        showError(err.message || 'An error occurred during sign in');
         submitBtn.disabled = false;
-        submitBtn.innerHTML = `Sign In <span class="mdi mdi-login-variant"></span>`;
+        submitBtn.innerHTML = `Sign In <span class="mdi mdi-arrow-right"></span>`;
       }
     });
   }

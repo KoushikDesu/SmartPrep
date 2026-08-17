@@ -41,14 +41,19 @@ export async function renderTeacherStudents() {
   return `
     <div class="page-container teacher-students">
       <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-        <div>
-          <nav class="breadcrumb">
-            <a href="#/teacher">Instructor Studio</a>
-            <span class="mdi mdi-chevron-right"></span>
-            <span>Student Tracking</span>
-          </nav>
-          <h2>Student Performance Roster</h2>
-          <p class="subtitle">Real-time tracking of questions attempted, accuracy, and preparation progress</p>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button class="back-bubble-btn" style="position: static; box-shadow: none;" onclick="window.history.back()" title="Back">
+            <span class="mdi mdi-arrow-left"></span>
+          </button>
+          <div>
+            <nav class="breadcrumb" style="margin-bottom: 2px;">
+              <a href="#/teacher">Instructor Studio</a>
+              <span class="mdi mdi-chevron-right"></span>
+              <span>Student Tracking</span>
+            </nav>
+            <h2>Student Performance Roster</h2>
+            <p class="subtitle">Real-time tracking of questions attempted, accuracy, and preparation progress</p>
+          </div>
         </div>
       </div>
 
