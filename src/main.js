@@ -30,7 +30,8 @@ import { renderTeacherNotifications, bindTeacherNotifs } from './pages/teacher/n
 export const appState = {
   user: null,
   profile: null,
-  sidebarOpen: false,
+  sidebarOpen: false, // For mobile drawer
+  sidebarCollapsed: false, // For desktop layout collapse
   theme: localStorage.getItem('smartprep-theme') || 'light',
 };
 
@@ -49,15 +50,35 @@ export function toggleTheme() {
 }
 
 export function toggleSidebar() {
-  appState.sidebarOpen = !appState.sidebarOpen;
+  const isMobile = window.innerWidth <= 1024;
+  const layout = document.querySelector('.app-layout');
   const sidebar = document.querySelector('.sidebar');
   const overlay = document.querySelector('.sidebar-overlay');
-  if (sidebar) sidebar.classList.toggle('open', appState.sidebarOpen);
-  if (overlay) overlay.classList.toggle('visible', appState.sidebarOpen);
+
+  if (isMobile) {
+    appState.sidebarOpen = !appState.sidebarOpen;
+    if (sidebar) sidebar.classList.toggle('open', appState.sidebarOpen);
+    if (overlay) overlay.classList.toggle('visible', appState.sidebarOpen);
+  } else {
+    appState.sidebarCollapsed = !appState.sidebarCollapsed;
+    if (layout) layout.classList.toggle('sidebar-collapsed', appState.sidebarCollapsed);
+    if (sidebar) sidebar.classList.toggle('collapsed', appState.sidebarCollapsed);
+  }
 }
 
 document.addEventListener('toggle-sidebar', toggleSidebar);
 document.addEventListener('toggle-theme', toggleTheme);
+
+// Auto-close mobile sidebar on navigation link click
+document.addEventListener('click', (e) => {
+  if (window.innerWidth <= 1024 && e.target.closest('.sidebar-link')) {
+    appState.sidebarOpen = false;
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
+    if (sidebar) sidebar.classList.remove('open');
+    if (overlay) overlay.classList.remove('visible');
+  }
+});
 
 function isPublicRoute(path) {
   return path === '/' || path === '/home' || path === '/login' || path === '/signup';
@@ -84,7 +105,7 @@ export async function renderApp() {
 
   if (cleanPath === '/login') {
     if (appState.user) {
-      navigateTo('/categories');
+      navigateToRoleHome();
       return;
     }
     app.innerHTML = renderLogin();
@@ -94,7 +115,7 @@ export async function renderApp() {
 
   if (cleanPath === '/signup') {
     if (appState.user) {
-      navigateTo('/categories');
+      navigateToRoleHome();
       return;
     }
     app.innerHTML = renderSignup();
@@ -104,10 +125,13 @@ export async function renderApp() {
 
   // ─── 2. Protected App Shell ──────────────────────────────────
   const showSidebar = !isPublicRoute(cleanPath);
+  const layoutClass = showSidebar 
+    ? (appState.sidebarCollapsed ? 'sidebar-collapsed' : '') 
+    : 'no-sidebar';
 
   app.innerHTML = `
     ${renderNavbar(appState.profile)}
-    <div class="app-layout ${showSidebar ? '' : 'no-sidebar'}">
+    <div class="app-layout ${layoutClass}">
       ${showSidebar ? `
         <div class="sidebar-overlay" id="sidebar-overlay"></div>
         ${renderSidebar(appState.profile)}
@@ -121,6 +145,12 @@ export async function renderApp() {
   `;
 
   bindNavbar();
+
+  // If sidebar is collapsed on desktop, ensure sidebar element reflects it
+  const sidebarEl = document.querySelector('.sidebar');
+  if (sidebarEl && appState.sidebarCollapsed && window.innerWidth > 1024) {
+    sidebarEl.classList.add('collapsed');
+  }
 
   const overlay = document.getElementById('sidebar-overlay');
   if (overlay) {
@@ -215,6 +245,13 @@ export async function renderApp() {
   }
 }
 
+function navigateToRoleHome() {
+  const role = appState.profile?.role;
+  if (role === 'admin') navigateTo('/admin');
+  else if (role === 'teacher') navigateTo('/teacher');
+  else navigateTo('/categories');
+}
+
 function bindLandingEvents() {
   const getStartedBtn = document.getElementById('get-started-btn');
   if (getStartedBtn) {
@@ -298,10 +335,7 @@ async function init() {
       } catch (e) {
         console.warn('Profile fetch failed:', e);
       }
-      const role = appState.profile?.role;
-      if (role === 'admin') navigateTo('/admin');
-      else if (role === 'teacher') navigateTo('/teacher');
-      else navigateTo('/categories');
+      navigateToRoleHome();
     } else if (event === 'SIGNED_OUT') {
       appState.user = null;
       appState.profile = null;

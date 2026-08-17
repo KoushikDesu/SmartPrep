@@ -5,19 +5,26 @@
 /* ─── App Shell Layout ─────────────────────────────────── */
 .app-layout {
   display: grid;
-  grid-template-columns: 260px 1fr;
+  grid-template-columns: 260px minmax(0, 1fr);
   min-height: 100vh;
-  transition: grid-template-columns var(--transition-base);
+  transition: grid-template-columns 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+}
+
+.app-layout.sidebar-collapsed {
+  grid-template-columns: 0px minmax(0, 1fr);
 }
 
 .app-layout.no-sidebar {
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .main-content {
   padding: var(--space-2xl) var(--space-xl);
   margin-top: 64px;
   min-height: calc(100vh - 64px);
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 .app-layout.no-sidebar .main-content {
@@ -204,8 +211,12 @@
   border-right: 1px solid var(--color-border);
   overflow-y: auto;
   z-index: var(--z-sidebar);
-  transition: transform var(--transition-base);
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
   padding: var(--space-md) var(--space-sm);
+}
+
+.sidebar.collapsed {
+  transform: translateX(-100%);
 }
 
 .sidebar-nav {
