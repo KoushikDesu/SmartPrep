@@ -1,85 +1,112 @@
 import { supabase } from '../../lib/supabase.js';
-import { sendNotification } from '../../lib/notifications.js';
 import { showToast } from '../../components/toast.js';
 import { appState } from '../../main.js';
 
+let history = [];
+let studentsList = [];
+
 export async function renderTeacherNotifications() {
-  let history = [];
   try {
-    const { data, error } = await supabase
-      .from('notifications')
-      .select('*')
-      .eq('sender_id', appState.user?.id)
-      .order('created_at', { ascending: false });
-    if (!error) history = data;
+    if (supabase) {
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (!error) history = data || [];
+
+      const { data: sData } = await supabase.from('profiles').select('id, full_name, username, roll_number').eq('role', 'student');
+      studentsList = sData || [];
+    }
   } catch (err) {
     console.error(err);
+    history = [];
   }
 
   const historyContent = history.length === 0 ? `
-    <div class="empty-state">
-      <p>No notifications sent yet.</p>
-    </div>
-  ` : `
-    <table class="table" style="width: 100%; border-collapse: collapse;">
-      <thead>
-        <tr style="border-bottom: 1px solid var(--color-border); text-align: left;">
-          <th style="padding: 1rem;">Title</th>
-          <th style="padding: 1rem;">Message</th>
-          <th style="padding: 1rem;">Target</th>
-          <th style="padding: 1rem;">Sent At</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${history.map(n => `
-          <tr style="border-bottom: 1px solid var(--color-border);">
-            <td style="padding: 1rem; font-weight: bold;">${n.title}</td>
-            <td style="padding: 1rem; max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${n.message}</td>
-            <td style="padding: 1rem;">${n.user_id ? 'Specific Student' : 'All Students'}</td>
-            <td style="padding: 1rem;">${new Date(n.created_at).toLocaleString()}</td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>
-  `;
+    <tr><td colspan="4" class="text-center" style="padding: 2.5rem;">No notifications sent yet.</td></tr>
+  ` : history.map(n => `
+    <tr>
+      <td><strong style="color: var(--color-text);">${n.title}</strong></td>
+      <td style="max-width: 320px; font-size: var(--text-sm); color: var(--color-text-secondary);">${n.message}</td>
+      <td>
+        <span class="badge ${n.target_type === 'all' ? 'badge-primary' : 'badge-warning'}">
+          ${n.target_type === 'all' ? 'All Students' : 'Direct Message'}
+        </span>
+      </td>
+      <td style="color: var(--color-text-tertiary); font-size: var(--text-xs);">${new Date(n.created_at).toLocaleString()}</td>
+    </tr>
+  `).join('');
+
+  const studentOptions = studentsList.map(s => `
+    <option value="${s.id}">${s.full_name || s.username} (${s.roll_number || 'Roll N/A'})</option>
+  `).join('');
 
   return `
-    <div class="teacher-notifications fade-in">
-      <div class="panel-header" style="margin-bottom: 2rem;">
-        <h1>Notifications</h1>
-        <p>Send announcements to students.</p>
+    <div class="page-container teacher-notifications">
+      <div class="page-header" style="margin-bottom: 2rem;">
+        <nav class="breadcrumb">
+          <a href="#/teacher">Instructor Studio</a>
+          <span class="mdi mdi-chevron-right"></span>
+          <span>Announcements</span>
+        </nav>
+        <h2>Broadcast Announcements</h2>
+        <p class="subtitle">Publish test alerts, recruitment drive updates, and study material reminders to students</p>
       </div>
 
-      <div class="card" style="margin-bottom: 2rem;">
-        <h2 style="margin-bottom: 1rem;">Compose Notification</h2>
-        <div class="form-group" style="margin-bottom: 1rem;">
-          <label class="form-label">Title</label>
-          <input type="text" id="notif-title" class="form-input" placeholder="Enter title">
-        </div>
-        <div class="form-group" style="margin-bottom: 1rem;">
-          <label class="form-label">Message</label>
-          <textarea id="notif-message" class="form-input" rows="4" placeholder="Enter message"></textarea>
-        </div>
-        <div class="form-group" style="margin-bottom: 1rem;">
-          <label class="form-label">Target</label>
-          <select id="notif-target" class="form-input">
-            <option value="all">All Students</option>
-            <option value="specific">Specific Student</option>
-          </select>
-        </div>
-        <div class="form-group" id="student-search-group" style="display: none; margin-bottom: 1rem;">
-          <label class="form-label">Student ID</label>
-          <input type="text" id="notif-student-search" class="form-input" placeholder="Enter student UUID">
-        </div>
-        <button id="send-notif-btn" class="btn btn-primary">
-          <span class="mdi mdi-send"></span> Send Notification
-        </button>
-      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        <!-- Compose Announcement Card -->
+        <div class="card" style="padding: 1.5rem;">
+          <h3 style="font-size: var(--text-lg); margin-bottom: 1.25rem;">Compose Notice</h3>
+          
+          <div class="form-group">
+            <label>Announcement Title</label>
+            <input type="text" id="notif-title" class="form-control" placeholder="e.g. TCS Campus Mock Test Schedule" required>
+          </div>
 
-      <div class="card">
-        <h2 style="margin-bottom: 1rem;">Sent History</h2>
-        <div class="table-responsive">
-          ${historyContent}
+          <div class="form-group">
+            <label>Target Audience</label>
+            <select id="notif-target" class="form-control">
+              <option value="all">Broadcast to All Enrolled Students</option>
+              <option value="specific">Send to Specific Student</option>
+            </select>
+          </div>
+
+          <div class="form-group hidden" id="student-select-group">
+            <label>Select Student</label>
+            <select id="notif-student-id" class="form-control">
+              ${studentOptions || '<option value="">No students available</option>'}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Announcement Message</label>
+            <textarea id="notif-message" class="form-control" rows="4" placeholder="Write announcement details..." required></textarea>
+          </div>
+
+          <button id="send-notif-btn" class="btn btn-primary btn-block">
+            <span class="mdi mdi-send-outline"></span> Broadcast Announcement
+          </button>
+        </div>
+
+        <!-- Sent Broadcast History -->
+        <div class="card" style="padding: 1.5rem;">
+          <h3 style="font-size: var(--text-lg); margin-bottom: 1.25rem;">Broadcast Log</h3>
+          
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Message</th>
+                  <th>Target</th>
+                  <th>Sent At</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${historyContent}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -88,43 +115,50 @@ export async function renderTeacherNotifications() {
 
 export function bindTeacherNotifs() {
   const targetSelect = document.getElementById('notif-target');
-  const searchGroup = document.getElementById('student-search-group');
+  const studentGroup = document.getElementById('student-select-group');
   const sendBtn = document.getElementById('send-notif-btn');
 
-  if (targetSelect && searchGroup) {
+  if (targetSelect && studentGroup) {
     targetSelect.addEventListener('change', (e) => {
       if (e.target.value === 'specific') {
-        searchGroup.style.display = 'block';
+        studentGroup.classList.remove('hidden');
       } else {
-        searchGroup.style.display = 'none';
+        studentGroup.classList.add('hidden');
       }
     });
   }
 
   if (sendBtn) {
     sendBtn.addEventListener('click', async () => {
-      const title = document.getElementById('notif-title').value;
-      const message = document.getElementById('notif-message').value;
-      const target = document.getElementById('notif-target').value;
-      const studentId = document.getElementById('notif-student-search').value;
+      const title = document.getElementById('notif-title')?.value.trim();
+      const message = document.getElementById('notif-message')?.value.trim();
+      const target = document.getElementById('notif-target')?.value || 'all';
+      const studentId = document.getElementById('notif-student-id')?.value;
 
-      if (!title || !message) return showToast('Title and message are required', 'error');
-      
-      const payload = {
-        title,
-        message,
-        user_id: target === 'specific' ? studentId : null,
-        type: 'announcement',
-        sender_id: appState.user?.id
-      };
+      if (!title || !message) {
+        showToast('Please enter both title and message', 'error');
+        return;
+      }
+
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = `<span class="mdi mdi-loading mdi-spin"></span> Sending...`;
 
       try {
-        const res = await sendNotification(payload);
-        if (res && res.error) throw res.error;
-        showToast('Notification sent successfully', 'success');
-        setTimeout(() => window.location.reload(), 1000);
+        const { error } = await supabase.from('notifications').insert({
+          title,
+          message,
+          target_type: target,
+          target_user_id: target === 'specific' ? studentId : null,
+          sender_id: appState.user?.id
+        });
+
+        if (error) throw error;
+        showToast('Announcement broadcasted to students! 📢', 'success');
+        setTimeout(() => window.location.reload(), 800);
       } catch (err) {
         showToast(err.message || 'Failed to send notification', 'error');
+        sendBtn.disabled = false;
+        sendBtn.innerHTML = `<span class="mdi mdi-send-outline"></span> Broadcast Announcement`;
       }
     });
   }

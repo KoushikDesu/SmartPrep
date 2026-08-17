@@ -1,98 +1,96 @@
 export function renderSidebar(profile) {
   const role = profile?.role || 'student';
-  const currentHash = window.location.hash || '#/';
+  const currentHash = window.location.hash || '#/categories';
   
-  const isActive = (path) => currentHash === path || currentHash.startsWith(path + '/') ? 'active' : '';
+  const isActive = (path) => currentHash === path ? 'active' : '';
 
-  const studentLinks = `
-    <a href="#/categories" class="sidebar-item ${isActive('#/categories')}">
-      <i class="mdi mdi-view-dashboard"></i> Dashboard
+  const studentSection = `
+    <div class="sidebar-section-title">Study Hub</div>
+    <a href="#/categories" class="sidebar-link ${isActive('#/categories')}">
+      <span class="mdi mdi-grid-large"></span>
+      <span>All Categories</span>
     </a>
+    <a href="#/profile" class="sidebar-link ${isActive('#/profile')}">
+      <span class="mdi mdi-chart-box-outline"></span>
+      <span>My Performance</span>
+    </a>
+
     <div class="sidebar-divider"></div>
-    <div class="sidebar-section">Practice</div>
-    <a href="#/category/arithmetic-aptitude" class="sidebar-item ${isActive('#/category/arithmetic-aptitude')}">
-      <i class="mdi mdi-calculator"></i> Arithmetic Aptitude
+    <div class="sidebar-section-title">Popular Modules</div>
+    <a href="#/category/arithmetic-aptitude" class="sidebar-link ${isActive('#/category/arithmetic-aptitude')}">
+      <span class="mdi mdi-calculator-variant-outline"></span>
+      <span>Arithmetic Aptitude</span>
     </a>
-    <a href="#/category/data-interpretation" class="sidebar-item ${isActive('#/category/data-interpretation')}">
-      <i class="mdi mdi-chart-bar"></i> Data Interpretation
+    <a href="#/category/verbal-ability" class="sidebar-link ${isActive('#/category/verbal-ability')}">
+      <span class="mdi mdi-text-box-search-outline"></span>
+      <span>Verbal Ability</span>
     </a>
-    <a href="#/category/verbal-ability" class="sidebar-item ${isActive('#/category/verbal-ability')}">
-      <i class="mdi mdi-format-text"></i> Verbal Ability
+    <a href="#/category/logical-reasoning" class="sidebar-link ${isActive('#/category/logical-reasoning')}">
+      <span class="mdi mdi-lightbulb-on-outline"></span>
+      <span>Logical Reasoning</span>
     </a>
-    <a href="#/category/logical-reasoning" class="sidebar-item ${isActive('#/category/logical-reasoning')}">
-      <i class="mdi mdi-head-lightbulb"></i> Logical Reasoning
+    <a href="#/category/c-programming" class="sidebar-link ${isActive('#/category/c-programming')}">
+      <span class="mdi mdi-code-tags"></span>
+      <span>C Programming</span>
     </a>
-    <a href="#/category/verbal-reasoning" class="sidebar-item ${isActive('#/category/verbal-reasoning')}">
-      <i class="mdi mdi-comment-processing"></i> Verbal Reasoning
-    </a>
-    <a href="#/category/nonverbal-reasoning" class="sidebar-item ${isActive('#/category/nonverbal-reasoning')}">
-      <i class="mdi mdi-shape"></i> Nonverbal Reasoning
-    </a>
-    <div class="sidebar-divider"></div>
-    <div class="sidebar-section">More</div>
-    <a href="#/category/general-knowledge" class="sidebar-item ${isActive('#/category/general-knowledge')}">
-      <i class="mdi mdi-earth"></i> General Knowledge
-    </a>
-    <a href="#/category/engineering" class="sidebar-item ${isActive('#/category/engineering')}">
-      <i class="mdi mdi-cog"></i> Engineering
-    </a>
-    <a href="#/category/programming" class="sidebar-item ${isActive('#/category/programming')}">
-      <i class="mdi mdi-code-braces"></i> Programming
-    </a>
-    <a href="#/category/current-affairs" class="sidebar-item ${isActive('#/category/current-affairs')}">
-      <i class="mdi mdi-newspaper"></i> Current Affairs
-    </a>
-    <div class="sidebar-divider"></div>
-    <a href="#/profile" class="sidebar-item ${isActive('#/profile')}">
-      <i class="mdi mdi-account"></i> My Profile
+    <a href="#/category/database" class="sidebar-link ${isActive('#/category/database')}">
+      <span class="mdi mdi-database-outline"></span>
+      <span>Database & SQL</span>
     </a>
   `;
 
-  const teacherLinks = `
-    <div class="sidebar-section">Teacher Panel</div>
-    <a href="#/teacher" class="sidebar-item ${isActive('#/teacher')}">
-      <i class="mdi mdi-teach"></i> Teacher Dashboard
+  const teacherSection = `
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-title">Instructor Studio</div>
+    <a href="#/teacher" class="sidebar-link ${isActive('#/teacher')}">
+      <span class="mdi mdi-view-dashboard-outline"></span>
+      <span>Teacher Dashboard</span>
     </a>
-    <a href="#/teacher/questions" class="sidebar-item ${isActive('#/teacher/questions')}">
-      <i class="mdi mdi-file-question"></i> Manage Questions
+    <a href="#/teacher/questions" class="sidebar-link ${isActive('#/teacher/questions')}">
+      <span class="mdi mdi-file-document-edit-outline"></span>
+      <span>Question Bank</span>
     </a>
-    <a href="#/teacher/students" class="sidebar-item ${isActive('#/teacher/students')}">
-      <i class="mdi mdi-account-group"></i> Track Students
+    <a href="#/teacher/students" class="sidebar-link ${isActive('#/teacher/students')}">
+      <span class="mdi mdi-account-group-outline"></span>
+      <span>Student Roster</span>
     </a>
-    <a href="#/teacher/notifications" class="sidebar-item ${isActive('#/teacher/notifications')}">
-      <i class="mdi mdi-bell-ring"></i> Send Notifications
+    <a href="#/teacher/notifications" class="sidebar-link ${isActive('#/teacher/notifications')}">
+      <span class="mdi mdi-bullhorn-outline"></span>
+      <span>Announcements</span>
+    </a>
+  `;
+
+  const adminSection = `
+    <div class="sidebar-section-title">Administration</div>
+    <a href="#/admin" class="sidebar-link ${isActive('#/admin')}">
+      <span class="mdi mdi-shield-crown-outline"></span>
+      <span>Admin Overview</span>
+    </a>
+    <a href="#/admin/users" class="sidebar-link ${isActive('#/admin/users')}">
+      <span class="mdi mdi-account-multiple-outline"></span>
+      <span>User Accounts</span>
+    </a>
+    <a href="#/admin/teachers" class="sidebar-link ${isActive('#/admin/teachers')}">
+      <span class="mdi mdi-school-outline"></span>
+      <span>Faculty Members</span>
     </a>
     <div class="sidebar-divider"></div>
   `;
 
-  const adminLinks = `
-    <div class="sidebar-section">Admin Panel</div>
-    <a href="#/admin" class="sidebar-item ${isActive('#/admin')}">
-      <i class="mdi mdi-shield-account"></i> Admin Dashboard
-    </a>
-    <a href="#/admin/users" class="sidebar-item ${isActive('#/admin/users')}">
-      <i class="mdi mdi-account-multiple"></i> Manage Users
-    </a>
-    <a href="#/admin/teachers" class="sidebar-item ${isActive('#/admin/teachers')}">
-      <i class="mdi mdi-teach"></i> Manage Teachers
-    </a>
-    <div class="sidebar-divider"></div>
-  `;
-
-  let content = '';
+  let navContent = '';
   if (role === 'admin') {
-    content += adminLinks + teacherLinks + studentLinks;
+    navContent = adminSection + teacherSection + studentSection;
   } else if (role === 'teacher') {
-    content += teacherLinks + studentLinks;
+    navContent = teacherSection + studentSection;
   } else {
-    content += studentLinks;
+    navContent = studentSection;
   }
 
   return `
     <aside class="sidebar">
-      <div class="sidebar-content">
-        ${content}
-      </div>
+      <nav class="sidebar-nav">
+        ${navContent}
+      </nav>
     </aside>
   `;
 }

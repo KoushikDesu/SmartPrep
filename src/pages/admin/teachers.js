@@ -7,80 +7,91 @@ let currentTeachers = [];
 
 export async function renderAdminTeachers() {
   try {
-    const { data: teachers, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('role', 'teacher')
-      .order('created_at', { ascending: false });
+    if (supabase) {
+      const { data: teachers, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('role', 'teacher')
+        .order('created_at', { ascending: false });
 
-    if (error) throw error;
-    currentTeachers = teachers || [];
+      if (error) throw error;
+      currentTeachers = teachers || [];
+    }
   } catch (error) {
     console.error('Error fetching teachers:', error);
     currentTeachers = [];
   }
 
-  let tableContent = '';
-  if (currentTeachers.length === 0) {
-    tableContent = `
-      <div class="empty-state">
-        <span class="mdi mdi-human-male-board" style="font-size: 3rem; color: var(--color-text-light);"></span>
-        <p>No teachers found.</p>
-      </div>
-    `;
-  } else {
-    tableContent = `
-      <div class="table-responsive">
-        <table class="table" style="width: 100%; border-collapse: collapse;">
-          <thead>
-            <tr style="border-bottom: 1px solid var(--color-border); text-align: left;">
-              <th style="padding: 1rem;">Name</th>
-              <th style="padding: 1rem;">Username</th>
-              <th style="padding: 1rem;">Created</th>
-              <th style="padding: 1rem;">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="teachers-table-body">
-            ${currentTeachers.map(t => generateTeacherRow(t)).join('')}
-          </tbody>
-        </table>
-      </div>
-    `;
-  }
+  const tableBody = currentTeachers.length > 0
+    ? currentTeachers.map(t => generateTeacherRow(t)).join('')
+    : `<tr><td colspan="5" class="text-center" style="padding: 2.5rem;">No faculty teacher accounts registered yet.</td></tr>`;
 
   return `
-    <div class="admin-teachers fade-in">
-      <div class="panel-header" style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+    <div class="page-container admin-teachers">
+      <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
         <div>
-          <h1>Teacher Management</h1>
-          <p>Manage teacher accounts.</p>
+          <nav class="breadcrumb">
+            <a href="#/admin">Admin Overview</a>
+            <span class="mdi mdi-chevron-right"></span>
+            <span>Faculty Members</span>
+          </nav>
+          <h2>Faculty Management</h2>
+          <p class="subtitle">Create and manage instructor accounts for syllabus & question authoring</p>
         </div>
         <button id="create-teacher-btn" class="btn btn-primary">
-          <span class="mdi mdi-plus"></span> Create Teacher
+          <span class="mdi mdi-account-plus"></span> Add New Teacher
         </button>
       </div>
 
-      <div class="card" style="margin-bottom: 2rem;">
-        ${tableContent}
+      <div class="card" style="padding: 1.5rem;">
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Faculty Member</th>
+                <th>Username</th>
+                <th>Employee / Roll ID</th>
+                <th>Created</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="teachers-table-body">
+              ${tableBody}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   `;
 }
 
 function generateTeacherRow(t) {
-  const joinedDate = new Date(t.created_at).toLocaleDateString();
+  const joinedDate = new Date(t.created_at || Date.now()).toLocaleDateString();
+  const initials = (t.full_name || t.username || 'T').substring(0, 2).toUpperCase();
+
   return `
-    <tr style="border-bottom: 1px solid var(--color-border);">
-      <td style="padding: 1rem;">${t.full_name || '—'}</td>
-      <td style="padding: 1rem;">${t.username || '—'}</td>
-      <td style="padding: 1rem;">${joinedDate}</td>
-      <td style="padding: 1rem; display: flex; gap: 0.5rem;">
-        <button class="btn btn-icon edit-teacher-btn" data-id="${t.id}" title="Edit Teacher">
-          <span class="mdi mdi-pencil"></span>
-        </button>
-        <button class="btn btn-icon delete-teacher-btn" data-id="${t.id}" title="Delete Teacher" style="color: var(--color-error);">
-          <span class="mdi mdi-trash-can"></span>
-        </button>
+    <tr data-teacher-id="${t.id}">
+      <td>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="avatar avatar-sm" style="background: linear-gradient(135deg, #d97706, #f59e0b);">${initials}</div>
+          <div>
+            <strong>${t.full_name || 'Professor'}</strong>
+            <div style="font-size: 11px; color: var(--color-text-tertiary);">Faculty Instructor</div>
+          </div>
+        </div>
+      </td>
+      <td><strong>@${t.username}</strong></td>
+      <td>${t.roll_number || 'FAC-ID'}</td>
+      <td style="color: var(--color-text-secondary); font-size: var(--text-xs);">${joinedDate}</td>
+      <td style="text-align: right;">
+        <div style="display: inline-flex; gap: 6px;">
+          <button class="btn btn-secondary btn-sm edit-teacher-btn" data-id="${t.id}" title="Edit Faculty">
+            <span class="mdi mdi-pencil"></span> Edit
+          </button>
+          <button class="btn btn-danger btn-sm delete-teacher-btn" data-id="${t.id}" title="Delete Account">
+            <span class="mdi mdi-trash-can-outline"></span>
+          </button>
+        </div>
       </td>
     </tr>
   `;
@@ -90,44 +101,63 @@ export function bindAdminTeachers() {
   const createBtn = document.getElementById('create-teacher-btn');
   if (createBtn) {
     createBtn.addEventListener('click', () => {
-      showModal('Create Teacher', `
-        <div class="form-group">
-          <label class="form-label">Full Name</label>
-          <input type="text" id="t-fullname" class="form-input">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Username</label>
-          <input type="text" id="t-username" class="form-input">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Password</label>
-          <input type="password" id="t-password" class="form-input">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Confirm Password</label>
-          <input type="password" id="t-confirm" class="form-input">
-        </div>
-      `, [
-        { label: 'Cancel', class: 'btn-outline' },
-        { label: 'Create', class: 'btn-primary', onClick: async () => {
-          const fullName = document.getElementById('t-fullname').value;
-          const username = document.getElementById('t-username').value;
+      showModal({
+        title: 'Add Faculty Instructor',
+        body: `
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="t-fullname" class="form-control" placeholder="e.g. Dr. Ramesh Kumar" required>
+          </div>
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="t-username" class="form-control" placeholder="e.g. ramesh_prof" required>
+          </div>
+          <div class="form-group">
+            <label>Faculty / Employee ID</label>
+            <input type="text" id="t-roll" class="form-control" placeholder="e.g. FAC-2026-01">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="t-password" class="form-control" placeholder="Min. 6 characters" required>
+          </div>
+          <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password" id="t-confirm" class="form-control" placeholder="Re-enter password" required>
+          </div>
+        `,
+        confirmText: 'Create Faculty Account',
+        cancelText: 'Cancel',
+        onConfirm: async () => {
+          const fullName = document.getElementById('t-fullname').value.trim();
+          const username = document.getElementById('t-username').value.trim();
+          const rollNumber = document.getElementById('t-roll').value.trim();
           const pwd = document.getElementById('t-password').value;
           const conf = document.getElementById('t-confirm').value;
 
-          if (!username || !pwd) return showToast('Username and password required', 'error');
-          if (pwd !== conf) return showToast('Passwords do not match', 'error');
+          if (!fullName || !username || !pwd) {
+            showToast('Please fill in all required fields', 'error');
+            return false;
+          }
+          if (pwd.length < 6) {
+            showToast('Password must be at least 6 characters', 'error');
+            return false;
+          }
+          if (pwd !== conf) {
+            showToast('Passwords do not match', 'error');
+            return false;
+          }
 
           try {
-            const res = await adminCreateTeacher(username, pwd, fullName);
+            const res = await adminCreateTeacher({ fullName, username, password: pwd, rollNumber });
             if (res.error) throw res.error;
-            showToast('Teacher created successfully', 'success');
+            showToast('Faculty teacher account created successfully!', 'success');
             setTimeout(() => window.location.reload(), 1000);
           } catch (err) {
             showToast(err.message || 'Creation failed', 'error');
+            return false;
           }
-        }}
-      ]);
+        }
+      });
     });
   }
 
@@ -139,52 +169,74 @@ export function bindAdminTeachers() {
       const id = editBtn.dataset.id;
       const t = currentTeachers.find(x => x.id === id);
       if (t) {
-        showModal('Edit Teacher', `
-          <div class="form-group">
-            <label class="form-label">Full Name</label>
-            <input type="text" id="edit-t-fullname" class="form-input" value="${t.full_name || ''}">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Username</label>
-            <input type="text" id="edit-t-username" class="form-input" value="${t.username || ''}">
-          </div>
-        `, [
-          { label: 'Cancel', class: 'btn-outline' },
-          { label: 'Save', class: 'btn-primary', onClick: async () => {
-            const updates = {
-              full_name: document.getElementById('edit-t-fullname').value,
-              username: document.getElementById('edit-t-username').value
-            };
+        showModal({
+          title: `Edit Faculty (@${t.username})`,
+          body: `
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="edit-t-fullname" class="form-control" value="${t.full_name || ''}" required>
+            </div>
+            <div class="form-group">
+              <label>Username</label>
+              <input type="text" id="edit-t-username" class="form-control" value="${t.username || ''}" required>
+            </div>
+            <div class="form-group">
+              <label>Employee / Roll ID</label>
+              <input type="text" id="edit-t-roll" class="form-control" value="${t.roll_number || ''}">
+            </div>
+          `,
+          confirmText: 'Save Changes',
+          cancelText: 'Cancel',
+          onConfirm: async () => {
+            const fullName = document.getElementById('edit-t-fullname').value.trim();
+            const username = document.getElementById('edit-t-username').value.trim();
+            const roll = document.getElementById('edit-t-roll').value.trim();
+
+            if (!fullName || !username) {
+              showToast('Full name and username are required', 'error');
+              return false;
+            }
+
             try {
-              const res = await updateProfile(id, updates);
+              const res = await updateProfile(id, { full_name: fullName, username, roll_number: roll });
               if (res.error) throw res.error;
-              showToast('Teacher updated', 'success');
-              setTimeout(() => window.location.reload(), 1000);
+              showToast('Faculty updated successfully', 'success');
+              t.full_name = fullName;
+              t.username = username;
+              t.roll_number = roll;
+              const row = document.querySelector(`tr[data-teacher-id="${id}"]`);
+              if (row) row.outerHTML = generateTeacherRow(t);
             } catch (err) {
               showToast(err.message || 'Update failed', 'error');
+              return false;
             }
-          }}
-        ]);
+          }
+        });
       }
     }
 
     if (delBtn) {
       const id = delBtn.dataset.id;
-      showModal('Delete Teacher', `
-        <p>Are you sure you want to delete this teacher?</p>
-      `, [
-        { label: 'Cancel', class: 'btn-outline' },
-        { label: 'Delete', class: 'btn-primary', onClick: async () => {
+      showModal({
+        title: 'Delete Faculty Account',
+        body: `<p style="font-size: var(--text-sm);">Are you sure you want to permanently remove this teacher account?</p>`,
+        confirmText: 'Delete Faculty',
+        cancelText: 'Cancel',
+        isDanger: true,
+        onConfirm: async () => {
           try {
             const res = await adminDeleteUser(id);
             if (res.error) throw res.error;
-            showToast('Teacher deleted', 'success');
-            setTimeout(() => window.location.reload(), 1000);
+            showToast('Teacher account deleted', 'success');
+            currentTeachers = currentTeachers.filter(x => x.id !== id);
+            const row = document.querySelector(`tr[data-teacher-id="${id}"]`);
+            if (row) row.remove();
           } catch (err) {
             showToast(err.message || 'Delete failed', 'error');
+            return false;
           }
-        }}
-      ]);
+        }
+      });
     }
   });
 }

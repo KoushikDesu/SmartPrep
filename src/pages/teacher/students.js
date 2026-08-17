@@ -1,74 +1,117 @@
 import { supabase } from '../../lib/supabase.js';
-import { appState } from '../../main.js';
-import { getStudentList } from '../../lib/progress.js';
+
+let currentStudents = [];
 
 export async function renderTeacherStudents() {
-  let students = [];
   try {
-    const res = await getStudentList(); // Assumes this function fetches students
-    if (res.data) students = res.data;
+    if (supabase) {
+      const { data: students, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('role', 'student')
+        .order('created_at', { ascending: false });
+
+      if (!error && students) {
+        // Fetch progress for each student
+        const { data: allProgress } = await supabase.from('user_progress').select('*');
+        
+        currentStudents = students.map(s => {
+          const userProgs = (allProgress || []).filter(p => p.user_id === s.id);
+          const attempted = userProgs.length;
+          const correct = userProgs.filter(p => p.is_correct).length;
+          const accuracy = attempted > 0 ? Math.round((correct / attempted) * 100) : 0;
+          return {
+            ...s,
+            attempted,
+            correct,
+            accuracy
+          };
+        });
+      }
+    }
   } catch (error) {
     console.error('Error fetching students:', error);
+    currentStudents = [];
   }
 
-  let tableContent = '';
-  if (students.length === 0) {
-    tableContent = `
-      <div class="empty-state">
-        <span class="mdi mdi-account-group" style="font-size: 3rem; color: var(--color-text-light);"></span>
-        <p>No students found.</p>
-      </div>
-    `;
-  } else {
-    tableContent = `
-      <div class="table-responsive">
-        <table class="table" style="width: 100%; border-collapse: collapse;">
-          <thead>
-            <tr style="border-bottom: 1px solid var(--color-border); text-align: left;">
-              <th style="padding: 1rem;">Name</th>
-              <th style="padding: 1rem;">Roll Number</th>
-              <th style="padding: 1rem;">Questions Attempted</th>
-              <th style="padding: 1rem;">Accuracy</th>
-              <th style="padding: 1rem;">Progress</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${students.map(s => {
-              const attempted = s.questions_attempted || 0;
-              const accuracy = s.accuracy || 0;
-              return `
-                <tr style="border-bottom: 1px solid var(--color-border); cursor: pointer;" class="student-row" data-id="${s.id}">
-                  <td style="padding: 1rem;">${s.full_name || s.username || 'Unknown'}</td>
-                  <td style="padding: 1rem;">${s.roll_number || '—'}</td>
-                  <td style="padding: 1rem;">${attempted}</td>
-                  <td style="padding: 1rem;">${accuracy}%</td>
-                  <td style="padding: 1rem;">
-                    <div style="width: 100%; height: 8px; background: var(--color-surface-hover); border-radius: 4px; overflow: hidden;">
-                      <div style="width: ${accuracy}%; height: 100%; background: var(--color-primary);"></div>
-                    </div>
-                  </td>
-                </tr>
-              `;
-            }).join('')}
-          </tbody>
-        </table>
-      </div>
-    `;
-  }
+  const tableBody = currentStudents.length > 0 
+    ? currentStudents.map(s => generateStudentRow(s)).join('')
+    : `<tr><td colspan="5" class="text-center" style="padding: 2.5rem;">No enrolled students found.</td></tr>`;
 
   return `
-    <div class="teacher-students fade-in">
-      <div class="panel-header" style="margin-bottom: 2rem;">
-        <h1>Student Progress Tracking</h1>
-        <p>Monitor student performance and progress.</p>
+    <div class="page-container teacher-students">
+      <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <nav class="breadcrumb">
+            <a href="#/teacher">Instructor Studio</a>
+            <span class="mdi mdi-chevron-right"></span>
+            <span>Student Tracking</span>
+          </nav>
+          <h2>Student Performance Roster</h2>
+          <p class="subtitle">Real-time tracking of questions attempted, accuracy, and preparation progress</p>
+        </div>
       </div>
 
-      <div class="card" style="margin-bottom: 2rem;">
-        <div class="search-bar" style="margin-bottom: 1.5rem;">
-          <input type="text" id="student-search" class="form-input" placeholder="Search students..." style="width: 100%; max-width: 400px;">
+      <div class="card" style="padding: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div style="position: relative; max-width: 380px; width: 100%;">
+            <input type="text" id="student-search-input" class="form-control" placeholder="Search by student name or roll number..." style="padding-left: 36px;">
+            <span class="mdi mdi-magnify" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--color-text-tertiary);"></span>
+          </div>
+          <div style="font-size: var(--text-sm); color: var(--color-text-secondary);">
+            Enrolled: <strong>${currentStudents.length}</strong> students
+          </div>
         </div>
-        ${tableContent}
+
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Roll Number</th>
+                <th>Attempted</th>
+                <th>Accuracy</th>
+                <th style="width: 180px;">Performance</th>
+              </tr>
+            </thead>
+            <tbody id="students-table-body">
+              ${tableBody}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
+  `;
+}
+
+function generateStudentRow(s) {
+  const initials = (s.full_name || s.username || 'S').substring(0, 2).toUpperCase();
+  const accuracyColor = s.accuracy >= 75 ? 'var(--color-success)' : (s.accuracy >= 40 ? 'var(--color-warning)' : 'var(--color-text-secondary)');
+
+  return `
+    <tr>
+      <td>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="avatar avatar-sm">${initials}</div>
+          <div>
+            <strong>${s.full_name || 'Student'}</strong>
+            <div style="font-size: 11px; color: var(--color-text-tertiary);">@${s.username}</div>
+          </div>
+        </div>
+      </td>
+      <td><strong>${s.roll_number || '—'}</strong></td>
+      <td>
+        <strong>${s.attempted || 0}</strong> <span style="font-size: 11px; color: var(--color-text-tertiary);">questions</span>
+      </td>
+      <td>
+        <span style="font-weight: 700; color: ${accuracyColor};">${s.accuracy || 0}%</span>
+        <span style="font-size: 11px; color: var(--color-text-tertiary);">(${s.correct || 0} correct)</span>
+      </td>
+      <td>
+        <div style="width: 100%; height: 8px; background: var(--color-surface-alt); border-radius: var(--radius-full); overflow: hidden; border: 1px solid var(--color-border);">
+          <div style="width: ${s.accuracy || 0}%; height: 100%; background: ${s.accuracy >= 75 ? 'var(--color-success)' : 'var(--color-primary)'}; border-radius: var(--radius-full);"></div>
+        </div>
+      </td>
+    </tr>
   `;
 }
