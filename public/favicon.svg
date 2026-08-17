@@ -1,10 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#2a9d8f"/>
-      <stop offset="100%" style="stop-color:#1a7a6f"/>
-    </linearGradient>
-  </defs>
-  <rect width="32" height="32" rx="8" fill="url(#g)"/>
-  <text x="16" y="22" text-anchor="middle" font-family="system-ui" font-weight="700" font-size="18" fill="white">S</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <!-- Rounded Base Container -->
+  <rect width="256" height="256" rx="64" fill="#0d52ce"/>
+  
+  <!-- Torso & Shoulders -->
+  <path d="M48 200 C48 152, 76 136, 100 136 L156 136 C180 136, 208 152, 208 200 C208 214, 196 220, 180 220 L76 220 C60 220, 48 214, 48 200 Z" fill="#2575fc"/>
+
+  <!-- Shirt Collar Left & Right -->
+  <polygon points="128,154 94,142 108,172" fill="#70a6ff"/>
+  <polygon points="128,154 162,142 148,172" fill="#70a6ff"/>
+
+  <!-- Necktie -->
+  <polygon points="122,154 134,154 138,166 128,172 118,166" fill="#a8c8ff"/>
+  <polygon points="128,172 136,206 128,218 120,206" fill="#a8c8ff"/>
+
+  <!-- Student ID Badge / Pocket Tag -->
+  <rect x="156" y="168" width="26" height="10" rx="5" fill="#70a6ff"/>
+
+  <!-- Student Head -->
+  <circle cx="128" cy="100" r="42" fill="#70a6ff"/>
+
+  <!-- Scholar Mortarboard (Graduation Cap) Top -->
+  <polygon points="128,36 208,58 128,78 48,58" fill="#70a6ff"/>
+
+  <!-- Cap Skull Band -->
+  <path d="M78 66 Q128 92 178 66 L178 78 Q128 106 78 78 Z" fill="#4d8eff"/>
+
+  <!-- Tassel Cord and Droplet Hanging to the Left -->
+  <path d="M128 58 Q72 66 64 88 L64 100" stroke="#70a6ff" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <ellipse cx="64" cy="104" rx="6" ry="9" fill="#70a6ff"/>
 </svg>
