@@ -1,8 +1,8 @@
 /* ============================================================
-   SmartPrep — Responsive Breakpoints & Overrides (responsive.css)
+   SmartPrep — Mobile-First Responsive Breakpoints (responsive.css)
    ============================================================ */
 
-/* ─── Tablet & Below (<= 1024px) ────────────────────────── */
+/* ─── Tablet & Small Laptop (<= 1024px) ─────────────────── */
 @media (max-width: 1024px) {
   .app-layout {
     grid-template-columns: 1fr;
@@ -11,6 +11,7 @@
   .sidebar {
     transform: translateX(-100%);
     box-shadow: var(--shadow-xl);
+    width: 280px;
   }
 
   .sidebar.open {
@@ -22,7 +23,8 @@
     position: fixed;
     inset: 0;
     background-color: var(--color-overlay);
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     z-index: calc(var(--z-sidebar) - 1);
   }
 
@@ -34,77 +36,204 @@
 
 /* ─── Mobile Large (<= 768px) ───────────────────────────── */
 @media (max-width: 768px) {
-  .hero-title {
-    font-size: var(--text-3xl);
-  }
-
-  .hero-subtitle {
-    font-size: var(--text-base);
-  }
-
-  .landing-header {
-    padding: 0 var(--space-md);
-  }
-
   .navbar-inner {
     padding: 0 var(--space-md);
   }
 
-  .categories-grid {
-    grid-template-columns: 1fr;
+  .landing-header {
+    padding: 0 var(--space-md);
+    height: 64px;
   }
 
-  .topics-grid {
-    grid-template-columns: 1fr;
+  .landing-header .logo h1 {
+    font-size: 1.25rem;
   }
 
-  .practice-container {
-    padding: var(--space-lg);
-    border-radius: var(--radius-xl);
+  .landing-header .auth-buttons .btn {
+    padding: 8px 14px;
+    font-size: var(--text-xs);
   }
 
-  .question-text {
+  .hero-section {
+    padding: var(--space-2xl) var(--space-md) var(--space-xl);
+  }
+
+  .hero-title {
+    font-size: clamp(1.85rem, 7vw, 2.75rem);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .hero-subtitle {
     font-size: var(--text-base);
-  }
-
-  .chatbot-panel {
-    width: calc(100vw - 32px);
-    right: 16px;
-    bottom: 86px;
-    height: 480px;
-  }
-
-  .chatbot-fab {
-    bottom: 18px;
-    right: 18px;
-    width: 52px;
-    height: 52px;
-    font-size: 1.5rem;
-  }
-
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ─── Mobile Small (<= 480px) ───────────────────────────── */
-@media (max-width: 480px) {
-  .auth-card {
-    padding: var(--space-lg);
+    margin-bottom: var(--space-xl);
   }
 
   .hero-ctas {
-    flex-direction: column;
     width: 100%;
   }
 
   .hero-ctas .btn {
     width: 100%;
+    justify-content: center;
+  }
+
+  .categories-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .topics-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+
+  .practice-page {
+    padding: 0;
+  }
+
+  .practice-container {
+    padding: var(--space-lg) var(--space-md);
+    border-radius: var(--radius-xl);
   }
 
   .practice-header {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-sm);
+  }
+
+  .practice-header h2 {
+    font-size: var(--text-xl);
+  }
+
+  .question-text {
+    font-size: var(--text-base);
+    flex-direction: row;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
+  }
+
+  .options-container {
+    gap: var(--space-sm);
+  }
+
+  .option-btn {
+    padding: 12px 14px;
+    gap: var(--space-sm);
+  }
+
+  .option-letter {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+
+  .option-text {
+    font-size: var(--text-xs);
+    line-height: 1.4;
+  }
+
+  .practice-navigation {
+    flex-direction: row;
+    gap: var(--space-sm);
+  }
+
+  .practice-navigation .btn {
+    flex: 1;
+  }
+
+  /* Chatbot on Mobile */
+  .chatbot-panel {
+    width: calc(100vw - 20px);
+    right: 10px;
+    bottom: 80px;
+    height: min(480px, calc(100vh - 100px));
+    border-radius: var(--radius-xl);
+  }
+
+  .chatbot-fab {
+    bottom: 16px;
+    right: 16px;
+    width: 50px;
+    height: 50px;
+    font-size: 1.4rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .footer-attribution-card {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-xs);
+  }
+}
+
+/* ─── Mobile Small (<= 480px) ───────────────────────────── */
+@media (max-width: 480px) {
+  /* Prevent username text collision on small phones */
+  .navbar-username {
+    display: none !important;
+  }
+
+  .navbar-user {
+    padding: 4px;
+    border-radius: var(--radius-full);
+  }
+
+  .navbar-user .dropdown-arrow {
+    display: none;
+  }
+
+  .navbar-logo .logo-text {
+    font-size: var(--text-base);
+  }
+
+  .navbar-inner {
+    padding: 0 var(--space-sm);
+  }
+
+  .auth-card {
+    padding: var(--space-lg) var(--space-md);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+  }
+
+  .auth-title {
+    font-size: var(--text-xl);
+  }
+
+  .page-header h2 {
+    font-size: var(--text-2xl);
+  }
+
+  .category-card {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .category-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+  }
+
+  .subcategories-list {
+    gap: 6px;
+  }
+
+  .subcategory-pill {
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+
+  .feature-card {
+    padding: var(--space-lg) var(--space-md);
   }
 }
