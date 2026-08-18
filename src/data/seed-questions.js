@@ -205,6 +205,106 @@ export const SEED_QUESTIONS = {
       option_d: '82 km/hr',
       correct_option: 'D',
       explanation: 'Total distance = 108 + 112 = 220 m.\n\nRelative speed = 220 / 6 = 110/3 m/s.\n\nConverting to km/hr: (110/3) × (18/5) = 22 × 6 = 132 km/hr.\n\nSpeed of second train = Relative speed - Speed of first train = 132 - 50 = 82 km/hr.'
+    },
+    {
+      question_number: 21,
+      question_text: 'A train 150 metres long takes 20 seconds to cross a platform 50 metres long. How much time will the train take to cross a platform 150 metres long?',
+      option_a: '25 seconds',
+      option_b: '30 seconds',
+      option_c: '35 seconds',
+      option_d: '40 seconds',
+      correct_option: 'B',
+      explanation: 'Total distance for 1st platform = 150 + 50 = 200 m.\nSpeed of train = 200 / 20 = 10 m/s.\n\nTotal distance for 2nd platform = 150 + 150 = 300 m.\nTime taken = 300 / 10 = 30 seconds.'
+    },
+    {
+      question_number: 22,
+      question_text: 'Two trains of equal length take 10 seconds and 15 seconds respectively to cross a telegraph post. If the length of each train be 120 metres, in what time (in seconds) will they cross each other travelling in opposite directions?',
+      option_a: '10 seconds',
+      option_b: '12 seconds',
+      option_c: '15 seconds',
+      option_d: '20 seconds',
+      correct_option: 'B',
+      explanation: 'Speed of 1st train = 120 / 10 = 12 m/s.\nSpeed of 2nd train = 120 / 15 = 8 m/s.\n\nRelative speed in opposite directions = 12 + 8 = 20 m/s.\nTotal distance to cover = 120 + 120 = 240 m.\n\nTime taken to cross each other = 240 / 20 = 12 seconds.'
+    },
+    {
+      question_number: 23,
+      question_text: 'A train running at 54 km/hr takes 20 seconds to pass a platform. Next it takes 12 seconds to pass a man walking at 6 km/hr in the same direction in which the train is going. Find the length of the train and length of the platform.',
+      option_a: '160 m and 140 m',
+      option_b: '140 m and 160 m',
+      option_c: '150 m and 150 m',
+      option_d: '180 m and 120 m',
+      correct_option: 'A',
+      explanation: 'Relative speed to man = 54 - 6 = 48 km/hr = 48 × (5/18) = 40/3 m/s.\nLength of train = (40/3) × 12 = 160 metres.\n\nSpeed of train = 54 × (5/18) = 15 m/s.\nTotal distance covered in 20 sec = 15 × 20 = 300 metres.\n\nLength of platform = 300 - 160 = 140 metres.'
+    },
+    {
+      question_number: 24,
+      question_text: 'A train travelling at 48 km/hr completely crosses another train having half its length and travelling in opposite direction at 42 km/hr, in 12 seconds. It also passes a railway platform in 45 seconds. The length of the platform is:',
+      option_a: '300 m',
+      option_b: '350 m',
+      option_c: '400 m',
+      option_d: '450 m',
+      correct_option: 'C',
+      explanation: 'Relative speed = 48 + 42 = 90 km/hr = 90 × (5/18) = 25 m/s.\nTotal distance in 12 sec = 25 × 12 = 300 m.\n\nLet length of first train be L. Length of second train = L/2.\nL + L/2 = 300 => 3L/2 = 300 => L = 200 metres.\n\nSpeed of first train = 48 × (5/18) = 40/3 m/s.\nDistance covered in 45 sec = (40/3) × 45 = 600 metres.\n\nLength of platform = 600 - 200 = 400 metres.'
+    },
+    {
+      question_number: 25,
+      question_text: 'A train 150 m long passes a kilometre stone in 15 seconds and another train of the same length travelling in opposite direction in 8 seconds. The speed of the second train is:',
+      option_a: '66 km/hr',
+      option_b: '72 km/hr',
+      option_c: '99 km/hr',
+      option_d: '108 km/hr',
+      correct_option: 'C',
+      explanation: 'Speed of 1st train = 150 / 15 = 10 m/s.\nLet speed of 2nd train be v m/s.\n\nCrossing each other: (150 + 150) / (10 + v) = 8\n300 / (10 + v) = 8 => 10 + v = 37.5 => v = 27.5 m/s.\n\nConverting to km/hr: 27.5 × (18/5) = 5.5 × 18 = 99 km/hr.'
+    },
+    {
+      question_number: 26,
+      question_text: 'A train 110 m long travels at 60 km/hr. In what time does it pass a telegraph post?',
+      option_a: '5.5 seconds',
+      option_b: '6.6 seconds',
+      option_c: '7.2 seconds',
+      option_d: '8.0 seconds',
+      correct_option: 'B',
+      explanation: 'Speed in m/s = 60 × (5/18) = 50/3 m/s.\n\nTime taken = Length / Speed = 110 / (50/3) = (110 × 3) / 50 = 6.6 seconds.'
+    },
+    {
+      question_number: 27,
+      question_text: 'A train running at 7/11 of its own speed reached a place in 22 hours. How much time could be saved if the train would have run at its own speed?',
+      option_a: '7 hours',
+      option_b: '8 hours',
+      option_c: '14 hours',
+      option_d: '16 hours',
+      correct_option: 'B',
+      explanation: 'Time is inversely proportional to speed.\nRatio of speeds = (7/11) : 1 = 7 : 11.\nRatio of times = 11 : 7.\n\n11 units = 22 hours => 1 unit = 2 hours.\nNormal time = 7 × 2 = 14 hours.\n\nTime saved = 22 - 14 = 8 hours.'
+    },
+    {
+      question_number: 28,
+      question_text: 'A train passes two bridges of lengths 800 m and 400 m in 100 seconds and 60 seconds respectively. The length of the train is:',
+      option_a: '150 m',
+      option_b: '200 m',
+      option_c: '250 m',
+      option_d: '300 m',
+      correct_option: 'B',
+      explanation: 'Let length of train be L.\nSpeed = (L + 800) / 100 = (L + 400) / 60.\n\nCross multiplying: 3(L + 800) = 5(L + 400)\n3L + 2400 = 5L + 2000 => 2L = 400 => L = 200 metres.'
+    },
+    {
+      question_number: 29,
+      question_text: 'Two trains start at the same time from Aligarh and Delhi and proceed towards each other at 14 km/hr and 21 km/hr respectively. When they meet, it is found that one train has travelled 70 km more than the other. The distance between the two stations is:',
+      option_a: '280 km',
+      option_b: '320 km',
+      option_c: '350 km',
+      option_d: '420 km',
+      correct_option: 'C',
+      explanation: 'Let time taken to meet be t hours.\nDistance by train 1 = 14t km.\nDistance by train 2 = 21t km.\n\nDifference = 21t - 14t = 7t = 70 km => t = 10 hours.\n\nTotal distance = 14t + 21t = 35t = 35 × 10 = 350 km.'
+    },
+    {
+      question_number: 30,
+      question_text: 'A train 125 m long passes a man, running at 5 km/hr in the same direction in which the train is going, in 10 seconds. In what time will it pass a 175 m long platform?',
+      option_a: '18 seconds',
+      option_b: '20 seconds',
+      option_c: '21.6 seconds',
+      option_d: '24 seconds',
+      correct_option: 'C',
+      explanation: 'Speed relative to man = 125 / 10 = 12.5 m/s = 12.5 × (18/5) = 45 km/hr.\nSpeed of train = 45 + 5 = 50 km/hr = 50 × (5/18) = 125/9 m/s.\n\nTotal distance to cross platform = 125 + 175 = 300 m.\nTime taken = 300 / (125/9) = (300 × 9) / 125 = 2700 / 125 = 21.6 seconds.'
     }
   ],
 
