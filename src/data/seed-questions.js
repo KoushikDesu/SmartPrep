@@ -1,9 +1,15 @@
 /**
- * SmartPrep — Comprehensive Question Dataset & Intelligent Topic Question Engine
+ * SmartPrep — Comprehensive Master Question Dataset & Topic Question Engine
  * High-yield placement multiple-choice questions for all Aptitude, Reasoning, Verbal, Programming, and Engineering topics.
  */
 
+import { APTITUDE_QUESTIONS } from './questions-aptitude.js';
+import { PROGRAMMING_QUESTIONS } from './questions-programming.js';
+
 export const SEED_QUESTIONS = {
+  ...APTITUDE_QUESTIONS,
+  ...PROGRAMMING_QUESTIONS,
+
   // ─── PROBLEMS ON TRAINS (30 FULL QUESTIONS) ────────────────────────────────
   'problems-on-trains': [
     {
@@ -740,11 +746,6 @@ function generateDynamicQuestions(topicSlug, targetCount = 20) {
 export function getSeedQuestions(topicSlug) {
   if (SEED_QUESTIONS[topicSlug] && SEED_QUESTIONS[topicSlug].length > 0) {
     return SEED_QUESTIONS[topicSlug];
-  }
-
-  // Pre-seed matching
-  if (topicSlug === 'problems-on-trains') {
-    return SEED_QUESTIONS['problems-on-trains'];
   }
 
   return generateDynamicQuestions(topicSlug, 20);
