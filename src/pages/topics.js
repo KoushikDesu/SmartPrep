@@ -1,3 +1,5 @@
+import { getSeedQuestions } from '../data/seed-questions.js';
+
 const FALLBACK_TOPICS = {
   'arithmetic-aptitude': [
     { name: 'Problems on Trains', slug: 'problems-on-trains', questionCount: 30 },
@@ -136,20 +138,23 @@ export async function renderTopics(categorySlug) {
     localStorage.setItem('smartprep_recent_modules', JSON.stringify(existing.slice(0, 5)));
   } catch (e) {}
 
-  const topicCards = topics.map(topic => `
-    <a href="#/practice/${topic.slug}" class="topic-card no-underline">
-      <div class="topic-card-inner">
-        <div class="topic-icon">
-          <span class="mdi mdi-book-open-page-variant"></span>
+  const topicCards = topics.map(topic => {
+    const actualCount = getSeedQuestions(topic.slug).length;
+    return `
+      <a href="#/practice/${topic.slug}" class="topic-card no-underline">
+        <div class="topic-card-inner">
+          <div class="topic-icon">
+            <span class="mdi mdi-book-open-page-variant"></span>
+          </div>
+          <div class="topic-content">
+            <h4>${topic.name}</h4>
+            <span class="badge badge-primary">${actualCount} Questions</span>
+          </div>
+          <span class="mdi mdi-chevron-right topic-arrow"></span>
         </div>
-        <div class="topic-content">
-          <h4>${topic.name}</h4>
-          <span class="badge badge-primary">${topic.questionCount} Questions</span>
-        </div>
-        <span class="mdi mdi-chevron-right topic-arrow"></span>
-      </div>
-    </a>
-  `).join('');
+      </a>
+    `;
+  }).join('');
 
   return `
     <div class="page-container">

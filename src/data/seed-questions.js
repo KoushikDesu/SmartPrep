@@ -526,62 +526,197 @@ export const SEED_QUESTIONS = {
 };
 
 /**
- * Intelligent topic question generator for any topic slug
+ * Intelligent topic question generator for any topic slug (generates 20 full, tailored questions)
  */
-function generateDynamicQuestions(topicSlug) {
+function generateDynamicQuestions(topicSlug, targetCount = 20) {
   const formatted = topicSlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
   const questions = [];
 
-  const templates = [
+  const rawTemplates = [
     {
-      q: `In placement assessments for ${formatted}, what is the most fundamental principle applied during problem-solving?`,
-      a: 'Formulate known variables and apply standard theorems',
-      b: 'Trial and error guessing without formula verification',
+      q: `In competitive placement exams, what is the core principle used to formulate solutions in ${formatted}?`,
+      a: 'Formulate known parameters, state equations, and apply standard theorems',
+      b: 'Guess blindly from option differences',
       c: 'Ignore boundary conditions and units',
-      d: 'Skip intermediate derivation steps',
+      d: 'Skip intermediate formula steps',
       correct: 'A',
-      exp: `For ${formatted}, structured analytical problem-solving requires identifying given inputs, applying verified formulas, and validating boundary constraints.`
+      exp: `Analytical problem solving in ${formatted} requires identifying given parameters, selecting verified equations, and computing step-by-step.`
     },
     {
-      q: `Which of the following represents the optimal time-management strategy for ${formatted} multiple-choice questions in campus drives (TCS, Infosys, Wipro)?`,
-      a: 'Spend more than 5 minutes per single question',
+      q: `What is the optimal time-management strategy for ${formatted} multiple choice questions in campus recruitment drives (TCS, Infosys, Wipro)?`,
+      a: 'Spend more than 5 minutes on one question',
       b: 'Eliminate improbable options first and aim for 60–90 seconds per question',
-      c: 'Attempt all questions in reverse order blindly',
-      d: 'Never re-check calculation steps',
+      c: 'Attempt all questions in reverse order randomly',
+      d: 'Never re-verify calculation values',
       correct: 'B',
-      exp: `Standard aptitude and technical placement tests allocate 60 to 90 seconds per MCQ. Option elimination saves critical time.`
+      exp: `Standard recruitment tests allocate 60 to 90 seconds per question. Eliminating 2 obvious false options saves critical time.`
     },
     {
-      q: `When solving intermediate level problems in ${formatted}, what dimensional or logical check is essential before choosing the final option?`,
-      a: 'Ensure units (time, rate, memory bytes, or logic types) are consistent throughout the equation',
+      q: `When solving problems in ${formatted}, what dimensional or logical check is essential before confirming the answer?`,
+      a: 'Ensure all units (time, rate, memory bytes, or logic types) are consistent throughout',
       b: 'Check only the last digit regardless of unit consistency',
       c: 'Convert all fractions to arbitrary rounded approximations',
-      d: 'Ignore negative sign constraints',
+      d: 'Ignore negative constraints',
       correct: 'A',
-      exp: `Unit consistency (e.g. m/s vs km/hr, bytes vs words, or true/false logic) prevents standard calculation traps in competitive exams.`
+      exp: `Unit consistency prevents calculation traps in standard placement exams.`
     },
     {
-      q: `Which characteristic is considered a classic interview question trap in ${formatted}?`,
+      q: `Which characteristic represents a common trap in ${formatted} questions?`,
       a: 'Assuming reciprocal relationships without checking base conditions',
       b: 'Strictly applying standard formulas',
       c: 'Verifying intermediate algebraic results',
       d: 'Reading the problem statement completely',
       correct: 'A',
-      exp: `Exam setters frequently introduce deceptive assumptions in ${formatted} problems. Always verify base parameters.`
+      exp: `Exam setters introduce deceptive assumptions in ${formatted}. Always verify base parameters.`
     },
     {
-      q: `What is the recommended shortcut algorithm to verify your chosen answer in ${formatted}?`,
+      q: `What is the recommended shortcut method to verify your calculated answer in ${formatted}?`,
       a: 'Reverse substitution of option values back into the problem statement',
       b: 'Select the longest option text automatically',
       c: 'Pick option C in every uncertain question',
       d: 'Recalculate using different incorrect equations',
       correct: 'A',
       exp: `Reverse substitution allows quick verification in 15 seconds by plugging option numbers back into the question constraints.`
+    },
+    {
+      q: `In ${formatted}, if the given input value doubles while rate parameters remain constant, how does the result change?`,
+      a: 'The output scales proportionally (doubles)',
+      b: 'The output is halved',
+      c: 'The output becomes zero',
+      d: 'The output increases by a factor of 4',
+      correct: 'A',
+      exp: `Linear proportional dependency ensures that doubling the input doubles the resulting value when other parameters are held constant.`
+    },
+    {
+      q: `Which standard notation is widely adopted in placement tests for ${formatted}?`,
+      a: 'Standard SI dimensional and logical symbolic notation',
+      b: 'Arbitrary custom units',
+      c: 'Unspecified variable bases',
+      d: 'Non-standard approximations',
+      correct: 'A',
+      exp: `Standard symbols and SI units ensure clarity across recruitment aptitude tests.`
+    },
+    {
+      q: `When two independent components operate simultaneously in ${formatted}, how are their individual rates combined?`,
+      a: 'Sum of their individual rates: Rate(Total) = Rate(1) + Rate(2)',
+      b: 'Product of their individual rates',
+      c: 'Difference of their rates regardless of direction',
+      d: 'Average of their times',
+      correct: 'A',
+      exp: `Concurrent rates add up directly: Combined Rate = Rate 1 + Rate 2.`
+    },
+    {
+      q: `What is the effect of inverse proportion in ${formatted} problem statements?`,
+      a: 'As variable X increases by factor k, variable Y decreases by factor k',
+      b: 'Both variables increase together',
+      c: 'Both variables decrease to zero',
+      d: 'Variables fluctuate randomly',
+      correct: 'A',
+      exp: `Inverse variation means X × Y = Constant. If X increases, Y must decrease proportionally.`
+    },
+    {
+      q: `Which analytical method is most effective when multiple constraints are given in ${formatted}?`,
+      a: 'Forming a system of simultaneous linear equations and solving step-by-step',
+      b: 'Trial and error with random values',
+      c: 'Ignoring the second constraint',
+      d: 'Choosing option D blindly',
+      correct: 'A',
+      exp: `Multi-constraint problems are reliably resolved by expressing each condition as an algebraic equation.`
+    },
+    {
+      q: `In ${formatted}, how should percentage changes or multipliers be handled in consecutive steps?`,
+      a: 'Multiply successive factors: Final = Initial × (1 + r1) × (1 + r2)',
+      b: 'Simply add the percentages together without compounding',
+      c: 'Subtract initial from final directly',
+      d: 'Ignore subsequent percentages',
+      correct: 'A',
+      exp: `Consecutive changes are multiplicative, not additive.`
+    },
+    {
+      q: `What is the primary indicator of a trick question in ${formatted}?`,
+      a: 'Inconsistent units specified in the question vs the answer choices',
+      b: 'Simple integer numbers',
+      c: 'Standard question formatting',
+      d: 'Clear option values',
+      correct: 'A',
+      exp: `Unit mismatches (e.g. hours vs minutes, meters vs kilometers) are the most frequent trick in placement MCQs.`
+    },
+    {
+      q: `When solving ratio-based relations in ${formatted}, what is the standard multiplier method?`,
+      a: 'Let the quantities be ax and bx, then solve for the common multiplier x',
+      b: 'Add the ratios directly as integers',
+      c: 'Multiply the ratios by 100',
+      d: 'Set the denominator to 1',
+      correct: 'A',
+      exp: `Representing ratio terms as ax and bx allows direct algebraic formulation.`
+    },
+    {
+      q: `What is the role of boundary conditions in ${formatted} evaluation?`,
+      a: 'Validating whether the calculated answer falls within realistic, non-negative bounds',
+      b: 'Checking if the result is always an odd number',
+      c: 'Ensuring the answer has exactly 2 decimals',
+      d: 'Ignoring physical limits',
+      correct: 'A',
+      exp: `Boundary checks ensure physical and logical validity (e.g. time and distance cannot be negative).`
+    },
+    {
+      q: `In ${formatted}, what is the quickest way to simplify complex fractional expressions?`,
+      a: 'Cancel common factors in numerator and denominator before multiplying',
+      b: 'Multiply all large numbers first',
+      c: 'Convert all fractions to decimals immediately',
+      d: 'Round off numbers early',
+      correct: 'A',
+      exp: `Pre-cancelling common prime factors drastically reduces arithmetic complexity.`
+    },
+    {
+      q: `Which skill is primarily tested by ${formatted} questions in technical and recruitment rounds?`,
+      a: 'Quantitative reasoning, structural precision, and analytical speed',
+      b: 'Rote memorization without application',
+      c: 'Speed of typing',
+      d: 'Random guessing accuracy',
+      correct: 'A',
+      exp: `Placement drives evaluate structured logical thinking and speed under timed conditions.`
+    },
+    {
+      q: `When dealing with average values in ${formatted}, what formula connects Total Sum and Count?`,
+      a: 'Total Sum = Average × Total Count',
+      b: 'Total Sum = Average / Total Count',
+      c: 'Total Sum = Average + Total Count',
+      d: 'Total Sum = Total Count / Average',
+      correct: 'A',
+      exp: `The fundamental equation of averages is: Sum = Average × Number of observations.`
+    },
+    {
+      q: `How can parity (odd/even) and divisibility rules assist in ${formatted} MCQs?`,
+      a: 'Quickly rule out options that violate algebraic parity or modular arithmetic',
+      b: 'Find the exact answer without reading the question',
+      c: 'Replace all formulas with digit sums',
+      d: 'Ensure the answer is always even',
+      correct: 'A',
+      exp: `Parity and divisibility constraints allow instant elimination of invalid option values.`
+    },
+    {
+      q: `In ${formatted}, what step should always follow after finding the unknown variable x?`,
+      a: 'Verify whether the question asked for x, or a derivative expression (e.g. 2x, x + 5, or ratio)',
+      b: 'Immediately click the first option matching x',
+      c: 'Erase the calculation',
+      d: 'Change the answer to option B',
+      correct: 'A',
+      exp: `A common error is selecting the value of x when the question actually asks for (x + 5) or the other entity.`
+    },
+    {
+      q: `What is the single most effective habit for mastering ${formatted} for placement success?`,
+      a: 'Consistent practice of standard questions with rigorous step-by-step solution reviews',
+      b: 'Memorizing answer keys without understanding',
+      c: 'Skipping conceptual theory',
+      d: 'Practicing only on the day of the exam',
+      correct: 'A',
+      exp: `Consistent hands-on problem solving builds speed, intuition, and formula recall.`
     }
   ];
 
-  for (let i = 0; i < templates.length; i++) {
-    const t = templates[i];
+  for (let i = 0; i < Math.min(targetCount, rawTemplates.length); i++) {
+    const t = rawTemplates[i];
     questions.push({
       question_number: i + 1,
       question_text: `[${formatted}] ${t.q}`,
@@ -607,18 +742,12 @@ export function getSeedQuestions(topicSlug) {
     return SEED_QUESTIONS[topicSlug];
   }
 
-  // Alias lookups
-  if (topicSlug.includes('c-') || topicSlug === 'c-programming') {
-    return SEED_QUESTIONS['c-pointers'] || SEED_QUESTIONS['c-declarations'];
-  }
-  if (topicSlug.includes('sql') || topicSlug.includes('db') || topicSlug === 'database') {
-    return SEED_QUESTIONS['sql-queries'];
-  }
-  if (topicSlug.includes('relation') || topicSlug.includes('reasoning') || topicSlug === 'logical-reasoning') {
-    return SEED_QUESTIONS['blood-relations'];
+  // Pre-seed matching
+  if (topicSlug === 'problems-on-trains') {
+    return SEED_QUESTIONS['problems-on-trains'];
   }
 
-  return generateDynamicQuestions(topicSlug);
+  return generateDynamicQuestions(topicSlug, 20);
 }
 
 /**
