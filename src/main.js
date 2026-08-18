@@ -322,13 +322,23 @@ async function init() {
 
   supabase.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' && session?.user) {
+      const isInitialOrLoggedOut = !appState.user;
       appState.user = session.user;
       try {
         appState.profile = await getCurrentProfile();
       } catch (e) {
         console.warn('Profile fetch failed:', e);
       }
-      navigateToRoleHome();
+      
+      // ONLY redirect if the user was on the Landing, Login, or Signup page
+      const currentHash = window.location.hash || '#/';
+      const path = currentHash.replace('#', '') || '/';
+      if (isInitialOrLoggedOut && (path === '/' || path === '/home' || path === '/login' || path === '/signup')) {
+        navigateToRoleHome();
+      }
+    } else if (event === 'TOKEN_REFRESHED' && session?.user) {
+      appState.user = session.user;
+      // Keep user exactly where they are on token refresh!
     } else if (event === 'SIGNED_OUT') {
       appState.user = null;
       appState.profile = null;

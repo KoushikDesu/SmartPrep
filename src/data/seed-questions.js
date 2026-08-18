@@ -64,8 +64,148 @@ export const SEED_QUESTIONS = {
       option_c: '100 sec',
       option_d: '150 sec',
       correct_option: 'B',
-      explanation: 'Speed = 240/24 = 10 m/s.\n\nTotal distance to cover = 240 + 650 = 890 m.\n\nTime = 890/10 = 89 seconds.'
+      explanation: 'Speed = 240 / 24 = 10 m/s.\n\nTotal distance to cover = 240 + 650 = 890 m.\n\nTime = 890 / 10 = 89 seconds.'
     },
+    {
+      question_number: 7,
+      question_text: 'A train 110 m long is travelling at a speed of 60 km/hr. In what time will it pass a man who is walking at 6 km/hr in the opposite direction?',
+      option_a: '5 seconds',
+      option_b: '6 seconds',
+      option_c: '7 seconds',
+      option_d: '10 seconds',
+      correct_option: 'B',
+      explanation: 'Relative speed of train and man in opposite directions = 60 + 6 = 66 km/hr.\n\nConverting to m/s: 66 × (5/18) = 55/3 m/s.\n\nTime to pass the man = Distance / Relative Speed = 110 / (55/3) = (110 × 3) / 55 = 6 seconds.'
+    },
+    {
+      question_number: 8,
+      question_text: 'Two trains of equal length are running on parallel lines in the same direction at 46 km/hr and 36 km/hr. The faster train passes the slower train in 36 seconds. The length of each train is:',
+      option_a: '50 m',
+      option_b: '72 m',
+      option_c: '80 m',
+      option_d: '100 m',
+      correct_option: 'A',
+      explanation: 'Relative speed in same direction = 46 - 36 = 10 km/hr = 10 × (5/18) = 25/9 m/s.\n\nTotal distance covered in 36 sec = (25/9) × 36 = 100 m.\n\nLet the length of each train be L. Total distance = 2L = 100 m.\n\nTherefore, L = 50 metres.'
+    },
+    {
+      question_number: 9,
+      question_text: 'A train 360 m long is running at a speed of 45 km/hr. In what time will it pass a bridge 140 m long?',
+      option_a: '40 seconds',
+      option_b: '42 seconds',
+      option_c: '45 seconds',
+      option_d: '48 seconds',
+      correct_option: 'A',
+      explanation: 'Speed = 45 × (5/18) = 12.5 m/s.\n\nTotal distance = 360 + 140 = 500 m.\n\nTime taken = 500 / 12.5 = 40 seconds.'
+    },
+    {
+      question_number: 10,
+      question_text: 'Two trains are running in opposite directions with the same speed. If the length of each train is 120 metres and they cross each other in 12 seconds, then the speed of each train is:',
+      option_a: '10 km/hr',
+      option_b: '18 km/hr',
+      option_c: '36 km/hr',
+      option_d: '72 km/hr',
+      correct_option: 'C',
+      explanation: 'Total distance = 120 + 120 = 240 m.\n\nRelative speed = 240 / 12 = 20 m/s.\n\nSince both trains have the same speed (v + v = 20 m/s), each train has a speed of 10 m/s.\n\nConverting to km/hr: 10 × (18/5) = 36 km/hr.'
+    },
+    {
+      question_number: 11,
+      question_text: 'A train 800 metres long is running at a speed of 78 km/hr. If it crosses a tunnel in 1 minute, then the length of the tunnel is:',
+      option_a: '1300 m',
+      option_b: '500 m',
+      option_c: '700 m',
+      option_d: '200 m',
+      correct_option: 'B',
+      explanation: 'Speed = 78 × (5/18) = 65/3 m/s.\nTime = 1 minute = 60 seconds.\n\nTotal distance = (65/3) × 60 = 1300 m.\n\nLength of tunnel = Total distance - Length of train = 1300 - 800 = 500 metres.'
+    },
+    {
+      question_number: 12,
+      question_text: 'A 150 m long train crosses a platform of length 250 m in 20 seconds. Find the speed of the train in km/hr.',
+      option_a: '50 km/hr',
+      option_b: '60 km/hr',
+      option_c: '72 km/hr',
+      option_d: '80 km/hr',
+      correct_option: 'C',
+      explanation: 'Total distance = 150 + 250 = 400 m.\n\nSpeed in m/s = 400 / 20 = 20 m/s.\n\nSpeed in km/hr = 20 × (18/5) = 72 km/hr.'
+    },
+    {
+      question_number: 13,
+      question_text: 'A train passes a 50 metre long platform in 14 seconds and a man standing on the platform in 10 seconds. The speed of the train is:',
+      option_a: '24 km/hr',
+      option_b: '36 km/hr',
+      option_c: '40 km/hr',
+      option_d: '45 km/hr',
+      correct_option: 'D',
+      explanation: 'Let length of train be L and speed be v.\n\nPassing man in 10 sec: L = 10v.\nPassing platform in 14 sec: L + 50 = 14v.\n\n10v + 50 = 14v => 4v = 50 => v = 12.5 m/s.\n\nConverting to km/hr: 12.5 × (18/5) = 45 km/hr.'
+    },
+    {
+      question_number: 14,
+      question_text: 'A train moves with a speed of 108 km/hr. Its speed in metres per second is:',
+      option_a: '10.8 m/s',
+      option_b: '18 m/s',
+      option_c: '30 m/s',
+      option_d: '38.8 m/s',
+      correct_option: 'C',
+      explanation: 'Speed in m/s = 108 × (5/18) = 6 × 5 = 30 m/s.'
+    },
+    {
+      question_number: 15,
+      question_text: 'A goods train runs at the speed of 72 km/hr and crosses a 250 m long platform in 26 seconds. What is the length of the goods train?',
+      option_a: '230 m',
+      option_b: '240 m',
+      option_c: '260 m',
+      option_d: '270 m',
+      correct_option: 'D',
+      explanation: 'Speed = 72 × (5/18) = 20 m/s.\n\nDistance in 26 sec = 20 × 26 = 520 m.\n\nLength of goods train = 520 - 250 = 270 metres.'
+    },
+    {
+      question_number: 16,
+      question_text: 'Two trains 140 m and 160 m long run at the speed of 60 km/hr and 40 km/hr respectively in opposite directions on parallel tracks. How many seconds will they take to cross each other?',
+      option_a: '9.6 seconds',
+      option_b: '10.8 seconds',
+      option_c: '12.0 seconds',
+      option_d: '15.0 seconds',
+      correct_option: 'B',
+      explanation: 'Total distance = 140 + 160 = 300 m.\n\nRelative speed in opposite directions = 60 + 40 = 100 km/hr = 100 × (5/18) = 250/9 m/s.\n\nTime taken = 300 / (250/9) = (300 × 9) / 250 = 10.8 seconds.'
+    },
+    {
+      question_number: 17,
+      question_text: 'A train 100 m long travelling at 60 km/hr passes another train 150 m long travelling at 40 km/hr in the same direction. How long does the faster train take to pass the slower train?',
+      option_a: '30 seconds',
+      option_b: '45 seconds',
+      option_c: '50 seconds',
+      option_d: '55 seconds',
+      correct_option: 'B',
+      explanation: 'Total distance = 100 + 150 = 250 m.\n\nRelative speed in same direction = 60 - 40 = 20 km/hr = 20 × (5/18) = 50/9 m/s.\n\nTime taken = 250 / (50/9) = (250 × 9) / 50 = 45 seconds.'
+    },
+    {
+      question_number: 18,
+      question_text: 'A train takes 18 seconds to pass completely through a station 162 m long and 15 seconds through another station 120 m long. The length of the train is:',
+      option_a: '70 m',
+      option_b: '80 m',
+      option_c: '90 m',
+      option_d: '100 m',
+      correct_option: 'C',
+      explanation: 'Let length of train be L.\nSpeed = (L + 162)/18 = (L + 120)/15.\n\nCross multiplying by 3: (L + 162)/6 = (L + 120)/5\n5(L + 162) = 6(L + 120)\n5L + 810 = 6L + 720\nL = 810 - 720 = 90 metres.'
+    },
+    {
+      question_number: 19,
+      question_text: 'Two stations A and B are 110 km apart. Train 1 starts from A at 7 a.m. at 20 km/hr towards B. Train 2 starts from B at 8 a.m. at 25 km/hr towards A. At what time will they meet?',
+      option_a: '9:00 a.m.',
+      option_b: '10:00 a.m.',
+      option_c: '10:30 a.m.',
+      option_d: '11:00 a.m.',
+      correct_option: 'B',
+      explanation: 'By 8 a.m., Train 1 has travelled for 1 hour = 20 km.\nRemaining distance at 8 a.m. = 110 - 20 = 90 km.\n\nRelative speed = 20 + 25 = 45 km/hr.\nTime to meet after 8 a.m. = 90 / 45 = 2 hours.\n\nThey meet at 8 a.m. + 2 hours = 10:00 a.m.'
+    },
+    {
+      question_number: 20,
+      question_text: 'A train 108 m long moving at 50 km/hr crosses another train 112 m long coming from the opposite direction in 6 seconds. The speed of the second train is:',
+      option_a: '48 km/hr',
+      option_b: '66 km/hr',
+      option_c: '72 km/hr',
+      option_d: '82 km/hr',
+      correct_option: 'D',
+      explanation: 'Total distance = 108 + 112 = 220 m.\n\nRelative speed = 220 / 6 = 110/3 m/s.\n\nConverting to km/hr: (110/3) × (18/5) = 22 × 6 = 132 km/hr.\n\nSpeed of second train = Relative speed - Speed of first train = 132 - 50 = 82 km/hr.'
+    }
   ],
 
   'time-and-work': [
