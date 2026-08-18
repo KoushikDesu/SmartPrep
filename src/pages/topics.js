@@ -2,44 +2,113 @@ const FALLBACK_TOPICS = {
   'arithmetic-aptitude': [
     { name: 'Problems on Trains', slug: 'problems-on-trains', questionCount: 30 },
     { name: 'Time and Distance', slug: 'time-and-distance', questionCount: 25 },
-    { name: 'Height and Distance', slug: 'height-and-distance', questionCount: 20 },
     { name: 'Time and Work', slug: 'time-and-work', questionCount: 28 },
     { name: 'Simple Interest', slug: 'simple-interest', questionCount: 22 },
     { name: 'Compound Interest', slug: 'compound-interest', questionCount: 18 },
     { name: 'Profit and Loss', slug: 'profit-and-loss', questionCount: 35 },
-    { name: 'Partnership', slug: 'partnership', questionCount: 15 },
     { name: 'Percentage', slug: 'percentage', questionCount: 40 },
     { name: 'Problems on Ages', slug: 'problems-on-ages', questionCount: 25 },
-    { name: 'Calendar', slug: 'calendar', questionCount: 15 },
-    { name: 'Clock', slug: 'clock', questionCount: 12 },
-    { name: 'Average', slug: 'average', questionCount: 30 },
-    { name: 'Area', slug: 'area', questionCount: 25 },
-    { name: 'Volume and Surface Area', slug: 'volume-surface-area', questionCount: 20 },
-    { name: 'Numbers', slug: 'numbers', questionCount: 45 },
-    { name: 'Problems on Numbers', slug: 'problems-on-numbers', questionCount: 35 },
-    { name: 'Problems on H.C.F and L.C.M', slug: 'hcf-lcm', questionCount: 28 },
-    { name: 'Decimal Fraction', slug: 'decimal-fraction', questionCount: 20 },
-    { name: 'Simplification', slug: 'simplification', questionCount: 30 },
-    { name: 'Square Root and Cube Root', slug: 'square-root-cube-root', questionCount: 22 },
-    { name: 'Surds and Indices', slug: 'surds-indices', questionCount: 18 },
     { name: 'Ratio and Proportion', slug: 'ratio-proportion', questionCount: 32 },
-    { name: 'Chain Rule', slug: 'chain-rule', questionCount: 15 },
     { name: 'Pipes and Cistern', slug: 'pipes-cistern', questionCount: 20 },
     { name: 'Boats and Streams', slug: 'boats-streams', questionCount: 18 },
     { name: 'Alligation or Mixture', slug: 'alligation-mixture', questionCount: 22 },
-    { name: 'Logarithm', slug: 'logarithm', questionCount: 15 },
-    { name: 'Races and Games', slug: 'races-games', questionCount: 10 },
-    { name: 'Stocks and Shares', slug: 'stocks-shares', questionCount: 12 },
+    { name: 'Average', slug: 'average', questionCount: 30 },
+    { name: 'Area & Perimeter', slug: 'area', questionCount: 25 },
+    { name: 'Volume and Surface Area', slug: 'volume-surface-area', questionCount: 20 },
+    { name: 'Numbers & Divisibility', slug: 'numbers', questionCount: 45 },
+    { name: 'Problems on H.C.F and L.C.M', slug: 'hcf-lcm', questionCount: 28 },
+    { name: 'Simplification', slug: 'simplification', questionCount: 30 },
+    { name: 'Permutations and Combinations', slug: 'permutations-and-combinations', questionCount: 20 },
     { name: 'Probability', slug: 'probability', questionCount: 25 },
-    { name: 'True Discount', slug: 'true-discount', questionCount: 10 },
-    { name: "Banker's Discount", slug: 'bankers-discount', questionCount: 8 },
-    { name: 'Odd Man Out and Series', slug: 'odd-man-out', questionCount: 30 },
+    { name: 'Calendar & Clocks', slug: 'calendar-and-clocks', questionCount: 20 },
   ],
+
+  'c-programming': [
+    { name: 'C Declarations & Data Types', slug: 'c-declarations', questionCount: 25 },
+    { name: 'Control Instructions & Loops', slug: 'c-control-instructions', questionCount: 25 },
+    { name: 'Pointers & Memory Architecture', slug: 'c-pointers', questionCount: 30 },
+    { name: 'Functions & Recursion', slug: 'c-functions', questionCount: 20 },
+    { name: 'Arrays & 2D Matrices', slug: 'c-arrays', questionCount: 22 },
+    { name: 'Strings & String Functions', slug: 'c-strings', questionCount: 20 },
+    { name: 'Structures & Unions', slug: 'c-structures', questionCount: 18 },
+    { name: 'Bitwise Operators & Shifts', slug: 'c-bitwise', questionCount: 20 },
+    { name: 'C Preprocessor & Macros', slug: 'c-preprocessor', questionCount: 15 },
+    { name: 'File Handling & I/O', slug: 'c-file-handling', questionCount: 15 },
+  ],
+
+  'programming': [
+    { name: 'C Language Fundamentals', slug: 'c-declarations', questionCount: 25 },
+    { name: 'C Pointers & Dynamic Memory', slug: 'c-pointers', questionCount: 30 },
+    { name: 'C++ Object Oriented Programming', slug: 'cpp-oop', questionCount: 25 },
+    { name: 'Java Core Concepts & Collections', slug: 'java-core', questionCount: 30 },
+    { name: 'Data Structures (Stacks & Queues)', slug: 'data-structures-stack-queue', questionCount: 25 },
+    { name: 'Data Structures (Trees & Graphs)', slug: 'data-structures-trees', questionCount: 20 },
+    { name: 'Algorithms (Sorting & Searching)', slug: 'algorithms-sorting-searching', questionCount: 25 },
+    { name: 'Python Programming Basics', slug: 'python-basics', questionCount: 25 },
+  ],
+
+  'logical-reasoning': [
+    { name: 'Blood Relations & Family Tree', slug: 'blood-relations', questionCount: 30 },
+    { name: 'Number Series & Pattern Completion', slug: 'number-series', questionCount: 35 },
+    { name: 'Syllogisms & Venn Deductions', slug: 'syllogism', questionCount: 30 },
+    { name: 'Coding - Decoding Puzzles', slug: 'coding-decoding', questionCount: 30 },
+    { name: 'Direction Sense & Navigation Tests', slug: 'direction-sense-test', questionCount: 25 },
+    { name: 'Seating Arrangement (Linear & Circular)', slug: 'seating-arrangement', questionCount: 25 },
+    { name: 'Analogies & Classification', slug: 'analogies', questionCount: 20 },
+    { name: 'Statement and Assumptions', slug: 'statement-and-assumption', questionCount: 20 },
+    { name: 'Statement and Conclusions', slug: 'statement-and-conclusion', questionCount: 20 },
+  ],
+
+  'verbal-ability': [
+    { name: 'Spotting Errors in Sentences', slug: 'spotting-errors', questionCount: 35 },
+    { name: 'Synonyms & Vocabulary Match', slug: 'synonyms', questionCount: 40 },
+    { name: 'Antonyms & Word Opposites', slug: 'antonyms', questionCount: 40 },
+    { name: 'Sentence Improvement & Grammar', slug: 'sentence-improvement', questionCount: 30 },
+    { name: 'Ordering of Words & Parajumbles', slug: 'ordering-of-words', questionCount: 25 },
+    { name: 'One Word Substitutions', slug: 'one-word-substitutes', questionCount: 30 },
+    { name: 'Idioms and Phrases', slug: 'idioms-and-phrases', questionCount: 30 },
+    { name: 'Reading Comprehension Passages', slug: 'comprehension', questionCount: 20 },
+    { name: 'Cloze Test & Fillers', slug: 'cloze-test', questionCount: 25 },
+  ],
+
+  'database': [
+    { name: 'SQL Queries, SELECT & Clauses', slug: 'sql-queries', questionCount: 30 },
+    { name: 'SQL Joins (Inner, Left, Right, Full)', slug: 'sql-joins', questionCount: 25 },
+    { name: 'DBMS Architecture & RDBMS Models', slug: 'db-architecture', questionCount: 20 },
+    { name: 'Database Normalization (1NF, 2NF, 3NF, BCNF)', slug: 'db-normalization', questionCount: 25 },
+    { name: 'Transactions, ACID & Concurrency', slug: 'db-transactions', questionCount: 20 },
+    { name: 'Keys & Integrity Constraints', slug: 'db-keys', questionCount: 20 },
+    { name: 'NoSQL Databases & MongoDB Basics', slug: 'nosql-basics', questionCount: 15 },
+  ],
+
+  'data-interpretation': [
+    { name: 'Table Charts & Data Grids', slug: 'table-charts', questionCount: 25 },
+    { name: 'Pie Charts & Sector Percentages', slug: 'pie-charts', questionCount: 25 },
+    { name: 'Bar Charts (Single & Multi-Bar)', slug: 'bar-charts', questionCount: 25 },
+    { name: 'Line Graphs & Trend Analysis', slug: 'line-graphs', questionCount: 20 },
+  ],
+
+  'general-knowledge': [
+    { name: 'Basic General Knowledge', slug: 'basic-gk', questionCount: 35 },
+    { name: 'Indian History & Freedom Struggle', slug: 'indian-history', questionCount: 30 },
+    { name: 'Indian Geography & Rivers', slug: 'geography', questionCount: 25 },
+    { name: 'General Science & Inventions', slug: 'general-science', questionCount: 30 },
+    { name: 'World Organizations (UN, WHO, IMF)', slug: 'world-orgs', questionCount: 20 },
+    { name: 'Current Affairs & Technology News', slug: 'current-affairs-gk', questionCount: 30 },
+  ],
+
+  'engineering': [
+    { name: 'Computer Science & IT Fundamentals', slug: 'cs-engineering', questionCount: 30 },
+    { name: 'Electronics & Communication (ECE)', slug: 'ece-engineering', questionCount: 25 },
+    { name: 'Electrical Engineering (EEE)', slug: 'eee-engineering', questionCount: 25 },
+    { name: 'Mechanical Engineering Core', slug: 'mechanical-engineering', questionCount: 25 },
+    { name: 'Civil Engineering Fundamentals', slug: 'civil-engineering', questionCount: 25 },
+  ],
+
   'default': [
-    { name: 'Basics & Fundamental Concepts', slug: 'basics', questionCount: 20 },
-    { name: 'Intermediate Placement Problems', slug: 'intermediate', questionCount: 30 },
-    { name: 'Advanced Company Test Questions', slug: 'advanced', questionCount: 15 },
-    { name: 'Comprehensive Mock Test', slug: 'mock-test', questionCount: 50 },
+    { name: 'Core Concept Questions', slug: 'core-concepts', questionCount: 25 },
+    { name: 'Intermediate Placement MCQs', slug: 'intermediate-mcqs', questionCount: 25 },
+    { name: 'Advanced Company Test Problems', slug: 'advanced-problems', questionCount: 20 },
   ]
 };
 
@@ -51,7 +120,7 @@ function formatTitle(slug) {
 }
 
 export async function renderTopics(categorySlug) {
-  let topics = FALLBACK_TOPICS[categorySlug] || FALLBACK_TOPICS['default'];
+  let topics = FALLBACK_TOPICS[categorySlug] || FALLBACK_TOPICS['arithmetic-aptitude'];
   const categoryTitle = formatTitle(categorySlug);
 
   // Track recent category
@@ -98,7 +167,7 @@ export async function renderTopics(categorySlug) {
           <p class="subtitle" style="font-size: var(--text-sm);">Select a topic to start practicing with step-by-step solutions</p>
         </div>
       </div>
-      
+
       <div class="topics-grid">
         ${topicCards}
       </div>

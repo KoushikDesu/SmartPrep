@@ -60,14 +60,9 @@ export async function renderPractice(topicSlug) {
     console.log('Fetching from Supabase failed, using seed questions');
   }
 
-  // 2. Fallback to seed questions
+  // 2. Fallback to topic-specific seed/generated questions
   if (!questions || questions.length === 0) {
     questions = getSeedQuestions(topicSlug);
-  }
-
-  // 3. Fallback to default questions if topic has no specific seeds
-  if (!questions || questions.length === 0) {
-    questions = getSeedQuestions('problems-on-trains');
   }
 
   // Read saved resume index
