@@ -4,6 +4,7 @@
  */
 
 export const APTITUDE_QUESTIONS = {
+  // ─── TIME AND WORK ────────────────────────────────────────────────────────
   'time-and-work': [
     {
       question_number: 1,
@@ -124,89 +125,10 @@ export const APTITUDE_QUESTIONS = {
       option_d: '4 days',
       correct_option: 'C',
       explanation: '1 day work = 1/24 + 1/6 + 1/12 = (1 + 4 + 2)/24 = 7/24.\nTotal time = 24/7 = 3(3/7) days.'
-    },
-    {
-      question_number: 13,
-      question_text: 'A and B can do a work in 8 days, B and C can do the same work in 12 days. A, B and C together can finish it in 6 days. A and C together will do it in:',
-      option_a: '4 days',
-      option_b: '6 days',
-      option_c: '8 days',
-      option_d: '12 days',
-      correct_option: 'C',
-      explanation: 'A + B + C = 1/6.\nA = (A + B + C) - (B + C) = 1/6 - 1/12 = 1/12.\nC = (A + B + C) - (A + B) = 1/6 - 1/8 = 1/24.\n(A + C)’s 1 day work = 1/12 + 1/24 = 3/24 = 1/8 => 8 days.'
-    },
-    {
-      question_number: 14,
-      question_text: 'A can do a piece of work in 14 days and B in 21 days. They begin together but 3 days before the completion of the work, A leaves off. The total number of days to complete the work is:',
-      option_a: '6(3/5) days',
-      option_b: '8.5 days',
-      option_c: '10.2 days',
-      option_d: '9(1/5) days',
-      correct_option: 'C',
-      explanation: 'In the last 3 days, B alone works = 3 × (1/21) = 1/7.\nRemaining work = 1 - 1/7 = 6/7.\n(A + B)’s 1 day work = 1/14 + 1/21 = 5/42.\nTime worked together = (6/7) / (5/42) = (6/7) × (42/5) = 36/5 = 7.2 days.\nTotal days = 7.2 + 3 = 10.2 days.'
-    },
-    {
-      question_number: 15,
-      question_text: '20 women can do a work in 16 days. 16 men can complete the same work in 15 days. What is the ratio between the capacity of a man and a woman?',
-      option_a: '3 : 4',
-      option_b: '4 : 3',
-      option_c: '5 : 3',
-      option_d: '2 : 1',
-      correct_option: 'B',
-      explanation: 'Total work = 20 × 16 = 320 women-days = 16 × 15 = 240 men-days.\n320 W = 240 M => M / W = 320 / 240 = 4 / 3.\nRatio = 4 : 3.'
-    },
-    {
-      question_number: 16,
-      question_text: 'A and B undertake to do a piece of work for Rs. 600. A alone can do it in 6 days while B alone can do it in 8 days. With the help of a boy, they finish it in 3 days. Find the boy’s share.',
-      option_a: 'Rs. 75',
-      option_b: 'Rs. 80',
-      option_c: 'Rs. 100',
-      option_d: 'Rs. 120',
-      correct_option: 'A',
-      explanation: 'Boy’s 3 days work = 1 - (3/6 + 3/8) = 1 - (1/2 + 3/8) = 1/8.\nBoy’s share = (1/8) × 600 = Rs. 75.'
-    },
-    {
-      question_number: 17,
-      question_text: 'A is 50% as efficient as B. C does half of the work done by A and B together. If C alone does the work in 40 days, then A, B and C together can do the work in:',
-      option_a: '13(1/3) days',
-      option_b: '15 days',
-      option_c: '20 days',
-      option_d: '30 days',
-      correct_option: 'A',
-      explanation: 'Efficiency: A = 1, B = 2 => (A + B) = 3.\nC’s efficiency = 3/2 = 1.5.\nTotal efficiency (A + B + C) = 3 + 1.5 = 4.5.\nRatio of C to (A + B + C) = 1.5 : 4.5 = 1 : 3.\nTime taken = 40 / 3 = 13(1/3) days.'
-    },
-    {
-      question_number: 18,
-      question_text: 'A can do a work in 20 days and B in 30 days. They work together for 7 days and then both leave the work. Then C finishes the remaining work in 10 days. In how many days can C alone finish the work?',
-      option_a: '24 days',
-      option_b: '25 days',
-      option_c: '30 days',
-      option_d: '36 days',
-      correct_option: 'A',
-      explanation: '(A + B)’s 7 days work = 7 × (1/20 + 1/30) = 7 × (5/60) = 7/12.\nRemaining work = 1 - 7/12 = 5/12 done by C in 10 days.\nC takes 10 × (12/5) = 24 days.'
-    },
-    {
-      question_number: 19,
-      question_text: '12 men can complete a work in 8 days. 16 women can complete the same work in 12 days. 8 men and 8 women started working together. In how many days will the work be completed?',
-      option_a: '8 days',
-      option_b: '9 days',
-      option_c: '10 days',
-      option_d: '12 days',
-      correct_option: 'A',
-      explanation: '12 × 8 = 96 men-days = 16 × 12 = 192 women-days => 1 man = 2 women.\n8 men + 8 women = 16 women + 8 women = 24 women.\nTime taken = 192 / 24 = 8 days.'
-    },
-    {
-      question_number: 20,
-      question_text: 'A can do a piece of work in 10 days, B in 12 days and C in 15 days. They begin together but A leaves the work after 2 days and B leaves 3 days before the completion of the work. How long did the work last?',
-      option_a: '7 days',
-      option_b: '8 days',
-      option_c: '9 days',
-      option_d: '10 days',
-      correct_option: 'A',
-      explanation: 'Let total days be x.\nA worked for 2 days, B worked for (x - 3) days, C worked for x days.\n2/10 + (x - 3)/12 + x/15 = 1 => 1/5 + (x - 3)/12 + x/15 = 1.\nMultiply by 60: 12 + 5(x - 3) + 4x = 60 => 12 + 5x - 15 + 4x = 60 => 9x - 3 = 60 => 9x = 63 => x = 7 days.'
     }
   ],
 
+  // ─── TIME AND DISTANCE ────────────────────────────────────────────────────
   'time-and-distance': [
     {
       question_number: 1,
@@ -257,9 +179,20 @@ export const APTITUDE_QUESTIONS = {
       option_d: '20 min',
       correct_option: 'B',
       explanation: 'Due to stoppages, it covers 54 - 45 = 9 km less per hour.\nTime to cover 9 km at 54 kmph = (9/54) × 60 = (1/6) × 60 = 10 minutes.'
+    },
+    {
+      question_number: 6,
+      question_text: 'In a flight of 600 km, an aircraft was slowed down due to bad weather. Its average speed for the trip was reduced by 200 km/hr and the time of flight increased by 30 minutes. The duration of the flight is:',
+      option_a: '1 hour',
+      option_b: '2 hours',
+      option_c: '3 hours',
+      option_d: '4 hours',
+      correct_option: 'A',
+      explanation: 'Let duration be t hours.\n600/t - 600/(t + 0.5) = 200 => 3/t - 3/(t + 0.5) = 1 => 3(t + 0.5) - 3t = t(t + 0.5) => 1.5 = t² + 0.5t => 2t² + t - 3 = 0 => (2t + 3)(t - 1) = 0 => t = 1 hour.'
     }
   ],
 
+  // ─── SIMPLE INTEREST ──────────────────────────────────────────────────────
   'simple-interest': [
     {
       question_number: 1,
@@ -310,6 +243,112 @@ export const APTITUDE_QUESTIONS = {
       option_d: '20%',
       correct_option: 'B',
       explanation: 'Let Principal = P. Amount = 2P => S.I. = P.\nRate = (S.I. × 100) / (P × T) = (P × 100) / (P × 10) = 10%.'
+    }
+  ],
+
+  // ─── PROFIT AND LOSS ──────────────────────────────────────────────────────
+  'profit-and-loss': [
+    {
+      question_number: 1,
+      question_text: 'A person sold an article for Rs. 450 with a loss of 10%. At what price should he have sold it to gain 20%?',
+      option_a: 'Rs. 500',
+      option_b: 'Rs. 550',
+      option_c: 'Rs. 600',
+      option_d: 'Rs. 650',
+      correct_option: 'C',
+      explanation: 'Cost Price = 450 / (1 - 0.10) = 450 / 0.9 = Rs. 500.\nSelling Price for 20% gain = 500 × 1.20 = Rs. 600.'
+    },
+    {
+      question_number: 2,
+      question_text: 'If the cost price of 12 pens is equal to the selling price of 8 pens, the gain percentage is:',
+      option_a: '25%',
+      option_b: '33.33%',
+      option_c: '50%',
+      option_d: '66.67%',
+      correct_option: 'C',
+      explanation: 'Let CP of 1 pen = Rs. 1. CP of 8 pens = Rs. 8.\nSP of 8 pens = CP of 12 pens = Rs. 12.\nGain = 12 - 8 = Rs. 4.\nGain % = (4 / 8) × 100 = 50%.'
+    },
+    {
+      question_number: 3,
+      question_text: 'A shopkeeper sells two articles at Rs. 1000 each. On one he gains 20% and on the other he loses 20%. Overall he incurs:',
+      option_a: 'No gain no loss',
+      option_b: '4% loss',
+      option_c: '4% gain',
+      option_d: '2% loss',
+      correct_option: 'B',
+      explanation: 'When two items are sold at same SP with x% gain and x% loss, there is always a loss of (x/10)² % = (20/10)² = 4% loss.'
+    }
+  ],
+
+  // ─── PERCENTAGE ───────────────────────────────────────────────────────────
+  'percentage': [
+    {
+      question_number: 1,
+      question_text: 'If A’s salary is 20% more than B’s salary, then how much percent is B’s salary less than A’s salary?',
+      option_a: '16(2/3)%',
+      option_b: '20%',
+      option_c: '25%',
+      option_d: '33(1/3)%',
+      correct_option: 'A',
+      explanation: 'Let B = 100 => A = 120.\nDifference = 20.\nPercentage less = (20 / 120) × 100 = 100 / 6 = 16(2/3)%.'
+    },
+    {
+      question_number: 2,
+      question_text: 'Two students appeared at an examination. One of them secured 9 marks more than the other and his marks were 56% of the sum of their marks. The marks obtained by them are:',
+      option_a: '39, 30',
+      option_b: '41, 32',
+      option_c: '42, 33',
+      option_d: '43, 34',
+      correct_option: 'C',
+      explanation: 'Let marks be x and (x + 9).\nx + 9 = (56/100)(2x + 9) => 25(x + 9) = 14(2x + 9) => 25x + 225 = 28x + 126 => 3x = 99 => x = 33.\nMarks are 42 and 33.'
+    }
+  ],
+
+  // ─── PROBLEMS ON AGES ─────────────────────────────────────────────────────
+  'problems-on-ages': [
+    {
+      question_number: 1,
+      question_text: 'Father is aged three times more than his son Sunil. After 8 years, he would be two and a half times of Sunil’s age. After further 8 years, how many times would he be of Sunil’s age?',
+      option_a: '2 times',
+      option_b: '2.5 times',
+      option_c: '2.75 times',
+      option_d: '3 times',
+      correct_option: 'A',
+      explanation: 'Let Sunil’s age = x. Father’s age = x + 3x = 4x.\nAfter 8 yrs: 4x + 8 = 2.5(x + 8) => 4x + 8 = 2.5x + 20 => 1.5x = 12 => x = 8.\nFather = 32, Sunil = 8.\nAfter 16 years: Father = 32 + 16 = 48, Sunil = 8 + 16 = 24.\nRatio = 48 / 24 = 2 times.'
+    },
+    {
+      question_number: 2,
+      question_text: 'The sum of the ages of 5 children born at the intervals of 3 years each is 50 years. What is the age of the youngest child?',
+      option_a: '4 years',
+      option_b: '8 years',
+      option_c: '10 years',
+      option_d: 'None of these',
+      correct_option: 'A',
+      explanation: 'Let ages be x, x+3, x+6, x+9, x+12.\nSum = 5x + 30 = 50 => 5x = 20 => x = 4 years.'
+    }
+  ],
+
+  // ─── RATIO AND PROPORTION ─────────────────────────────────────────────────
+  'ratio-proportion': [
+    {
+      question_number: 1,
+      question_text: 'If A : B = 5 : 7 and B : C = 6 : 11, then A : B : C is:',
+      option_a: '30 : 42 : 77',
+      option_b: '35 : 49 : 77',
+      option_c: '30 : 35 : 77',
+      option_d: '25 : 35 : 77',
+      correct_option: 'A',
+      explanation: 'A : B = 5 : 7 = 30 : 42.\nB : C = 6 : 11 = 42 : 77.\nA : B : C = 30 : 42 : 77.'
+    },
+    {
+      question_number: 2,
+      question_text: 'Two numbers are in the ratio 3 : 5. If 9 is subtracted from each, the new numbers are in the ratio 12 : 23. The smaller number is:',
+      option_a: '27',
+      option_b: '33',
+      option_c: '49',
+      option_d: '55',
+      correct_option: 'B',
+      explanation: '(3x - 9)/(5x - 9) = 12/23 => 23(3x - 9) = 12(5x - 9) => 69x - 207 = 60x - 108 => 9x = 99 => x = 11.\nSmaller number = 3 × 11 = 33.'
     }
   ]
 };

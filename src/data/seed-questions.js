@@ -5,10 +5,14 @@
 
 import { APTITUDE_QUESTIONS } from './questions-aptitude.js';
 import { PROGRAMMING_QUESTIONS } from './questions-programming.js';
+import { REASONING_QUESTIONS } from './questions-reasoning.js';
+import { VERBAL_QUESTIONS } from './questions-verbal.js';
 
 export const SEED_QUESTIONS = {
   ...APTITUDE_QUESTIONS,
   ...PROGRAMMING_QUESTIONS,
+  ...REASONING_QUESTIONS,
+  ...VERBAL_QUESTIONS,
 
   // ─── PROBLEMS ON TRAINS (30 FULL QUESTIONS) ────────────────────────────────
   'problems-on-trains': [
@@ -314,7 +318,7 @@ export const SEED_QUESTIONS = {
     }
   ],
 
-  // ─── C DECLARATIONS & TYPES (20 QUESTIONS) ──────────────────────────────────
+  // ─── C DECLARATIONS & TYPES ────────────────────────────────────────────────
   'c-declarations': [
     {
       question_number: 1,
@@ -368,7 +372,7 @@ export const SEED_QUESTIONS = {
     }
   ],
 
-  // ─── C POINTERS & MEMORY (20 QUESTIONS) ────────────────────────────────────
+  // ─── C POINTERS & MEMORY ──────────────────────────────────────────────────
   'c-pointers': [
     {
       question_number: 1,
@@ -422,7 +426,7 @@ export const SEED_QUESTIONS = {
     }
   ],
 
-  // ─── SQL QUERIES & DATABASE (20 QUESTIONS) ─────────────────────────────────
+  // ─── SQL QUERIES & DATABASE ────────────────────────────────────────────────
   'sql-queries': [
     {
       question_number: 1,
@@ -473,60 +477,6 @@ export const SEED_QUESTIONS = {
       option_d: 'Authentication',
       correct_option: 'B',
       explanation: 'ACID stands for Atomicity, Consistency, Isolation, and Durability. Atomicity ensures all operations in a transaction succeed completely or none do.'
-    }
-  ],
-
-  // ─── BLOOD RELATIONS (20 QUESTIONS) ────────────────────────────────────────
-  'blood-relations': [
-    {
-      question_number: 1,
-      question_text: 'Pointing to a photograph of a boy, Suresh said, "He is the son of the only son of my mother." How is Suresh related to that boy?',
-      option_a: 'Brother',
-      option_b: 'Uncle',
-      option_c: 'Cousin',
-      option_d: 'Father',
-      correct_option: 'D',
-      explanation: 'Mother\'s only son = Suresh himself.\nSo, the boy is the son of Suresh.\nTherefore, Suresh is the father of the boy.'
-    },
-    {
-      question_number: 2,
-      question_text: 'If A is the brother of B; B is the sister of C; and C is the father of D, how D is related to A?',
-      option_a: 'Brother',
-      option_b: 'Sister',
-      option_c: 'Nephew or Niece',
-      option_d: 'Cannot be determined',
-      correct_option: 'C',
-      explanation: 'A, B, C are siblings (A: brother, B: sister, C: brother). D is the child of C. Since D\'s gender is not specified, D is either the Nephew or Niece of A.'
-    },
-    {
-      question_number: 3,
-      question_text: 'Introducing a man, a woman said, "His wife is the only daughter of my father." How is that man related to the woman?',
-      option_a: 'Brother',
-      option_b: 'Father-in-law',
-      option_c: 'Husband',
-      option_d: 'Maternal Uncle',
-      correct_option: 'C',
-      explanation: 'Only daughter of my father = The woman herself.\nSo the man\'s wife is the woman herself.\nTherefore, the man is the woman\'s husband.'
-    },
-    {
-      question_number: 4,
-      question_text: 'A and B are married couple. X and Y are brothers. X is the brother of A. How is Y related to B?',
-      option_a: 'Brother-in-law',
-      option_b: 'Brother',
-      option_c: 'Son-in-law',
-      option_d: 'Cousin',
-      correct_option: 'A',
-      explanation: 'Since X and Y are brothers, and X is brother of A, Y is also brother of A.\nB is married to A, so Y is the brother-in-law of B.'
-    },
-    {
-      question_number: 5,
-      question_text: 'A\'s mother is sister of B and daughter of C. D is the daughter of B and sister of E. How is C related to E?',
-      option_a: 'Sister-in-law',
-      option_b: 'Grandmother or Grandfather',
-      option_c: 'Aunt',
-      option_d: 'Mother',
-      correct_option: 'B',
-      explanation: 'B and D\'s mother are children of C. Since E is sibling of D, E is also grandchild of C. Thus C is the Grandparent (Grandmother or Grandfather) of E.'
     }
   ]
 };
