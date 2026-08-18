@@ -78,13 +78,43 @@ export async function renderPractice(topicSlug) {
   const topicTitle = formatTitle(topicSlug);
   const concept = getTopicConcept(topicSlug);
 
-  const formulasHtml = (concept.formulas || []).map(f => `<li style="margin-bottom: 8px;">${f}</li>`).join('');
-  const tipsHtml = (concept.tips || []).map(t => `<li style="margin-bottom: 6px;">${t}</li>`).join('');
+  const formulasHtml = (concept.formulas || []).map(f => {
+    if (typeof f === 'object') {
+      return `
+        <div class="formula-box">
+          <div class="formula-title"><span class="mdi mdi-function-variant"></span> ${f.title}</div>
+          <div class="formula-equation">${f.equation}</div>
+        </div>
+      `;
+    }
+    return `<div class="formula-box"><div class="formula-equation">${f}</div></div>`;
+  }).join('');
+
+  const tipsHtml = (concept.tips || []).map(t => `
+    <li style="margin-bottom: 8px; display: flex; align-items: flex-start; gap: 6px;">
+      <span class="mdi mdi-check-circle-outline" style="color: var(--color-success); font-size: 1.1rem; flex-shrink: 0; margin-top: 1px;"></span>
+      <span>${t}</span>
+    </li>
+  `).join('');
+
   const linksHtml = (concept.studyLinks || []).map(l => `
-    <a href="${l.url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="font-size: 11px; padding: 4px 10px;">
+    <a href="${l.url}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="font-size: 11px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 4px;">
       <span class="mdi mdi-open-in-new"></span> ${l.title}
     </a>
   `).join('');
+
+  // Auto-render math expressions if KaTeX is loaded
+  setTimeout(() => {
+    if (window.renderMathInElement) {
+      window.renderMathInElement(document.body, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false }
+        ],
+        throwOnError: false
+      });
+    }
+  }, 100);
 
   return `
     <div class="page-container practice-page">
@@ -317,6 +347,18 @@ export function bindPractice() {
     } catch (e) {}
   }
 
+  function renderMath() {
+    if (window.renderMathInElement) {
+      window.renderMathInElement(container, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false }
+        ],
+        throwOnError: false
+      });
+    }
+  }
+
   function updateView() {
     container.innerHTML = renderCurrentQuestion();
     if (numSpan) numSpan.textContent = currentIndex + 1;
@@ -326,6 +368,7 @@ export function bindPractice() {
     
     localStorage.setItem(`smartprep_resume_${currentTopicSlug}`, currentIndex);
     attachOptionListeners();
+    renderMath();
   }
 
   if (jumpFirstBtn) {
@@ -363,5 +406,8 @@ export function bindPractice() {
     });
   }
 
-  if (container) attachOptionListeners();
+  if (container) {
+    attachOptionListeners();
+    renderMath();
+  }
 }

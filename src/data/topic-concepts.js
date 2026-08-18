@@ -1,23 +1,41 @@
 /**
  * SmartPrep — Topic Formulas, Key Concepts & Study References
- * Comprehensive formula bank modeled after IndiaBIX, GeeksforGeeks & standard placement syllabi.
+ * Formatted with clean visual HTML math notation and fraction styling.
  */
 
 export const TOPIC_CONCEPTS = {
   'problems-on-trains': {
-    title: 'Problems on Trains — Formulas & Core Concepts',
+    title: 'Problems on Trains — Key Formulas & Rules',
     category: 'Arithmetic Aptitude',
     formulas: [
-      '<strong>Speed Conversion (km/hr to m/s):</strong> $x \\text{ km/hr} = \\left( x \\times \\frac{5}{18} \\right) \\text{ m/s}$',
-      '<strong>Speed Conversion (m/s to km/hr):</strong> $x \\text{ m/s} = \\left( x \\times \\frac{18}{5} \\right) \\text{ km/hr}$',
-      '<strong>Passing a Stationary Object of Negligible Length (pole, man, tree):</strong> Time taken = $\\frac{\\text{Length of train}}{\\text{Speed of train}}$',
-      '<strong>Passing a Stationary Object of Length $L_2$ (platform, bridge, tunnel):</strong> Time taken = $\\frac{\\text{Length of train } (L_1) + \\text{Length of object } (L_2)}{\\text{Speed of train}}$',
-      '<strong>Two Trains Moving in Opposite Directions:</strong> Relative Speed = $u + v$. Total distance = $L_1 + L_2$.',
-      '<strong>Two Trains Moving in Same Direction:</strong> Relative Speed = $u - v$ (where $u > v$). Total distance = $L_1 + L_2$.'
+      {
+        title: 'Speed Conversion (km/hr to m/s)',
+        equation: 'Speed in m/s = Speed in km/hr × <span class="math-frac"><span class="math-num">5</span><span class="math-den">18</span></span>'
+      },
+      {
+        title: 'Speed Conversion (m/s to km/hr)',
+        equation: 'Speed in km/hr = Speed in m/s × <span class="math-frac"><span class="math-num">18</span><span class="math-den">5</span></span>'
+      },
+      {
+        title: 'Crossing a Stationary Object (Pole, Tree, Man)',
+        equation: 'Time Taken = <span class="math-frac"><span class="math-num">Length of Train</span><span class="math-den">Speed of Train</span></span>'
+      },
+      {
+        title: 'Crossing a Platform, Bridge, or Tunnel',
+        equation: 'Time Taken = <span class="math-frac"><span class="math-num">Length of Train + Length of Platform</span><span class="math-den">Speed of Train</span></span>'
+      },
+      {
+        title: 'Two Trains in Opposite Directions',
+        equation: 'Relative Speed = <span class="math-badge">u + v</span> | Total Distance = <span class="math-badge">L₁ + L₂</span> | Time = <span class="math-frac"><span class="math-num">L₁ + L₂</span><span class="math-den">u + v</span></span>'
+      },
+      {
+        title: 'Two Trains in Same Direction (u > v)',
+        equation: 'Relative Speed = <span class="math-badge">u - v</span> | Total Distance = <span class="math-badge">L₁ + L₂</span> | Time = <span class="math-frac"><span class="math-num">L₁ + L₂</span><span class="math-den">u - v</span></span>'
+      }
     ],
     tips: [
-      'Always ensure Units of distance (meters) and speed (m/s) match before computing time in seconds.',
-      'When a train passes a man running in the same direction: Relative speed is $(u - v)$, and distance is only the length of the train.',
+      'Always ensure units of distance (meters) and speed (m/s) match before computing time.',
+      'When a train passes a moving person in the same direction: Relative Speed = (Train Speed - Man Speed).'
     ],
     studyLinks: [
       { title: 'IndiaBIX — Problems on Trains Formulas', url: 'https://www.indiabix.com/aptitude/problems-on-trains/formulas' },
@@ -29,33 +47,56 @@ export const TOPIC_CONCEPTS = {
     title: 'Time and Work — Core Formulas & Rules',
     category: 'Arithmetic Aptitude',
     formulas: [
-      '<strong>Work Rate:</strong> If A can do a piece of work in $n$ days, then A’s 1 day’s work = $\\frac{1}{n}$.',
-      '<strong>Total Time:</strong> If A’s 1 day’s work = $\\frac{1}{n}$, then A completes the total work in $n$ days.',
-      '<strong>Combined Work:</strong> If A can do a job in $x$ days and B in $y$ days, together they complete it in $\\frac{xy}{x + y}$ days.',
-      '<strong>Three Workers:</strong> If A, B, C can complete in $x, y, z$ days respectively, together they finish in $\\frac{xyz}{xy + yz + zx}$ days.',
-      '<strong>Efficiency Ratio:</strong> If A is twice as good a workman as B, Ratio of work done by A and B = $2 : 1$, and Ratio of time taken = $1 : 2$.',
-      '<strong>Work & Wages Formula:</strong> $\\frac{M_1 \\times D_1 \\times H_1}{W_1} = \\frac{M_2 \\times D_2 \\times H_2}{W_2}$ ($M$=men, $D$=days, $H$=hours, $W$=work/units).'
+      {
+        title: 'Work Rate per Day',
+        equation: 'If A finishes work in <strong>n</strong> days, then A’s 1-day work = <span class="math-frac"><span class="math-num">1</span><span class="math-den">n</span></span>'
+      },
+      {
+        title: 'Combined Work of 2 Persons (A and B)',
+        equation: 'Total Time = <span class="math-frac"><span class="math-num">x × y</span><span class="math-den">x + y</span></span> days'
+      },
+      {
+        title: 'Combined Work of 3 Persons (A, B, and C)',
+        equation: 'Total Time = <span class="math-frac"><span class="math-num">x × y × z</span><span class="math-den">(xy + yz + zx)</span></span> days'
+      },
+      {
+        title: 'Efficiency to Time Ratio',
+        equation: 'If A is <strong>twice</strong> as efficient as B: Work Ratio = <span class="math-badge">2 : 1</span> | Time Taken Ratio = <span class="math-badge">1 : 2</span>'
+      },
+      {
+        title: 'Chain Rule (Men, Days, Hours, Work)',
+        equation: '<span class="math-frac"><span class="math-num">M₁ × D₁ × H₁</span><span class="math-den">W₁</span></span> = <span class="math-frac"><span class="math-num">M₂ × D₂ × H₂</span><span class="math-den">W₂</span></span>'
+      }
     ],
     tips: [
-      'Assume Total Work as the LCM of individual days for quick mental calculations.',
-      'Wages are always divided in the ratio of the work done by each person.'
+      'Use the LCM method: Take total units of work as the LCM of individual days for faster mental calculations.',
+      'Wages are always shared in proportion to the work done by each person.'
     ],
     studyLinks: [
       { title: 'IndiaBIX — Time and Work Formulas', url: 'https://www.indiabix.com/aptitude/time-and-work/formulas' },
-      { title: 'GeeksforGeeks — Time and Work Shortcuts', url: 'https://www.geeksforgeeks.org/time-and-work/' }
+      { title: 'GeeksforGeeks — Time & Work Shortcuts', url: 'https://www.geeksforgeeks.org/time-and-work/' }
     ]
   },
 
   'time-and-distance': {
-    title: 'Time and Distance — Formulas & Velocity Rules',
+    title: 'Time and Distance — Velocity Rules',
     category: 'Arithmetic Aptitude',
     formulas: [
-      '<strong>Fundamental Equation:</strong> $\\text{Speed} = \\frac{\\text{Distance}}{\\text{Time}}$ | $\\text{Distance} = \\text{Speed} \\times \\text{Time}$ | $\\text{Time} = \\frac{\\text{Distance}}{\\text{Speed}}$',
-      '<strong>Average Speed (Equal Distances):</strong> If a person travels a distance at $u$ km/hr and returns at $v$ km/hr, Average Speed = $\\frac{2uv}{u + v}$ km/hr.',
-      '<strong>Ratio of Speeds:</strong> If the ratio of speeds of A and B is $a : b$, the ratio of times taken to cover the same distance is $\\frac{1}{a} : \\frac{1}{b} = b : a$.'
+      {
+        title: 'Fundamental Equation',
+        equation: 'Speed = <span class="math-frac"><span class="math-num">Distance</span><span class="math-den">Time</span></span> | Distance = Speed × Time | Time = <span class="math-frac"><span class="math-num">Distance</span><span class="math-den">Speed</span></span>'
+      },
+      {
+        title: 'Average Speed (Equal Distances)',
+        equation: 'Average Speed = <span class="math-frac"><span class="math-num">2 × u × v</span><span class="math-den">u + v</span></span> km/hr'
+      },
+      {
+        title: 'Speed & Time Inverse Proportion',
+        equation: 'If ratio of speeds = <span class="math-badge">a : b</span>, then ratio of times taken = <span class="math-badge">b : a</span>'
+      }
     ],
     tips: [
-      'Average speed is NOT the arithmetic mean $\\frac{u + v}{2}$ when distances are equal; always use harmonic average $\\frac{2uv}{u + v}$.'
+      'Average speed is the harmonic mean 2uv/(u+v), NOT the simple average (u+v)/2.'
     ],
     studyLinks: [
       { title: 'IndiaBIX — Time & Distance Formulas', url: 'https://www.indiabix.com/aptitude/time-and-distance/formulas' }
@@ -66,13 +107,25 @@ export const TOPIC_CONCEPTS = {
     title: 'Simple & Compound Interest Formulas',
     category: 'Arithmetic Aptitude',
     formulas: [
-      '<strong>Simple Interest (S.I.):</strong> $\\text{S.I.} = \\frac{P \\times R \\times T}{100}$ ($P$ = Principal, $R$ = Rate% per annum, $T$ = Time in years).',
-      '<strong>Total Amount (A):</strong> $A = P + \\text{S.I.} = P\\left(1 + \\frac{R \\times T}{100}\\right)$.',
-      '<strong>Compound Interest (C.I.):</strong> $A = P\\left(1 + \\frac{R}{100}\\right)^n$ | $\\text{C.I.} = A - P$.',
-      '<strong>Difference between C.I. and S.I. for 2 Years:</strong> $\\text{Difference} = P\\left(\\frac{R}{100}\\right)^2$.'
+      {
+        title: 'Simple Interest (S.I.)',
+        equation: 'S.I. = <span class="math-frac"><span class="math-num">P × R × T</span><span class="math-den">100</span></span> (P = Principal, R = Rate%, T = Time in Years)'
+      },
+      {
+        title: 'Total Maturity Amount (A)',
+        equation: 'Amount = Principal + S.I. = P × (1 + <span class="math-frac"><span class="math-num">R × T</span><span class="math-den">100</span></span>)'
+      },
+      {
+        title: 'Compound Interest (C.I.)',
+        equation: 'Amount = P × (1 + <span class="math-frac"><span class="math-num">R</span><span class="math-den">100</span></span>)ⁿ | C.I. = Amount - Principal'
+      },
+      {
+        title: '2-Year Difference between C.I. and S.I.',
+        equation: 'Difference = P × (<span class="math-frac"><span class="math-num">R</span><span class="math-den">100</span></span>)²'
+      }
     ],
     tips: [
-      'When interest is compounded half-yearly: Rate becomes $R/2$ and Time becomes $2n$.'
+      'If compounded half-yearly: Rate becomes R/2 and Time becomes 2n.'
     ],
     studyLinks: [
       { title: 'IndiaBIX — Simple Interest Formulas', url: 'https://www.indiabix.com/aptitude/simple-interest/formulas' }
@@ -80,15 +133,20 @@ export const TOPIC_CONCEPTS = {
   },
 
   'blood-relations': {
-    title: 'Logical Reasoning — Blood Relations Family Tree Rules',
+    title: 'Logical Reasoning — Blood Relations Family Tree',
     category: 'Logical Reasoning',
     formulas: [
-      '<strong>Generation Hierarchy:</strong> Grandparents $\\to$ Parents/Uncles/Aunts $\\to$ Self/Siblings/Spouse $\\to$ Children/Nephews $\\to$ Grandchildren.',
-      '<strong>Direct Relations:</strong> Mother’s or Father’s son = Brother | Mother’s or Father’s daughter = Sister.',
-      '<strong>In-Law Relations:</strong> Son’s wife = Daughter-in-law | Daughter’s husband = Son-in-law | Spouse’s brother = Brother-in-law.'
+      {
+        title: 'Generations Order',
+        equation: 'Grandparents ➔ Parents / Uncles / Aunts ➔ Self / Siblings / Spouse ➔ Children / Nephews'
+      },
+      {
+        title: 'Notation Shortcuts',
+        equation: '<span class="math-badge">[ + ] Male</span> | <span class="math-badge">[ - ] Female</span> | <span class="math-badge">[ = ] Married Couple</span> | <span class="math-badge">[ — ] Siblings</span>'
+      }
     ],
     tips: [
-      'Use symbols: Box for Male (+), Circle for Female (-), Double Line (=) for Married Couple, Single Line (-) for Siblings, Vertical Line (|) for Parent-Child.'
+      'Draw the generation tree vertically to easily deduce relations step by step.'
     ],
     studyLinks: [
       { title: 'IndiaBIX — Blood Relations Concepts', url: 'https://www.indiabix.com/logical-reasoning/blood-relations/' }
@@ -99,18 +157,24 @@ export const TOPIC_CONCEPTS = {
     title: 'C Programming — Pointers & Memory Architecture',
     category: 'Programming',
     formulas: [
-      '<strong>Address-of Operator (\`&\`):</strong> Returns the memory address of a variable (e.g. \`&x\`).',
-      '<strong>Dereference Operator (\`*\`):</strong> Accesses the value residing at the pointed memory address (e.g. \`*ptr\`).',
-      '<strong>Pointer Arithmetic:</strong> \`ptr + 1\` increments address by \`sizeof(*ptr)\` bytes.',
-      '<strong>Dynamic Allocation:</strong> \`int *arr = (int*)malloc(n * sizeof(int));\` | Always \`free(arr);\` after use.'
+      {
+        title: 'Address-of Operator (&)',
+        equation: '<code>int *ptr = &amp;x;</code> (Stores memory address of variable x)'
+      },
+      {
+        title: 'Dereference Operator (*)',
+        equation: '<code>*ptr = 25;</code> (Directly modifies the value stored at the pointed address)'
+      },
+      {
+        title: 'Dynamic Memory Allocation',
+        equation: '<code>int *arr = (int*)malloc(n * sizeof(int));</code> | Always <code>free(arr);</code>'
+      }
     ],
     tips: [
-      'An uninitialized pointer is a wild pointer; always initialize to \`NULL\` or valid memory.',
-      'Array name decays to pointer to its first element: \`arr == &arr[0]\`.'
+      'An uninitialized pointer is a wild pointer; always initialize to NULL or valid allocated address.'
     ],
     studyLinks: [
-      { title: 'GeeksforGeeks — C Pointers Tutorial', url: 'https://www.geeksforgeeks.org/c-pointers/' },
-      { title: 'W3Schools — C Pointers', url: 'https://www.w3schools.com/c/c_pointers.php' }
+      { title: 'GeeksforGeeks — C Pointers Tutorial', url: 'https://www.geeksforgeeks.org/c-pointers/' }
     ]
   }
 };
@@ -123,23 +187,27 @@ export function getTopicConcept(topicSlug) {
     return TOPIC_CONCEPTS[topicSlug];
   }
 
-  // Default concept fallback
   const formatted = topicSlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
   return {
-    title: `${formatted} — Concept Overview & Study Guide`,
+    title: `${formatted} — Concept Overview & Formulas`,
     category: 'Placement Preparation',
     formulas: [
-      `<strong>Topic Fundamentals:</strong> Review core definitions and step-by-step mathematical theorems for ${formatted}.`,
-      '<strong>Formula Precision:</strong> Read problem statements carefully and identify knowns vs unknowns before calculation.',
-      '<strong>Time Management:</strong> Aim to solve standard placement multiple-choice questions in 60–90 seconds.'
+      {
+        title: 'Core Topic Principles',
+        equation: `Master standard definitions, step-by-step algorithms, and formula applications for ${formatted}.`
+      },
+      {
+        title: 'Problem-Solving Strategy',
+        equation: 'Identify given parameters ➔ Apply standard equation ➔ Verify dimensional units.'
+      }
     ],
     tips: [
-      'Use elimination technique: rule out clearly wrong options to increase probability of correct choice.',
-      'Practice with step-by-step mathematical explanations to master underlying shortcut algorithms.'
+      'Eliminate improbable options first to maximize accuracy.',
+      'Review step-by-step solutions to master underlying shortcut algorithms.'
     ],
     studyLinks: [
       { title: `IndiaBIX — ${formatted} Questions & Formulas`, url: `https://www.indiabix.com/search?q=${encodeURIComponent(formatted)}` },
-      { title: 'GeeksforGeeks — Placement Practice', url: 'https://www.geeksforgeeks.org/aptitude-questions-and-answers/' }
+      { title: 'GeeksforGeeks — Placement Aptitude', url: 'https://www.geeksforgeeks.org/aptitude-questions-and-answers/' }
     ]
   };
 }
