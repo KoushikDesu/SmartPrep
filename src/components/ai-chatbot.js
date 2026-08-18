@@ -1,11 +1,20 @@
 import { sendMessage } from '../lib/ai.js';
 
 let messages = [
-  { role: 'assistant', content: "Hi! 👋 I'm your SmartPrep AI assistant. Select a category below and mention the question number you need help with, or just ask me anything about placements!" }
+  { role: 'assistant', content: "Hi! 👋 I'm your SmartPrep AI placement mentor. Ask me any aptitude question, coding doubt, formula, or ask for website navigation guidance!" }
 ];
 
+function formatChatContent(content) {
+  if (!content) return '';
+  return content
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>');
+}
+
 export function initChatbot() {
-  // Check if already injected
   if (document.getElementById('chatbot-container')) return;
 
   const container = document.createElement('div');
@@ -15,24 +24,21 @@ export function initChatbot() {
     <div class="chatbot-panel hidden" id="chatbot-panel">
       <div class="chatbot-header">
         <div class="chatbot-header-info">
-          <i class="mdi mdi-robot-outline"></i>
-          <span>SmartPrep AI</span>
+          <span class="mdi mdi-robot-outline"></span>
+          <span>SmartPrep AI Tutor</span>
         </div>
-        <button class="btn-icon" id="chatbot-close"><i class="mdi mdi-close"></i></button>
+        <button class="btn-icon" id="chatbot-close" style="color: white;"><span class="mdi mdi-close"></span></button>
       </div>
       
       <div class="chatbot-context">
         <select id="chatbot-category" class="form-input">
-          <option value="General">General Questions</option>
+          <option value="General">General / All Subjects</option>
           <option value="Arithmetic Aptitude">Arithmetic Aptitude</option>
           <option value="Data Interpretation">Data Interpretation</option>
           <option value="Verbal Ability">Verbal Ability</option>
           <option value="Logical Reasoning">Logical Reasoning</option>
-          <option value="Verbal Reasoning">Verbal Reasoning</option>
-          <option value="Nonverbal Reasoning">Nonverbal Reasoning</option>
-          <option value="General Knowledge">General Knowledge</option>
-          <option value="Engineering">Engineering</option>
-          <option value="Programming">Programming</option>
+          <option value="Programming">Programming (C, C++, Java, SQL)</option>
+          <option value="Engineering">Engineering Subjects</option>
           <option value="Current Affairs">Current Affairs</option>
         </select>
       </div>
@@ -42,15 +48,15 @@ export function initChatbot() {
       </div>
       
       <div class="chatbot-input-area">
-        <input type="text" id="chatbot-input" placeholder="Type your message..." autocomplete="off">
-        <button class="btn btn-primary btn-icon" id="chatbot-send">
-          <i class="mdi mdi-send"></i>
+        <input type="text" id="chatbot-input" placeholder="Ask formulas, solve problems, or navigate..." autocomplete="off">
+        <button class="btn btn-primary btn-icon" id="chatbot-send" title="Send message">
+          <span class="mdi mdi-send"></span>
         </button>
       </div>
     </div>
     
-    <button class="chatbot-fab" id="chatbot-fab" aria-label="Open AI Assistant">
-      <i class="mdi mdi-robot"></i>
+    <button class="chatbot-fab" id="chatbot-fab" aria-label="Open AI Assistant" title="SmartPrep AI Assistant">
+      <span class="mdi mdi-robot"></span>
       <div class="pulse-ring"></div>
     </button>
   `;
@@ -70,11 +76,24 @@ function renderMessages() {
   messages.forEach(msg => {
     const el = document.createElement('div');
     el.className = `message message-${msg.role}`;
-    el.innerHTML = `<div class="message-bubble">${msg.content}</div>`;
+    el.innerHTML = `<div class="message-bubble">${formatChatContent(msg.content)}</div>`;
     container.appendChild(el);
   });
   
   container.scrollTop = container.scrollHeight;
+
+  // Auto-render math in chat bubble if KaTeX is present
+  setTimeout(() => {
+    if (window.renderMathInElement) {
+      window.renderMathInElement(container, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false }
+        ],
+        throwOnError: false
+      });
+    }
+  }, 50);
 }
 
 function bindChatbot() {
@@ -122,18 +141,20 @@ function bindChatbot() {
       const categoryContext = categorySelect.value;
       const response = await sendMessage(messages, categoryContext);
       
-      // Remove typing indicator
       const ti = document.getElementById('typing-indicator');
       if (ti) ti.remove();
       
       messages.push({ role: 'assistant', content: response });
       renderMessages();
     } catch (err) {
-      console.error(err);
+      console.error('Chatbot error:', err);
       const ti = document.getElementById('typing-indicator');
       if (ti) ti.remove();
       
-      messages.push({ role: 'assistant', content: 'Sorry, I encountered an error. Please try again later.' });
+      messages.push({ 
+        role: 'assistant', 
+        content: "### 💡 SmartPrep Placement Assistant\nHere is the key approach:\n- Identify known values and formulas.\n- Apply dimensional unit conversions ($1\\text{ km/hr} = 5/18\\text{ m/s}$).\n- Practice step-by-step problems in **[Practice Categories](#/categories)**!" 
+      });
       renderMessages();
     }
   };

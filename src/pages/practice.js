@@ -103,19 +103,6 @@ export async function renderPractice(topicSlug) {
     </a>
   `).join('');
 
-  // Auto-render math expressions if KaTeX is loaded
-  setTimeout(() => {
-    if (window.renderMathInElement) {
-      window.renderMathInElement(document.body, {
-        delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false }
-        ],
-        throwOnError: false
-      });
-    }
-  }, 100);
-
   return `
     <div class="page-container practice-page">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
@@ -133,7 +120,7 @@ export async function renderPractice(topicSlug) {
           </div>
         </div>
 
-        <!-- 2 Top Navigation Action Buttons -->
+        <!-- Top Action Buttons -->
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
           <button id="toggle-concept-btn" class="btn btn-secondary btn-sm" style="background: rgba(37, 99, 235, 0.08); border-color: rgba(37, 99, 235, 0.25); color: var(--color-primary);">
             <span class="mdi mdi-book-open-outline"></span> Formulas & Concept
@@ -147,15 +134,15 @@ export async function renderPractice(topicSlug) {
         </div>
       </div>
 
-      <!-- Collapsible Formulas & Key Concepts Reference Card -->
-      <div id="concept-reference-card" class="card" style="margin-bottom: 1.5rem; border-left: 4px solid var(--color-primary); background: var(--color-surface); padding: 1.5rem;">
+      <!-- Collapsible Formulas & Key Concepts Reference Card (HIDDEN BY DEFAULT) -->
+      <div id="concept-reference-card" class="card hidden" style="margin-bottom: 1.5rem; border-left: 4px solid var(--color-primary); background: var(--color-surface); padding: 1.5rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 8px;">
           <h3 style="font-size: var(--text-lg); display: flex; align-items: center; gap: 8px; margin: 0;">
             <span class="mdi mdi-lightbulb-on-outline" style="color: var(--color-warning);"></span>
             ${concept.title}
           </h3>
           <button id="close-concept-btn" class="btn-icon" title="Hide Formulas">
-            <span class="mdi mdi-chevron-up"></span>
+            <span class="mdi mdi-close"></span>
           </button>
         </div>
 
@@ -164,16 +151,16 @@ export async function renderPractice(topicSlug) {
             <h4 style="font-size: var(--text-sm); text-transform: uppercase; color: var(--color-primary); margin-bottom: 8px; letter-spacing: 0.05em;">
               Core Formulas & Theorems
             </h4>
-            <ul style="padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text);">
+            <div>
               ${formulasHtml}
-            </ul>
+            </div>
           </div>
 
           <div>
             <h4 style="font-size: var(--text-sm); text-transform: uppercase; color: var(--color-success); margin-bottom: 8px; letter-spacing: 0.05em;">
               Placement Exam Shortcuts & Tips
             </h4>
-            <ul style="padding-left: 1.25rem; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text-secondary);">
+            <ul style="padding-left: 0.5rem; font-size: var(--text-sm); line-height: 1.6; color: var(--color-text-secondary); list-style: none;">
               ${tipsHtml}
             </ul>
 
@@ -185,6 +172,17 @@ export async function renderPractice(topicSlug) {
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- Small Gentle Helper Banner on Question 1 -->
+      <div id="concept-hint-banner" class="concept-hint-banner">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="mdi mdi-lightbulb-on" style="color: var(--color-warning); font-size: 1.25rem;"></span>
+          <span><strong>Quick Study Tip:</strong> Need formulas, shortcut equations or theory? Click <button id="open-concept-link" class="link-btn">Formulas & Concept</button> anytime!</span>
+        </div>
+        <button id="dismiss-hint-btn" class="btn-icon" title="Dismiss" style="padding: 2px;">
+          <span class="mdi mdi-close"></span>
+        </button>
       </div>
 
       <!-- Practice Question Container -->
@@ -264,13 +262,22 @@ export function bindPractice() {
   const jumpResumeBtn = document.getElementById('btn-jump-resume');
   const toggleConceptBtn = document.getElementById('toggle-concept-btn');
   const closeConceptBtn = document.getElementById('close-concept-btn');
+  const openConceptLink = document.getElementById('open-concept-link');
+  const dismissHintBtn = document.getElementById('dismiss-hint-btn');
+  const hintBanner = document.getElementById('concept-hint-banner');
   const conceptCard = document.getElementById('concept-reference-card');
 
-  if (toggleConceptBtn && conceptCard) {
-    toggleConceptBtn.addEventListener('click', () => {
+  function toggleConcept() {
+    if (conceptCard) {
       conceptCard.classList.toggle('hidden');
-    });
+      if (!conceptCard.classList.contains('hidden')) {
+        renderMathIn(conceptCard);
+      }
+    }
   }
+
+  if (toggleConceptBtn) toggleConceptBtn.addEventListener('click', toggleConcept);
+  if (openConceptLink) openConceptLink.addEventListener('click', toggleConcept);
 
   if (closeConceptBtn && conceptCard) {
     closeConceptBtn.addEventListener('click', () => {
@@ -278,11 +285,34 @@ export function bindPractice() {
     });
   }
 
+  if (dismissHintBtn && hintBanner) {
+    dismissHintBtn.addEventListener('click', () => {
+      hintBanner.style.display = 'none';
+      localStorage.setItem('smartprep_hide_formula_tip', 'true');
+    });
+  }
+
+  // Check if tip was previously dismissed
+  if (localStorage.getItem('smartprep_hide_formula_tip') === 'true' && hintBanner) {
+    hintBanner.style.display = 'none';
+  }
+
+  function renderMathIn(target) {
+    if (window.renderMathInElement && target) {
+      window.renderMathInElement(target, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false }
+        ],
+        throwOnError: false
+      });
+    }
+  }
+
   function attachOptionListeners() {
     const q = questions[currentIndex];
     if (!q) return;
 
-    // Check if previously answered
     checkExistingAnswer(q);
 
     const options = container.querySelectorAll('.option-btn');
@@ -290,7 +320,7 @@ export function bindPractice() {
 
     options.forEach(btn => {
       btn.addEventListener('click', async () => {
-        if (btn.classList.contains('correct') || btn.classList.contains('wrong')) return; // Already answered
+        if (btn.classList.contains('correct') || btn.classList.contains('wrong')) return;
 
         const selected = btn.dataset.option;
         const correct = q.correct_option;
@@ -306,15 +336,15 @@ export function bindPractice() {
           showToast('Incorrect option', 'error');
         }
 
-        // Show explanation
-        if (solutionPanel) solutionPanel.classList.remove('hidden');
+        if (solutionPanel) {
+          solutionPanel.classList.remove('hidden');
+          renderMathIn(solutionPanel);
+        }
 
-        // Save position to localStorage
         localStorage.setItem(`smartprep_resume_${currentTopicSlug}`, currentIndex);
         lastAnsweredIndex = currentIndex;
         if (jumpResumeBtn) jumpResumeBtn.innerHTML = `<span class="mdi mdi-restore"></span> Resume (Q${lastAnsweredIndex + 1})`;
 
-        // Save progress to Supabase and LocalStorage
         try {
           const userId = appState.user?.id || 'guest';
           await saveProgress(userId, q.id || `local_${currentTopicSlug}_${currentIndex}`, selected, isCorrect, currentTopicSlug);
@@ -332,7 +362,10 @@ export function bindPractice() {
       const res = await hasAnswered(userId, qId);
       if (res && res.answered) {
         const solutionPanel = container.querySelector('.solution-panel');
-        if (solutionPanel) solutionPanel.classList.remove('hidden');
+        if (solutionPanel) {
+          solutionPanel.classList.remove('hidden');
+          renderMathIn(solutionPanel);
+        }
 
         const selectedBtn = container.querySelector(`.option-btn[data-option="${res.selectedOption}"]`);
         const correctBtn = container.querySelector(`.option-btn[data-option="${q.correct_option}"]`);
@@ -347,18 +380,6 @@ export function bindPractice() {
     } catch (e) {}
   }
 
-  function renderMath() {
-    if (window.renderMathInElement) {
-      window.renderMathInElement(container, {
-        delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$', right: '$', display: false }
-        ],
-        throwOnError: false
-      });
-    }
-  }
-
   function updateView() {
     container.innerHTML = renderCurrentQuestion();
     if (numSpan) numSpan.textContent = currentIndex + 1;
@@ -368,7 +389,7 @@ export function bindPractice() {
     
     localStorage.setItem(`smartprep_resume_${currentTopicSlug}`, currentIndex);
     attachOptionListeners();
-    renderMath();
+    renderMathIn(container);
   }
 
   if (jumpFirstBtn) {
@@ -408,6 +429,6 @@ export function bindPractice() {
 
   if (container) {
     attachOptionListeners();
-    renderMath();
+    renderMathIn(container);
   }
 }
