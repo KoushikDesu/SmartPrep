@@ -174,17 +174,6 @@ export async function renderPractice(topicSlug) {
         </div>
       </div>
 
-      <!-- Small Gentle Helper Banner on Question 1 -->
-      <div id="concept-hint-banner" class="concept-hint-banner">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span class="mdi mdi-lightbulb-on" style="color: var(--color-warning); font-size: 1.25rem;"></span>
-          <span><strong>Quick Study Tip:</strong> Need formulas, shortcut equations or theory? Click <button id="open-concept-link" class="link-btn">Formulas & Concept</button> anytime!</span>
-        </div>
-        <button id="dismiss-hint-btn" class="btn-icon" title="Dismiss" style="padding: 2px;">
-          <span class="mdi mdi-close"></span>
-        </button>
-      </div>
-
       <!-- Practice Question Container -->
       <div class="practice-container">
         <div class="practice-header">
@@ -277,24 +266,11 @@ export function bindPractice() {
   }
 
   if (toggleConceptBtn) toggleConceptBtn.addEventListener('click', toggleConcept);
-  if (openConceptLink) openConceptLink.addEventListener('click', toggleConcept);
 
   if (closeConceptBtn && conceptCard) {
     closeConceptBtn.addEventListener('click', () => {
       conceptCard.classList.add('hidden');
     });
-  }
-
-  if (dismissHintBtn && hintBanner) {
-    dismissHintBtn.addEventListener('click', () => {
-      hintBanner.style.display = 'none';
-      localStorage.setItem('smartprep_hide_formula_tip', 'true');
-    });
-  }
-
-  // Check if tip was previously dismissed
-  if (localStorage.getItem('smartprep_hide_formula_tip') === 'true' && hintBanner) {
-    hintBanner.style.display = 'none';
   }
 
   function renderMathIn(target) {
