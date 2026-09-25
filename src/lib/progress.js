@@ -143,3 +143,80 @@ export async function hasAnswered(userId, questionId) {
 
   return { answered: false };
 }
+
+/**
+ * Gets comprehensive topic attempt stats and automatically resolves the next unattempted question
+ * @param {string} userId
+ * @param {string} topicSlug
+ * @param {Array} questions
+ * @returns {Promise<{resumeIndex: number, answeredCount: number, answeredIndices: Set<number>}>}
+ */
+export async function getTopicProgressInfo(userId, topicSlug, questions = []) {
+  let records = [];
+
+  // 1. Fetch from Supabase online
+  if (supabase && userId && userId !== 'guest') {
+    try {
+      const { data, error } = await supabase
+        .from('user_progress')
+        .select('*')
+        .eq('user_id', userId)
+        .eq('topic_slug', topicSlug);
+
+      if (!error && data && data.length > 0) {
+        records = data;
+      }
+    } catch (e) {
+      console.warn('Supabase topic progress query error:', e);
+    }
+  }
+
+  // 2. Fetch from LocalStorage cache
+  try {
+    const localKey = `smartprep_progress_${userId || 'guest'}`;
+    const localData = JSON.parse(localStorage.getItem(localKey) || '[]');
+    const topicLocalRecords = localData.filter(r => r.topic_slug === topicSlug || String(r.question_id).includes(topicSlug));
+    
+    // Merge without duplicates
+    topicLocalRecords.forEach(lr => {
+      if (!records.some(r => String(r.question_id) === String(lr.question_id))) {
+        records.push(lr);
+      }
+    });
+  } catch (e) {}
+
+  const answeredIndices = new Set();
+  const answeredQIds = new Set(records.map(r => String(r.question_id)));
+
+  questions.forEach((q, idx) => {
+    const qId1 = String(q.id);
+    const qId2 = `local_${topicSlug}_${idx}`;
+    if (answeredQIds.has(qId1) || answeredQIds.has(qId2)) {
+      answeredIndices.add(idx);
+    }
+  });
+
+  // Find the first unattempted question index
+  let firstUnattemptedIndex = 0;
+  for (let i = 0; i < questions.length; i++) {
+    if (!answeredIndices.has(i)) {
+      firstUnattemptedIndex = i;
+      break;
+    }
+    firstUnattemptedIndex = i; // if all attempted, stay on last
+  }
+
+  // Read saved local preference as secondary hint
+  const savedIndex = parseInt(localStorage.getItem(`smartprep_resume_${topicSlug}`) || '-1', 10);
+  const resumeIndex = (savedIndex >= 0 && savedIndex < questions.length) 
+    ? savedIndex 
+    : firstUnattemptedIndex;
+
+  return {
+    resumeIndex: Math.min(resumeIndex, Math.max(0, questions.length - 1)),
+    firstUnattemptedIndex,
+    answeredCount: answeredIndices.size,
+    answeredIndices
+  };
+}
+

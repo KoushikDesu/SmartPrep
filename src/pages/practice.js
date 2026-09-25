@@ -2,7 +2,7 @@ import { showToast } from '../components/toast.js';
 import { supabase } from '../lib/supabase.js';
 import { getSeedQuestions } from '../data/seed-questions.js';
 import { getTopicConcept } from '../data/topic-concepts.js';
-import { saveProgress, hasAnswered } from '../lib/progress.js';
+import { saveProgress, hasAnswered, getTopicProgressInfo } from '../lib/progress.js';
 import { appState } from '../main.js';
 
 function formatTitle(slug) {
@@ -65,10 +65,17 @@ export async function renderPractice(topicSlug) {
     questions = getSeedQuestions(topicSlug);
   }
 
-  // Read saved resume index
-  const savedResumeIndex = parseInt(localStorage.getItem(`smartprep_resume_${topicSlug}`) || '0', 10);
-  currentIndex = (savedResumeIndex >= 0 && savedResumeIndex < questions.length) ? savedResumeIndex : 0;
-  lastAnsweredIndex = currentIndex;
+  // 3. Resolve exact saved/unattempted question from database & cache
+  try {
+    const userId = appState.user?.id || 'guest';
+    const progressInfo = await getTopicProgressInfo(userId, topicSlug, questions);
+    currentIndex = progressInfo.resumeIndex;
+    lastAnsweredIndex = progressInfo.resumeIndex;
+  } catch (e) {
+    const savedResumeIndex = parseInt(localStorage.getItem(`smartprep_resume_${topicSlug}`) || '0', 10);
+    currentIndex = (savedResumeIndex >= 0 && savedResumeIndex < questions.length) ? savedResumeIndex : 0;
+    lastAnsweredIndex = currentIndex;
+  }
 
   const topicTitle = formatTitle(topicSlug);
   const concept = getTopicConcept(topicSlug);
@@ -299,12 +306,12 @@ export function bindPractice() {
 
         if (isCorrect) {
           btn.classList.add('correct');
-          showToast('Correct answer! 🎉', 'success');
+          showToast('Correct answer! 🎉', 'success', 1900);
         } else {
           btn.classList.add('wrong');
           const correctBtn = container.querySelector(`.option-btn[data-option="${correct}"]`);
           if (correctBtn) correctBtn.classList.add('correct');
-          showToast('Incorrect option', 'error');
+          showToast('Incorrect option', 'error', 1900);
         }
 
         if (solutionPanel) {
@@ -312,8 +319,10 @@ export function bindPractice() {
           renderMathIn(solutionPanel);
         }
 
-        localStorage.setItem(`smartprep_resume_${currentTopicSlug}`, currentIndex);
-        lastAnsweredIndex = currentIndex;
+        // Advance resume target to next question
+        const nextTarget = Math.min(currentIndex + 1, questions.length - 1);
+        localStorage.setItem(`smartprep_resume_${currentTopicSlug}`, nextTarget);
+        lastAnsweredIndex = nextTarget;
         if (jumpResumeBtn) jumpResumeBtn.innerHTML = `<span class="mdi mdi-restore"></span> Resume (Q${lastAnsweredIndex + 1})`;
 
         try {
@@ -367,16 +376,22 @@ export function bindPractice() {
     jumpFirstBtn.addEventListener('click', () => {
       currentIndex = 0;
       updateView();
-      showToast('Jumped to Question 1', 'info');
+      showToast('Jumped to Question 1', 'info', 1900);
     });
   }
 
   if (jumpResumeBtn) {
-    jumpResumeBtn.addEventListener('click', () => {
-      const savedIndex = parseInt(localStorage.getItem(`smartprep_resume_${currentTopicSlug}`) || '0', 10);
-      currentIndex = (savedIndex >= 0 && savedIndex < questions.length) ? savedIndex : 0;
+    jumpResumeBtn.addEventListener('click', async () => {
+      try {
+        const userId = appState.user?.id || 'guest';
+        const info = await getTopicProgressInfo(userId, currentTopicSlug, questions);
+        currentIndex = info.resumeIndex;
+      } catch (e) {
+        const savedIndex = parseInt(localStorage.getItem(`smartprep_resume_${currentTopicSlug}`) || '0', 10);
+        currentIndex = (savedIndex >= 0 && savedIndex < questions.length) ? savedIndex : 0;
+      }
       updateView();
-      showToast(`Resumed at Question ${currentIndex + 1}`, 'info');
+      showToast(`Resumed at Question ${currentIndex + 1}`, 'info', 1900);
     });
   }
 
