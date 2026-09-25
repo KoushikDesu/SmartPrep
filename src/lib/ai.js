@@ -3,47 +3,57 @@ import { getDomainResponse } from './ai-knowledge.js';
 
 const FALLBACK_MODELS = [
   'gemini-2.5-flash',
+  'gemini-2.0-flash',
   'gemini-1.5-flash',
-  'gemini-2.0-flash-exp',
   'gemini-1.5-pro'
 ];
 
-// Runtime fallback key construction for browser environments
-function getActiveKey() {
-  if (GEMINI_API_KEY && GEMINI_API_KEY.length > 10) return GEMINI_API_KEY;
-  // Construct default active key segments
-  const p1 = 'AQ.Ab8RN6JG';
-  const p2 = 'cokBMTvQ_GND';
-  const p3 = 'U4bOyEIRX1sbp';
-  const p4 = 'CdimYxnOqh6xEi4Qg';
-  return `${p1}${p2}${p3}${p4}`;
+/**
+ * Retrieves the currently active Gemini API key
+ */
+export function getStoredApiKey() {
+  return localStorage.getItem('smartprep_gemini_api_key') || 
+         localStorage.getItem('gemini_api_key') || 
+         GEMINI_API_KEY || '';
+}
+
+/**
+ * Saves a user-provided Gemini API key
+ */
+export function setStoredApiKey(key) {
+  if (key && key.trim().length > 5) {
+    localStorage.setItem('smartprep_gemini_api_key', key.trim());
+    return true;
+  } else {
+    localStorage.removeItem('smartprep_gemini_api_key');
+    return false;
+  }
 }
 
 /**
  * Builds comprehensive system prompt for SmartPrep AI tutor & guide
  */
 export function buildSystemPrompt(category, questionContext) {
-  let prompt = `You are SmartPrep AI, an intelligent, encouraging placement preparation tutor and complete website guide for SmartPrep.
+  let prompt = `You are SmartPrep AI, the ultimate expert placement preparation mentor and intelligent guide for the SmartPrep platform.
 
-## Platform Capabilities & Navigation Sitemap:
-- Study Hub & All Categories: #/categories (Features Arithmetic Aptitude, Data Interpretation, Verbal Ability, Logical Reasoning, Verbal Reasoning, Nonverbal Reasoning, General Knowledge, Engineering, Programming, Current Affairs).
-- Topic Practice: #/category/:categorySlug (Lists specific topics such as Problems on Trains, Time & Work, Blood Relations, Pointers in C, SQL Queries, etc.).
-- Active Practice Suite: #/practice/:topicSlug (Focused one-question-at-a-time practice with instant validation and step-by-step mathematical explanations).
-- Student Performance Profile: #/profile (Tracks total questions solved, correct counts, accuracy %, roll number, and recommendations).
-- Instructor Studio (for Teachers): #/teacher (Author questions, review student accuracy roster, broadcast recruitment drive announcements).
-- Administration Center (for Admins): #/admin (Manage user roles, create faculty accounts, reset passwords).
+## Platform Sitemap & Routes:
+- Categories & Study Hub: #/categories (Aptitude, Verbal, Reasoning, C Programming, SQL, Engineering, Current Affairs)
+- Topic Practice: #/practice/:topicSlug (Problems on Trains, Time & Work, Pointers in C, SQL Queries, Blood Relations)
+- Student Performance: #/profile (Accuracy %, Total Solved, College Roll No)
+- Teacher Studio: #/teacher (Question Bank authoring, Roster)
+- Admin Center: #/admin (User management)
 
-## Your Role:
-1. Explain aptitude, logical reasoning, programming (C, C++, Java, Python, SQL), and engineering concepts step-by-step with clear formulas, examples, and shortcuts.
-2. Guide users seamlessly to the right section or practice module on the website when they ask where to study something.
-3. Be encouraging, concise, highly educational, and format mathematical formulas clearly with LaTeX delimiters or bullet points.`;
+## Instructions:
+1. When asked about math, formulas, or aptitude problems (e.g. Relative Speed, Trains, Time & Work, Probability), explain the fundamental concept first, state the exact formulas clearly with LaTeX notation, and provide a clear step-by-step example.
+2. For coding questions (C, C++, Java, SQL), provide clean, commented code snippets and explain execution steps.
+3. Keep your answers concise, structured, friendly, and visually clear using markdown and bold titles.`;
 
-  if (category) {
+  if (category && category !== 'General') {
     const catName = typeof category === 'string' ? category : (category.category || '');
-    if (catName) prompt += `\n\nCURRENT CONTEXT: The student is currently studying the '${catName}' module.`;
+    if (catName) prompt += `\n\nCURRENT TOPIC CONTEXT: The student is currently studying '${catName}'.`;
   }
   if (questionContext) {
-    prompt += `\nCURRENT QUESTION CONTEXT: ${JSON.stringify(questionContext)}`;
+    prompt += `\nCURRENT QUESTION: ${JSON.stringify(questionContext)}`;
   }
 
   return prompt;
@@ -65,9 +75,9 @@ export async function sendMessage(messages, context = {}) {
     parts: [{ text: msg.content }]
   }));
 
-  const apiKey = getActiveKey();
+  const apiKey = getStoredApiKey();
 
-  if (apiKey) {
+  if (apiKey && apiKey.length > 5) {
     for (const model of FALLBACK_MODELS) {
       try {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
@@ -93,6 +103,8 @@ export async function sendMessage(messages, context = {}) {
           const data = await response.json();
           const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
           if (text && text.trim().length > 0) return text;
+        } else {
+          console.warn(`Gemini API ${model} response not ok:`, response.status);
         }
       } catch (err) {
         console.warn(`Model ${model} attempt failed, trying next...`);

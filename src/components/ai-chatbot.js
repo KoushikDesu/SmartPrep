@@ -1,4 +1,5 @@
-import { sendMessage } from '../lib/ai.js';
+import { sendMessage, getStoredApiKey, setStoredApiKey } from '../lib/ai.js';
+import { showToast } from './toast.js';
 
 let messages = [
   { role: 'assistant', content: "Hi! 👋 I'm your SmartPrep AI placement mentor. Ask me any aptitude question, coding doubt, formula, or ask for website navigation guidance!" }
@@ -27,11 +28,25 @@ export function initChatbot() {
           <span class="mdi mdi-robot-outline"></span>
           <span>SmartPrep AI Tutor</span>
         </div>
-        <button class="btn-icon" id="chatbot-close" style="color: white;"><span class="mdi mdi-close"></span></button>
+        <div style="display: flex; align-items: center; gap: 4px;">
+          <button class="btn-icon" id="chatbot-settings-btn" title="Configure Gemini API Key" style="color: white; font-size: 1.1rem;">
+            <span class="mdi mdi-cog-outline"></span>
+          </button>
+          <button class="btn-icon" id="chatbot-close" style="color: white;"><span class="mdi mdi-close"></span></button>
+        </div>
+      </div>
+
+      <!-- Settings Dropdown / Panel -->
+      <div id="chatbot-settings-panel" class="hidden" style="padding: 10px 14px; background-color: var(--color-surface-alt); border-bottom: 1px solid var(--color-border); font-size: var(--text-xs);">
+        <label style="display: block; font-weight: 600; margin-bottom: 4px; color: var(--color-text);">Google Gemini API Key:</label>
+        <div style="display: flex; gap: 6px;">
+          <input type="password" id="gemini-key-input" class="form-input" style="padding: 4px 8px; font-size: var(--text-xs);" placeholder="Paste AI Studio API Key..." />
+          <button id="save-gemini-key-btn" class="btn btn-primary" style="padding: 4px 10px; font-size: var(--text-xs);">Save</button>
+        </div>
       </div>
       
       <div class="chatbot-context">
-        <select id="chatbot-category" class="form-input">
+        <select id="chatbot-category" class="form-input" style="font-size: var(--text-xs); padding: 6px 10px;">
           <option value="General">General / All Subjects</option>
           <option value="Arithmetic Aptitude">Arithmetic Aptitude</option>
           <option value="Data Interpretation">Data Interpretation</option>
@@ -104,7 +119,35 @@ function bindChatbot() {
   const input = document.getElementById('chatbot-input');
   const messagesContainer = document.getElementById('chatbot-messages');
   const categorySelect = document.getElementById('chatbot-category');
+  const settingsBtn = document.getElementById('chatbot-settings-btn');
+  const settingsPanel = document.getElementById('chatbot-settings-panel');
+  const keyInput = document.getElementById('gemini-key-input');
+  const saveKeyBtn = document.getElementById('save-gemini-key-btn');
   
+  if (keyInput) {
+    const existingKey = getStoredApiKey();
+    if (existingKey) keyInput.value = existingKey;
+  }
+
+  if (settingsBtn && settingsPanel) {
+    settingsBtn.addEventListener('click', () => {
+      settingsPanel.classList.toggle('hidden');
+    });
+  }
+
+  if (saveKeyBtn && keyInput) {
+    saveKeyBtn.addEventListener('click', () => {
+      const val = keyInput.value.trim();
+      setStoredApiKey(val);
+      if (val) {
+        showToast('Gemini API Key saved successfully! 🚀', 'success');
+      } else {
+        showToast('Using default built-in AI Tutor engine', 'info');
+      }
+      settingsPanel.classList.add('hidden');
+    });
+  }
+
   const togglePanel = () => {
     panel.classList.toggle('hidden');
     if (!panel.classList.contains('hidden')) {
@@ -119,48 +162,48 @@ function bindChatbot() {
     const text = input.value.trim();
     if (!text) return;
     
-    input.value = '';
-    
-    // Add user message
+    // Add User Message
     messages.push({ role: 'user', content: text });
+    input.value = '';
     renderMessages();
     
-    // Show typing indicator
-    const typingIndicator = document.createElement('div');
-    typingIndicator.className = 'message message-assistant typing-indicator';
-    typingIndicator.id = 'typing-indicator';
-    typingIndicator.innerHTML = `
-      <div class="message-bubble">
-        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    // Typing Indicator
+    const typingEl = document.createElement('div');
+    typingEl.className = 'message message-assistant typing-indicator-msg';
+    typingEl.innerHTML = `
+      <div class="message-bubble typing-indicator">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
       </div>
     `;
-    messagesContainer.appendChild(typingIndicator);
+    messagesContainer.appendChild(typingEl);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
     
     try {
-      const categoryContext = categorySelect.value;
-      const response = await sendMessage(messages, categoryContext);
+      const category = categorySelect.value;
+      const response = await sendMessage(messages, { category });
       
-      const ti = document.getElementById('typing-indicator');
-      if (ti) ti.remove();
+      // Remove typing indicator
+      const currentTyping = messagesContainer.querySelector('.typing-indicator-msg');
+      if (currentTyping) currentTyping.remove();
       
+      // Add Assistant Message
       messages.push({ role: 'assistant', content: response });
       renderMessages();
     } catch (err) {
-      console.error('Chatbot error:', err);
-      const ti = document.getElementById('typing-indicator');
-      if (ti) ti.remove();
+      const currentTyping = messagesContainer.querySelector('.typing-indicator-msg');
+      if (currentTyping) currentTyping.remove();
       
-      messages.push({ 
-        role: 'assistant', 
-        content: "### 💡 SmartPrep Placement Assistant\nHere is the key approach:\n- Identify known values and formulas.\n- Apply dimensional unit conversions ($1\\text{ km/hr} = 5/18\\text{ m/s}$).\n- Practice step-by-step problems in **[Practice Categories](#/categories)**!" 
-      });
+      messages.push({ role: 'assistant', content: "I'm having a brief connection hiccup, but feel free to ask again or browse the formula cards in practice mode!" });
       renderMessages();
     }
   };
   
   sendBtn.addEventListener('click', handleSend);
-  input.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') handleSend();
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      handleSend();
+    }
   });
 }

@@ -1042,15 +1042,25 @@
 
 .chatbot-input-area input {
   flex: 1;
+  background-color: var(--color-surface-alt);
+  color: var(--color-text);
   border: 1.5px solid var(--color-border);
   border-radius: var(--radius-full);
-  padding: 8px 16px;
+  padding: 10px 16px;
   font-size: var(--text-sm);
   outline: none;
+  transition: all var(--transition-fast);
+}
+
+.chatbot-input-area input::placeholder {
+  color: var(--color-text-tertiary);
 }
 
 .chatbot-input-area input:focus {
   border-color: var(--color-primary);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 0 0 3px var(--color-primary-glow);
 }
 
 .typing-indicator .dot {

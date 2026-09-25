@@ -4,9 +4,47 @@
  */
 
 export const DOMAIN_KNOWLEDGE = [
-  // 1. Problems on Trains
+  // 1. Relative Speed & Motion
   {
-    keywords: ['train', 'trains', 'platform', 'pole', 'bridge', 'speed of train'],
+    keywords: ['relative speed', 'relative', 'relative velocity', 'opposite direction', 'same direction', 'passing each other', 'crossing each other'],
+    category: 'Arithmetic Aptitude',
+    topic: 'Relative Speed',
+    solve: (query) => `### ⚡ Relative Speed — Core Concepts & Formulas
+
+**Relative Speed** is the speed of one moving object with respect to another moving object.
+
+---
+
+### 1. Bodies Moving in Opposite Directions:
+When two bodies move towards each other or in opposite directions with speeds $u$ and $v$:
+$$\\text{Relative Speed} = u + v$$
+* **Intuition:** Because they are approaching each other, the distance between them decreases at a rate equal to the **sum of their speeds**.
+* **Time taken to cross each other:**
+  $$\\text{Time} = \\frac{\\text{Total Distance } (L_1 + L_2)}{u + v}$$
+
+---
+
+### 2. Bodies Moving in the Same Direction:
+When two bodies move in the same direction with speeds $u$ and $v$ (where $u > v$):
+$$\\text{Relative Speed} = u - v$$
+* **Intuition:** The faster body only gains ground at the rate of the **difference between speeds**.
+* **Time taken to overtake / cross:**
+  $$\\text{Time} = \\frac{\\text{Total Distance } (L_1 + L_2)}{u - v}$$
+
+---
+
+### 3. Essential Speed Conversions:
+* **To convert $\\text{km/hr} \\to \\text{m/s}$:** Multiply by $\\frac{5}{18}$
+  $$72\\text{ km/hr} = 72 \\times \\frac{5}{18} = 20\\text{ m/s}$$
+* **To convert $\\text{m/s} \\to \\text{km/hr}$:** Multiply by $\\frac{18}{5}$
+  $$25\\text{ m/s} = 25 \\times \\frac{18}{5} = 90\\text{ km/hr}$$
+
+👉 Practice 30+ solved placement questions in **[Problems on Trains](#/practice/problems-on-trains)** and **[Time and Distance](#/practice/time-and-distance)**!`
+  },
+
+  // 2. Problems on Trains
+  {
+    keywords: ['train', 'trains', 'platform', 'pole', 'bridge', 'speed of train', 'tunnel', 'kilometer stone'],
     category: 'Arithmetic Aptitude',
     topic: 'Problems on Trains',
     solve: (query) => `### 🚆 Problems on Trains — Step-by-Step Concepts & Formulas
@@ -14,7 +52,6 @@ export const DOMAIN_KNOWLEDGE = [
 **1. Speed Unit Conversion Rules:**
 * **To convert from km/hr to m/s:** Multiply by $\\frac{5}{18}$
   $$\\text{Speed (m/s)} = \\text{Speed (km/hr)} \\times \\frac{5}{18}$$
-  *Example:* $72\\text{ km/hr} = 72 \\times \\frac{5}{18} = 20\\text{ m/s}$.
 * **To convert from m/s to km/hr:** Multiply by $\\frac{18}{5}$
   $$\\text{Speed (km/hr)} = \\text{Speed (m/s)} \\times \\frac{18}{5}$$
 
@@ -25,17 +62,15 @@ $$\\text{Time taken} = \\frac{\\text{Length of Train}}{\\text{Speed of Train}}$$
 $$\\text{Time taken} = \\frac{\\text{Length of Train } (L_1) + \\text{Length of Platform } (L_2)}{\\text{Speed of Train}}$$
 
 **4. Relative Speed of Two Trains:**
-* **Moving in Opposite Directions:** $\\text{Relative Speed} = u + v$
-  $$\\text{Time to cross each other} = \\frac{L_1 + L_2}{u + v}$$
-* **Moving in the Same Direction ($u > v$):** $\\text{Relative Speed} = u - v$
-  $$\\text{Time to cross each other} = \\frac{L_1 + L_2}{u - v}$$
+* **Opposite Directions:** $\\text{Relative Speed} = u + v \\implies \\text{Time} = \\frac{L_1 + L_2}{u + v}$
+* **Same Direction ($u > v$):** $\\text{Relative Speed} = u - v \\implies \\text{Time} = \\frac{L_1 + L_2}{u - v}$
 
 👉 Practice 30+ multiple choice questions with solutions in **[Problems on Trains](#/practice/problems-on-trains)**!`
   },
 
-  // 2. Time and Work
+  // 3. Time and Work
   {
-    keywords: ['time and work', 'piece of work', 'work and wages', 'man days', 'efficiency'],
+    keywords: ['time and work', 'piece of work', 'work and wages', 'man days', 'efficiency', 'work'],
     category: 'Arithmetic Aptitude',
     topic: 'Time and Work',
     solve: (query) => `### ⏱️ Time and Work — Core Formulas & Shortcut Methods
@@ -61,14 +96,14 @@ $$\\frac{M_1 \\times D_1 \\times H_1}{W_1} = \\frac{M_2 \\times D_2 \\times H_2}
 👉 Try step-by-step problems in **[Time and Work](#/practice/time-and-work)**!`
   },
 
-  // 3. Time and Distance
+  // 4. Time, Speed and Distance
   {
-    keywords: ['time and distance', 'average speed', 'speed distance', 'km/h', 'm/sec'],
+    keywords: ['time and distance', 'speed', 'distance', 'average speed', 'speed distance', 'km/h', 'm/sec', 'aeroplane', 'car speed', 'bus'],
     category: 'Arithmetic Aptitude',
     topic: 'Time and Distance',
     solve: (query) => `### 🚗 Time, Speed and Distance — Master Guide
 
-**1. Basic Formulas:**
+**1. Fundamental Relations:**
 $$\\text{Speed} = \\frac{\\text{Distance}}{\\text{Time}} \\quad | \\quad \\text{Distance} = \\text{Speed} \\times \\text{Time} \\quad | \\quad \\text{Time} = \\frac{\\text{Distance}}{\\text{Speed}}$$
 
 **2. Average Speed when Covering Equal Distances:**
@@ -83,9 +118,9 @@ $$\\text{Speed} = \\frac{\\text{Distance}}{\\text{Time}} \\quad | \\quad \\text{
 👉 Start solving problems in **[Time and Distance](#/practice/time-and-distance)**!`
   },
 
-  // 4. Simple and Compound Interest
+  // 5. Simple and Compound Interest
   {
-    keywords: ['simple interest', 'compound interest', 'principal', 'rate of interest', 'compounded'],
+    keywords: ['simple interest', 'compound interest', 'principal', 'rate of interest', 'compounded', 'interest', 's.i.', 'c.i.'],
     category: 'Arithmetic Aptitude',
     topic: 'Simple & Compound Interest',
     solve: (query) => `### 💰 Simple & Compound Interest Formulas
@@ -93,7 +128,6 @@ $$\\text{Speed} = \\frac{\\text{Distance}}{\\text{Time}} \\quad | \\quad \\text{
 **1. Simple Interest (S.I.):**
 $$\\text{S.I.} = \\frac{P \\times R \\times T}{100}$$
 $$\\text{Total Amount } (A) = P + \\text{S.I.} = P\\left(1 + \\frac{R \\times T}{100}\\right)$$
-*($P$ = Principal, $R$ = Annual Rate %, $T$ = Time in years)*
 
 **2. Compound Interest (C.I.):**
 $$\\text{Amount } (A) = P\\left(1 + \\frac{R}{100}\\right)^n \\quad | \\quad \\text{C.I.} = A - P$$
@@ -109,145 +143,88 @@ $$\\text{Amount } (A) = P\\left(1 + \\frac{R}{100}\\right)^n \\quad | \\quad \\t
 👉 Test your skills in **[Simple Interest](#/practice/simple-interest)** & **[Compound Interest](#/practice/compound-interest)**!`
   },
 
-  // 5. Profit and Loss
+  // 6. C Programming & Pointers
   {
-    keywords: ['profit', 'loss', 'cost price', 'selling price', 'marked price', 'discount'],
-    category: 'Arithmetic Aptitude',
-    topic: 'Profit and Loss',
-    solve: (query) => `### 🏷️ Profit and Loss — Essential Rules & Percentages
-
-**1. Basic Definitions:**
-* **Cost Price (C.P.):** Price at which an article is bought.
-* **Selling Price (S.P.):** Price at which an article is sold.
-
-**2. Gain and Loss Calculations:**
-* **Gain (Profit) when $S.P. > C.P.$:** $\\text{Gain} = S.P. - C.P.$
-  $$\\text{Gain \\%} = \\left(\\frac{\\text{Gain}}{C.P.} \\times 100\\right)\\%$$
-* **Loss when $C.P. > S.P.$:** $\\text{Loss} = C.P. - S.P.$
-  $$\\text{Loss \\%} = \\left(\\frac{\\text{Loss}}{C.P.} \\times 100\\right)\\%$$
-
-**3. Finding S.P. and C.P. Directly:**
-* $S.P. = \\left(\\frac{100 + \\text{Gain \\%}}{100}\\right) \\times C.P. \\quad | \\quad S.P. = \\left(\\frac{100 - \\text{Loss \\%}}{100}\\right) \\times C.P.$
-* $C.P. = \\left(\\frac{100}{100 + \\text{Gain \\%}}\\right) \\times S.P. \\quad | \\quad C.P. = \\left(\\frac{100}{100 - \\text{Loss \\%}}\\right) \\times S.P.$
-
-**4. False Weights Shortcut:**
-$$\\text{Gain \\%} = \\left(\\frac{\\text{Error}}{\\text{True Value} - \\text{Error}} \\times 100\\right)\\%$$
-
-👉 Practice now in **[Profit and Loss](#/practice/profit-and-loss)**!`
-  },
-
-  // 6. Percentage
-  {
-    keywords: ['percentage', 'percent', 'increase percent', 'decrease percent', 'population'],
-    category: 'Arithmetic Aptitude',
-    topic: 'Percentage',
-    solve: (query) => `### 📊 Percentage Calculations & Formulas
-
-**1. Basic Concept:**
-$$x\\% \\text{ of } A = \\frac{x}{100} \\times A$$
-
-**2. Percentage Increase & Decrease:**
-$$\\text{\\% Increase} = \\left(\\frac{\\text{Increase}}{\\text{Original Value}} \\times 100\\right)\\%$$
-$$\\text{\\% Decrease} = \\left(\\frac{\\text{Decrease}}{\\text{Original Value}} \\times 100\\right)\\%$$
-
-**3. Commodity Price & Consumption Rule:**
-* If price increases by $R\\%$, reduction in consumption to keep expenditure same:
-  $$\\text{Reduction \\%} = \\left(\\frac{R}{100 + R} \\times 100\\right)\\%$$
-* If price decreases by $R\\%$, increase in consumption:
-  $$\\text{Increase \\%} = \\left(\\frac{R}{100 - R} \\times 100\\right)\\%$$
-
-**4. Successive Percentage Change:**
-$$\\text{Net Change} = \\left(a + b + \\frac{a \\times b}{100}\\right)\\%$$
-
-👉 Practice in **[Percentage](#/practice/percentage)**!`
-  },
-
-  // 7. Blood Relations
-  {
-    keywords: ['blood relation', 'blood relations', 'maternal', 'paternal', 'brother-in-law', 'sister-in-law', 'family tree'],
-    category: 'Logical Reasoning',
-    topic: 'Blood Relations',
-    solve: (query) => `### 👨‍👩‍👧‍👦 Logical Reasoning — Blood Relations Family Tree
-
-**1. Standard Symbol Notation:**
-* Male: $\\mathbf{[ + ]}$ or Square $\\Box$
-* Female: $\\mathbf{[ - ]}$ or Circle $\\bigcirc$
-* Married Couple: Double horizontal line $\\mathbf{=}$ (e.g. $A = B$)
-* Siblings (Brother/Sister): Single horizontal line $\\mathbf{-}$ (e.g. $A - B$)
-* Generation Hierarchy (Parent to Child): Vertical line $\\mathbf{|}$
-
-**2. Key Family Tree Terms:**
-* **Maternal:** Mother's side (e.g. Maternal Uncle = Mother's Brother)
-* **Paternal:** Father's side (e.g. Paternal Uncle = Father's Brother)
-* **Brother-in-law:** Spouse's brother OR Sister's husband
-* **Sister-in-law:** Spouse's sister OR Brother's wife
-* **Nephew / Niece:** Brother's or Sister's Son / Daughter
-
-👉 Practice TCS & Infosys questions in **[Blood Relations](#/practice/blood-relations)**!`
-  },
-
-  // 8. C Pointers & Memory
-  {
-    keywords: ['pointer', 'pointers', 'malloc', 'calloc', 'free', 'dereference', 'segmentation fault', 'pointer arithmetic'],
+    keywords: ['c programming', 'pointer', 'pointers', 'malloc', 'calloc', 'memory', 'seg fault', 'segmentation fault', 'struct', 'sizeof'],
     category: 'Programming',
-    topic: 'C Pointers & Memory Architecture',
-    solve: (query) => `### 💻 C Programming — Pointers & Memory Concepts
+    topic: 'C Programming & Pointers',
+    solve: (query) => `### 💻 C Pointers & Memory Management Guide
 
 **1. Pointer Basics:**
-A pointer is a variable that stores the memory address of another variable.
+* \`&\` (Address-of operator): Retrieves the memory address of a variable.
+* \`*\` (Dereference operator): Accesses the value stored at the pointed memory address.
+
 \`\`\`c
-int x = 10;
-int *ptr = &x; // ptr stores address of x (& is address-of operator)
-printf("%d", *ptr); // Outputs 10 (* is dereference operator)
+int x = 25;
+int *ptr = &x;     // ptr holds the memory address of x
+printf("%d", *ptr); // Dereferences ptr to output 25
+*ptr = 50;         // Modifies value of x to 50
 \`\`\`
 
-**2. Pointer Arithmetic:**
-* \`ptr + 1\` increases address by \`sizeof(datatype)\` bytes.
-* For \`int *p\` (4 bytes): if \`p = 2000\`, \`p + 1 = 2004\`.
+**2. Pointer Arithmetic Scaling Rule:**
+* Incrementing a pointer (\`ptr + n\`) advances by $n \\times \\text{sizeof}(*ptr)$ bytes:
+  $$\\text{New Address} = \\text{Base Address} + (n \\times \\text{sizeof}(\\text{Data Type}))$$
 
 **3. Dynamic Memory Allocation (\`<stdlib.h>\`):**
-* **\`malloc(size)\`**: Allocates raw uninitialized memory.
-  \`\`\`c
-  int *arr = (int*)malloc(5 * sizeof(int));
-  \`\`\`
-* **\`calloc(n, size)\`**: Allocates memory and initializes all bytes to 0.
-* **\`free(ptr)\`**: Releases allocated memory to prevent memory leaks. Always set \`ptr = NULL;\` afterwards.
+* \`malloc(size)\`: Allocates uninitialized memory containing garbage values.
+* \`calloc(n, size)\`: Allocates memory for $n$ items and initializes all bytes to **0**.
+* \`free(ptr)\`: Deallocates heap memory (set \`ptr = NULL\` to avoid dangling pointers).
 
-**4. Common Pitfalls:**
-* **Wild Pointer:** Uninitialized pointer pointing to arbitrary memory.
-* **Dangling Pointer:** Pointer pointing to memory that has already been freed.
-* **Segmentation Fault:** Attempting to read/write invalid or restricted memory address (e.g. dereferencing \`NULL\`).
-
-👉 Practice technical MCQs in **[Programming: C Pointers](#/practice/c-pointers)**!`
+👉 Practice code debugging MCQs in **[C Pointers](#/practice/c-pointers)** & **[C Declarations](#/practice/c-declarations)**!`
   },
 
-  // 9. SQL & Databases
+  // 7. SQL & Database
   {
-    keywords: ['sql', 'database', 'join', 'inner join', 'left join', 'primary key', 'foreign key', 'normalization', 'group by'],
-    category: 'Programming',
-    topic: 'Database & SQL Queries',
-    solve: (query) => `### 🗄️ Database Management & SQL Core Concepts
+    keywords: ['sql', 'database', 'join', 'joins', 'group by', 'having', 'primary key', 'foreign key', 'acid', 'truncate', 'delete'],
+    category: 'Database',
+    topic: 'SQL & Database Architecture',
+    solve: (query) => `### 🗄️ SQL & RDBMS Core Interview Concepts
 
-**1. SQL Joins Explained:**
-* **INNER JOIN:** Returns rows where there is a match in both tables.
-* **LEFT JOIN (LEFT OUTER JOIN):** Returns all rows from left table, and matched rows from right table (NULL if no match).
-* **RIGHT JOIN:** Returns all rows from right table, and matched rows from left table.
-* **FULL OUTER JOIN:** Returns rows when there is a match in either left or right table.
+**1. WHERE vs HAVING Clause:**
+* \`WHERE\`: Filters individual rows **before** aggregation (cannot use aggregate functions).
+* \`HAVING\`: Filters aggregated groups **after** \`GROUP BY\` (e.g. \`HAVING COUNT(*) > 5\`).
 
-**2. Key Constraints:**
-* **PRIMARY KEY:** Unique identifier for each record. Cannot contain \`NULL\` values.
-* **FOREIGN KEY:** Field in one table referencing the Primary Key of another table, ensuring referential integrity.
-* **UNIQUE:** Ensures all values in a column are distinct, allows a single \`NULL\`.
+**2. SQL JOIN Types:**
+* **INNER JOIN:** Returns matching records from both tables.
+* **LEFT JOIN:** Returns all records from the left table + matching records from right.
+* **RIGHT JOIN:** Returns all records from the right table + matching records from left.
+* **FULL OUTER JOIN:** Returns all records when there is a match in either table.
 
-**3. GROUP BY vs WHERE vs HAVING:**
-* \`WHERE\` filters rows **before** aggregation.
-* \`GROUP BY\` groups rows that have the same values into summary rows.
-* \`HAVING\` filters aggregated groups **after** \`GROUP BY\` (e.g. \`HAVING COUNT(*) > 5\`).
+**3. ACID Properties:**
+* **A - Atomicity:** All operations in a transaction succeed completely or none do.
+* **C - Consistency:** Preserves database integrity rules and constraints.
+* **I - Isolation:** Concurrent transactions execute without interfering.
+* **D - Durability:** Committed data is permanently saved even after server crashes.
 
-👉 Explore MCQs in **[Database & SQL](#/category/database)**!`
+👉 Master database queries in **[SQL Queries](#/practice/sql-queries)**!`
   },
 
-  // 10. Platform Navigation & Sitemap
+  // 8. Blood Relations
+  {
+    keywords: ['blood relation', 'blood relations', 'family tree', 'maternal', 'paternal', 'uncle', 'nephew', 'niece'],
+    category: 'Logical Reasoning',
+    topic: 'Blood Relations',
+    solve: (query) => `### 👨‍👩‍👦 Blood Relations — Tree Decoding Strategy
+
+**1. Relationship Mapping:**
+* **Mother's / Father's Son:** Brother (or Myself).
+* **Mother's / Father's only Son:** Myself (if male).
+* **Mother's / Father's Daughter:** Sister (or Myself).
+* **Father's Brother:** Paternal Uncle.
+* **Mother's Brother:** Maternal Uncle.
+* **Brother's / Sister's Son:** Nephew.
+* **Brother's / Sister's Daughter:** Niece.
+
+**2. Generation Level Notation:**
+* **Generation +2:** Grandfather, Grandmother
+* **Generation +1:** Father, Mother, Uncle, Aunt
+* **Generation 0 (Self):** Brother, Sister, Cousin, Spouse
+* **Generation -1:** Son, Daughter, Nephew, Niece
+
+👉 Practice deduction problems in **[Blood Relations](#/practice/blood-relations)**!`
+  },
+
+  // 9. Platform Navigation & Sitemap
   {
     keywords: ['how to', 'where to', 'navigate', 'find', 'category', 'profile', 'admin', 'teacher', 'login', 'signup', 'dashboard'],
     category: 'Website Guide',
@@ -288,7 +265,7 @@ export function getDomainResponse(query, categoryContext = '') {
   }
 
   // 2. Category match
-  if (categoryContext) {
+  if (categoryContext && categoryContext !== 'General') {
     const matched = DOMAIN_KNOWLEDGE.find(d => 
       d.category.toLowerCase().includes(categoryContext.toLowerCase()) ||
       d.topic.toLowerCase().includes(categoryContext.toLowerCase())
@@ -301,7 +278,7 @@ export function getDomainResponse(query, categoryContext = '') {
 I can help you solve and understand any placement problem!
 
 **What I can do for you:**
-* 📐 **Aptitude Formulas:** Ask about *Problems on Trains, Time & Work, Interest, Percentages, Probability, Speed & Distance*.
+* 📐 **Aptitude Formulas:** Ask about *Relative Speed, Problems on Trains, Time & Work, Interest, Percentages, Speed & Distance*.
 * 🧠 **Logical Reasoning:** Ask about *Blood Relations, Syllogisms, Number Series, Coding-Decoding*.
 * 💻 **Coding & Technical:** Ask about *C Pointers, Memory Allocation, Data Structures, SQL Joins, OOP in Java/C++*.
 * 🧭 **Platform Navigation:** Ask how to practice modules, track your profile accuracy, or access faculty tools.
