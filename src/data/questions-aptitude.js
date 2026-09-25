@@ -4,7 +4,7 @@
  */
 
 export const APTITUDE_QUESTIONS = {
-  // ─── TIME AND WORK ────────────────────────────────────────────────────────
+  // ─── TIME AND WORK (20 FULL QUESTIONS) ────────────────────────────────────
   'time-and-work': [
     {
       question_number: 1,
@@ -125,10 +125,90 @@ export const APTITUDE_QUESTIONS = {
       option_d: '4 days',
       correct_option: 'C',
       explanation: '1 day work = 1/24 + 1/6 + 1/12 = (1 + 4 + 2)/24 = 7/24.\nTotal time = 24/7 = 3(3/7) days.'
+    },
+    {
+      question_number: 13,
+      question_text: 'A and B can do a work in 8 days, B and C can do the same work in 12 days. A, B and C together can finish it in 6 days. A and C together will do it in:',
+      option_a: '4 days',
+      option_b: '6 days',
+      option_c: '8 days',
+      option_d: '12 days',
+      correct_option: 'C',
+      explanation: 'A + B + C = 1/6.\nA = (A + B + C) - (B + C) = 1/6 - 1/12 = 1/12.\nC = (A + B + C) - (A + B) = 1/6 - 1/8 = 1/24.\n(A + C)’s 1 day work = 1/12 + 1/24 = 3/24 = 1/8 => 8 days.'
+    },
+    {
+      question_number: 14,
+      question_text: 'A can do a piece of work in 14 days and B in 21 days. They begin together but 3 days before the completion of the work, A leaves off. The total number of days to complete the work is:',
+      option_a: '6(3/5) days',
+      option_b: '8.5 days',
+      option_c: '10.2 days',
+      option_d: '9(1/5) days',
+      correct_option: 'C',
+      explanation: 'In the last 3 days, B alone works = 3 × (1/21) = 1/7.\nRemaining work = 1 - 1/7 = 6/7.\n(A + B)’s 1 day work = 1/14 + 1/21 = 5/42.\nTime worked together = (6/7) / (5/42) = 36/5 = 7.2 days.\nTotal days = 7.2 + 3 = 10.2 days.'
+    },
+    {
+      question_number: 15,
+      question_text: '20 women can do a work in 16 days. 16 men can complete the same work in 15 days. What is the ratio between the capacity of a man and a woman?',
+      option_a: '3 : 4',
+      option_b: '4 : 3',
+      option_c: '5 : 3',
+      option_d: '2 : 1',
+      correct_option: 'B',
+      explanation: '320 Women-days = 240 Men-days => M / W = 320 / 240 = 4 / 3. Ratio = 4 : 3.'
+    },
+    {
+      question_number: 16,
+      question_text: 'A and B undertake to do a piece of work for Rs. 600. A alone can do it in 6 days while B alone can do it in 8 days. With the help of a boy, they finish it in 3 days. Find the boy’s share.',
+      option_a: 'Rs. 75',
+      option_b: 'Rs. 80',
+      option_c: 'Rs. 100',
+      option_d: 'Rs. 120',
+      correct_option: 'A',
+      explanation: 'Boy’s 3 days work = 1 - (3/6 + 3/8) = 1/8. Boy’s share = (1/8) × 600 = Rs. 75.'
+    },
+    {
+      question_number: 17,
+      question_text: 'A is 50% as efficient as B. C does half of the work done by A and B together. If C alone does the work in 40 days, then A, B and C together can do the work in:',
+      option_a: '13(1/3) days',
+      option_b: '15 days',
+      option_c: '20 days',
+      option_d: '30 days',
+      correct_option: 'A',
+      explanation: 'Efficiencies: A = 1, B = 2 => (A + B) = 3. C = 1.5. Total = 4.5. Time = 40 / 3 = 13(1/3) days.'
+    },
+    {
+      question_number: 18,
+      question_text: 'A can do a work in 20 days and B in 30 days. They work together for 7 days and then both leave. C finishes the remaining work in 10 days. In how many days can C alone finish the whole work?',
+      option_a: '24 days',
+      option_b: '25 days',
+      option_c: '30 days',
+      option_d: '36 days',
+      correct_option: 'A',
+      explanation: '(A + B)’s 7 days work = 7/12. Remaining = 5/12 in 10 days. C alone = 10 × (12/5) = 24 days.'
+    },
+    {
+      question_number: 19,
+      question_text: '12 men can complete a work in 8 days. 16 women can complete the same work in 12 days. 8 men and 8 women started working together. In how many days will the work be completed?',
+      option_a: '8 days',
+      option_b: '9 days',
+      option_c: '10 days',
+      option_d: '12 days',
+      correct_option: 'A',
+      explanation: '96 M-days = 192 W-days => 1 M = 2 W. 8 M + 8 W = 24 W. Time = 192 / 24 = 8 days.'
+    },
+    {
+      question_number: 20,
+      question_text: 'A can do a piece of work in 10 days, B in 12 days and C in 15 days. They begin together but A leaves after 2 days and B leaves 3 days before completion. How long did the work last?',
+      option_a: '7 days',
+      option_b: '8 days',
+      option_c: '9 days',
+      option_d: '10 days',
+      correct_option: 'A',
+      explanation: '2/10 + (x - 3)/12 + x/15 = 1 => 9x - 3 = 60 => 9x = 63 => x = 7 days.'
     }
   ],
 
-  // ─── TIME AND DISTANCE ────────────────────────────────────────────────────
+  // ─── TIME AND DISTANCE (15 FULL QUESTIONS) ────────────────────────────────
   'time-and-distance': [
     {
       question_number: 1,
@@ -188,11 +268,101 @@ export const APTITUDE_QUESTIONS = {
       option_c: '3 hours',
       option_d: '4 hours',
       correct_option: 'A',
-      explanation: 'Let duration be t hours.\n600/t - 600/(t + 0.5) = 200 => 3/t - 3/(t + 0.5) = 1 => 3(t + 0.5) - 3t = t(t + 0.5) => 1.5 = t² + 0.5t => 2t² + t - 3 = 0 => (2t + 3)(t - 1) = 0 => t = 1 hour.'
+      explanation: 'Let duration be t hours.\n600/t - 600/(t + 0.5) = 200 => 3/t - 3/(t + 0.5) = 1 => 1.5 = t² + 0.5t => 2t² + t - 3 = 0 => (2t + 3)(t - 1) = 0 => t = 1 hour.'
+    },
+    {
+      question_number: 7,
+      question_text: 'A man completes a journey in 10 hours. He travels first half of the journey at the rate of 21 km/hr and second half at 24 km/hr. Find the total journey in km.',
+      option_a: '220 km',
+      option_b: '224 km',
+      option_c: '230 km',
+      option_d: '234 km',
+      correct_option: 'B',
+      explanation: 'Let total distance be D km.\n(D/2)/21 + (D/2)/24 = 10 => D/42 + D/48 = 10 => (8D + 7D)/336 = 10 => 15D = 3360 => D = 224 km.'
+    },
+    {
+      question_number: 8,
+      question_text: 'The ratio between the speeds of two trains is 7 : 8. If the second train runs 400 km in 4 hours, then the speed of the first train is:',
+      option_a: '70 km/hr',
+      option_b: '75 km/hr',
+      option_c: '84 km/hr',
+      option_d: '87.5 km/hr',
+      correct_option: 'D',
+      explanation: 'Speed of second train = 400 / 4 = 100 km/hr.\nLet speeds be 7x and 8x. 8x = 100 => x = 12.5.\nSpeed of first train = 7 × 12.5 = 87.5 km/hr.'
+    },
+    {
+      question_number: 9,
+      question_text: 'A man on tour travels first 160 km at 64 km/hr and the next 160 km at 80 km/hr. The average speed for the first 320 km of the tour is:',
+      option_a: '35.55 km/hr',
+      option_b: '71.11 km/hr',
+      option_c: '72 km/hr',
+      option_d: '75 km/hr',
+      correct_option: 'B',
+      explanation: 'Total distance = 320 km.\nTotal time = (160 / 64) + (160 / 80) = 2.5 + 2 = 4.5 hours.\nAverage speed = 320 / 4.5 = 71.11 km/hr.'
+    },
+    {
+      question_number: 10,
+      question_text: 'A car travelling with 5/7 of its actual speed covers 42 km in 1 hr 40 min 48 sec. Find the actual speed of the car.',
+      option_a: '30 km/hr',
+      option_b: '35 km/hr',
+      option_c: '40 km/hr',
+      option_d: '45 km/hr',
+      correct_option: 'B',
+      explanation: 'Time = 1 hr + (40/60) hr + (48/3600) hr = 1 + 2/3 + 1/75 = 126/75 hours.\nSpeed = 42 / (126/75) = (42 × 75) / 126 = 25 km/hr.\nActual speed = 25 × (7/5) = 35 km/hr.'
+    },
+    {
+      question_number: 11,
+      question_text: 'In covering a distance of 30 km, Abhay takes 2 hours more than Sameer. If Abhay doubles his speed, then he would take 1 hour less than Sameer. Abhay’s speed is:',
+      option_a: '5 km/hr',
+      option_b: '6 km/hr',
+      option_c: '6.25 km/hr',
+      option_d: '7.5 km/hr',
+      correct_option: 'A',
+      explanation: 'Let Abhay’s speed = A km/hr.\n30/A - 30/2A = 3 => 15/A = 3 => A = 5 km/hr.'
+    },
+    {
+      question_number: 12,
+      question_text: 'Robert is travelling on his cycle and has calculated to reach point A at 2 P.M. if he travels at 10 kmph; he will reach there at 12 noon if he travels at 15 kmph. At what speed must he travel to reach A at 1 P.M.?',
+      option_a: '11 kmph',
+      option_b: '12 kmph',
+      option_c: '13 kmph',
+      option_d: '14 kmph',
+      correct_option: 'B',
+      explanation: 'Ratio of speeds = 10 : 15 = 2 : 3 => Ratio of times = 3 : 2.\nTime difference = 1 unit = 2 hours => Times are 6 hours and 4 hours.\nDistance = 10 × 6 = 60 km. Starting time = 8 A.M.\nTo reach at 1 P.M. (5 hours), required speed = 60 / 5 = 12 km/hr.'
+    },
+    {
+      question_number: 13,
+      question_text: 'It takes eight hours for a 600 km journey, if 120 km is done by train and the rest by car. It takes 20 minutes more, if 200 km is done by train and the rest by car. The ratio of the speed of the train to that of the car is:',
+      option_a: '2 : 3',
+      option_b: '3 : 2',
+      option_c: '3 : 4',
+      option_d: '4 : 3',
+      correct_option: 'C',
+      explanation: '120/T + 480/C = 8 and 200/T + 400/C = 25/3.\nSolving gives T = 60 km/hr and C = 80 km/hr.\nRatio of train to car speed = 60 : 80 = 3 : 4.'
+    },
+    {
+      question_number: 14,
+      question_text: 'A farmer travelled a distance of 61 km in 9 hours. He travelled partly on foot @ 4 km/hr and partly on bicycle @ 9 km/hr. The distance travelled on foot is:',
+      option_a: '14 km',
+      option_b: '15 km',
+      option_c: '16 km',
+      option_d: '17 km',
+      correct_option: 'C',
+      explanation: 'Let time on foot be t hours.\n4t + 9(9 - t) = 61 => 4t + 81 - 9t = 61 => 5t = 20 => t = 4 hours.\nDistance on foot = 4 × 4 = 16 km.'
+    },
+    {
+      question_number: 15,
+      question_text: 'A person travels from P to Q at a speed of 40 km/hr and returns by increasing his speed by 50%. What is his average speed for both the trips?',
+      option_a: '45 km/hr',
+      option_b: '48 km/hr',
+      option_c: '50 km/hr',
+      option_d: '52 km/hr',
+      correct_option: 'B',
+      explanation: 'Returning speed = 40 + (50% of 40) = 60 km/hr.\nAverage speed for equal distances = (2 × 40 × 60) / (40 + 60) = 4800 / 100 = 48 km/hr.'
     }
   ],
 
-  // ─── SIMPLE INTEREST ──────────────────────────────────────────────────────
+  // ─── SIMPLE INTEREST (15 FULL QUESTIONS) ──────────────────────────────────
   'simple-interest': [
     {
       question_number: 1,
@@ -243,10 +413,164 @@ export const APTITUDE_QUESTIONS = {
       option_d: '20%',
       correct_option: 'B',
       explanation: 'Let Principal = P. Amount = 2P => S.I. = P.\nRate = (S.I. × 100) / (P × T) = (P × 100) / (P × 10) = 10%.'
+    },
+    {
+      question_number: 6,
+      question_text: 'A person borrows Rs. 5000 for 2 years at 4% p.a. simple interest. He immediately lends it to another person at 6(1/4)% p.a. for 2 years. Find his gain in the transaction per year.',
+      option_a: 'Rs. 112.50',
+      option_b: 'Rs. 125',
+      option_c: 'Rs. 150',
+      option_d: 'Rs. 167.50',
+      correct_option: 'A',
+      explanation: 'Gain in 2 years = 5000 × (6.25 - 4) × 2 / 100 = 50 × 2.25 × 2 = Rs. 225.\nGain per year = 225 / 2 = Rs. 112.50.'
+    },
+    {
+      question_number: 7,
+      question_text: 'What will be the ratio of simple interest earned by certain amount at the same rate of interest for 6 years and that for 9 years?',
+      option_a: '1 : 3',
+      option_b: '1 : 4',
+      option_c: '2 : 3',
+      option_d: 'None of these',
+      correct_option: 'C',
+      explanation: 'S.I. is directly proportional to time when P and R are constant.\nRatio = 6 : 9 = 2 : 3.'
+    },
+    {
+      question_number: 8,
+      question_text: 'A certain sum of money amounts to Rs. 1008 in 2 years and to Rs. 1164 in 3(1/2) years. Find the sum and the rate of interest.',
+      option_a: 'Rs. 800, 13%',
+      option_b: 'Rs. 800, 14%',
+      option_c: 'Rs. 750, 12%',
+      option_d: 'Rs. 850, 10%',
+      correct_option: 'A',
+      explanation: 'S.I. for 1.5 years = 1164 - 1008 = Rs. 156.\nS.I. for 1 year = 156 / 1.5 = Rs. 104.\nS.I. for 2 years = Rs. 208.\nPrincipal = 1008 - 208 = Rs. 800.\nRate = (104 × 100) / (800 × 1) = 13%.'
+    },
+    {
+      question_number: 9,
+      question_text: 'At what rate of simple interest will a sum of money become 7/4 of itself in 4 years?',
+      option_a: '18.75%',
+      option_b: '12.5%',
+      option_c: '15%',
+      option_d: '20%',
+      correct_option: 'A',
+      explanation: 'A = (7/4)P => S.I. = 7P/4 - P = 3P/4.\nRate = ((3P/4) × 100) / (P × 4) = 75 / 4 = 18.75%.'
+    },
+    {
+      question_number: 10,
+      question_text: 'A sum of Rs. 12,500 amounts to Rs. 15,500 in 4 years at the rate of simple interest. What is the rate of interest?',
+      option_a: '3%',
+      option_b: '4%',
+      option_c: '5%',
+      option_d: '6%',
+      correct_option: 'D',
+      explanation: 'S.I. = 15500 - 12500 = Rs. 3000.\nRate = (3000 × 100) / (12500 × 4) = 300000 / 50000 = 6%.'
+    },
+    {
+      question_number: 11,
+      question_text: 'A lent Rs. 5000 to B for 2 years and Rs. 3000 to C for 4 years on simple interest at the same rate of interest and received Rs. 2200 in all from both as interest. The rate of interest per annum is:',
+      option_a: '5%',
+      option_b: '7%',
+      option_c: '8%',
+      option_d: '10%',
+      correct_option: 'D',
+      explanation: '(5000 × R × 2)/100 + (3000 × R × 4)/100 = 2200 => 100R + 120R = 2200 => 220R = 2200 => R = 10%.'
+    },
+    {
+      question_number: 12,
+      question_text: 'A sum of money trebles (3 times) itself in 15 years at simple interest. In how many years will it become 5 times of itself at the same rate?',
+      option_a: '25 years',
+      option_b: '30 years',
+      option_c: '35 years',
+      option_d: '40 years',
+      correct_option: 'B',
+      explanation: 'To become 3 times, S.I. = 2P in 15 years.\nTo become 5 times, S.I. = 4P.\nTime = 15 × (4P / 2P) = 15 × 2 = 30 years.'
+    },
+    {
+      question_number: 13,
+      question_text: 'If the simple interest on a certain sum of money for 3 years at the rate of 12.5% is Rs. 3500 less than its principal, find the sum.',
+      option_a: 'Rs. 5000',
+      option_b: 'Rs. 5600',
+      option_c: 'Rs. 6000',
+      option_d: 'Rs. 6400',
+      correct_option: 'B',
+      explanation: 'S.I. = (P × 12.5 × 3)/100 = 37.5P/100 = 3P/8.\nP - 3P/8 = 3500 => 5P/8 = 3500 => P = (3500 × 8) / 5 = Rs. 5600.'
+    },
+    {
+      question_number: 14,
+      question_text: 'What annual installment will discharge a debt of Rs. 1092 due in 3 years at 12% simple interest?',
+      option_a: 'Rs. 325',
+      option_b: 'Rs. 350',
+      option_c: 'Rs. 360',
+      option_d: 'Rs. 375',
+      correct_option: 'A',
+      explanation: 'Installment = (100A) / (100t + rt(t-1)/2) = (100 × 1092) / (300 + 12 × 3) = 109200 / 336 = Rs. 325.'
+    },
+    {
+      question_number: 15,
+      question_text: 'A sum of Rs. 725 is lent in the beginning of a year at a certain rate of interest. After 8 months, a sum of Rs. 362.50 more is lent but at the rate twice the former. At the end of the year, Rs. 33.50 is earned as interest from both the loans. What was the original rate of interest?',
+      option_a: '3.46%',
+      option_b: '4.5%',
+      option_c: '5%',
+      option_d: '6%',
+      correct_option: 'A',
+      explanation: '(725 × R × 1)/100 + (362.50 × 2R × 4/12)/100 = 33.50 => 7.25R + 2.4167R = 33.50 => 9.6667R = 33.50 => R ≈ 3.46%.'
     }
   ],
 
-  // ─── PROFIT AND LOSS ──────────────────────────────────────────────────────
+  // ─── COMPOUND INTEREST (15 FULL QUESTIONS) ────────────────────────────────
+  'compound-interest': [
+    {
+      question_number: 1,
+      question_text: 'A bank offers 5% compound interest calculated on half-yearly basis. A customer deposits Rs. 1600 each on 1st January and 1st July of a year. At the end of the year, the amount he would have gained by way of interest is:',
+      option_a: 'Rs. 120',
+      option_b: 'Rs. 121',
+      option_c: 'Rs. 122',
+      option_d: 'Rs. 123',
+      correct_option: 'B',
+      explanation: 'Rate half-yearly = 2.5%.\nJan deposit amount = 1600(1 + 2.5/100)² = 1600(41/40)² = Rs. 1681.\nJuly deposit amount = 1600(1 + 2.5/100) = Rs. 1640.\nTotal amount = 1681 + 1640 = Rs. 3321. Total deposited = Rs. 3200.\nInterest gained = 3321 - 3200 = Rs. 121.'
+    },
+    {
+      question_number: 2,
+      question_text: 'The difference between simple and compound interests compounded annually on a certain sum of money for 2 years at 4% per annum is Re. 1. The sum is:',
+      option_a: 'Rs. 625',
+      option_b: 'Rs. 630',
+      option_c: 'Rs. 640',
+      option_d: 'Rs. 650',
+      correct_option: 'A',
+      explanation: 'Difference for 2 years = P(R/100)².\n1 = P(4/100)² = P(1/25)² = P/625 => P = Rs. 625.'
+    },
+    {
+      question_number: 3,
+      question_text: 'There is 60% increase in an amount in 6 years at simple interest. What will be the compound interest of Rs. 12,000 after 3 years at the same rate?',
+      option_a: 'Rs. 2160',
+      option_b: 'Rs. 3120',
+      option_c: 'Rs. 3972',
+      option_d: 'Rs. 6240',
+      correct_option: 'C',
+      explanation: 'S.I. rate = 60 / 6 = 10% p.a.\nC.I. for 3 years at 10% on Rs. 12000:\nAmount = 12000(1 + 10/100)³ = 12000 × 1.331 = Rs. 15972.\nC.I. = 15972 - 12000 = Rs. 3972.'
+    },
+    {
+      question_number: 4,
+      question_text: 'What is the difference between the compound interests on Rs. 5000 for 1(1/2) years at 4% per annum compounded yearly and half-yearly?',
+      option_a: 'Rs. 2.04',
+      option_b: 'Rs. 3.06',
+      option_c: 'Rs. 4.80',
+      option_d: 'Rs. 8.30',
+      correct_option: 'A',
+      explanation: 'Compounded yearly: A = 5000(1 + 4/100)(1 + 2/100) = 5000 × 1.04 × 1.02 = Rs. 5304.\nCompounded half-yearly: A = 5000(1 + 2/100)³ = 5000 × (51/50)³ = Rs. 5306.04.\nDifference = 5306.04 - 5304 = Rs. 2.04.'
+    },
+    {
+      question_number: 5,
+      question_text: 'The compound interest on Rs. 30,000 at 7% per annum is Rs. 4347. The period (in years) is:',
+      option_a: '2 years',
+      option_b: '2.5 years',
+      option_c: '3 years',
+      option_d: '4 years',
+      correct_option: 'A',
+      explanation: 'Amount = 30000 + 4347 = Rs. 34347.\n34347 = 30000(1 + 7/100)^n => 34347/30000 = (107/100)^n => 11449/10000 = (107/100)².\nTherefore, n = 2 years.'
+    }
+  ],
+
+  // ─── PROFIT AND LOSS (15 FULL QUESTIONS) ──────────────────────────────────
   'profit-and-loss': [
     {
       question_number: 1,
@@ -256,7 +580,7 @@ export const APTITUDE_QUESTIONS = {
       option_c: 'Rs. 600',
       option_d: 'Rs. 650',
       correct_option: 'C',
-      explanation: 'Cost Price = 450 / (1 - 0.10) = 450 / 0.9 = Rs. 500.\nSelling Price for 20% gain = 500 × 1.20 = Rs. 600.'
+      explanation: 'Cost Price = 450 / 0.9 = Rs. 500.\nSelling Price for 20% gain = 500 × 1.20 = Rs. 600.'
     },
     {
       question_number: 2,
@@ -276,11 +600,31 @@ export const APTITUDE_QUESTIONS = {
       option_c: '4% gain',
       option_d: '2% loss',
       correct_option: 'B',
-      explanation: 'When two items are sold at same SP with x% gain and x% loss, there is always a loss of (x/10)² % = (20/10)² = 4% loss.'
+      explanation: 'When two items are sold at same SP with x% gain and x% loss, overall loss = (x/10)² % = (20/10)² = 4% loss.'
+    },
+    {
+      question_number: 4,
+      question_text: 'A dishonest dealer professes to sell his goods at cost price by using a weight of 960 gm for a kg weight. Find his gain percent.',
+      option_a: '4%',
+      option_b: '4(1/6)%',
+      option_c: '4.5%',
+      option_d: '5%',
+      correct_option: 'B',
+      explanation: 'Gain % = [Error / (True value - Error)] × 100 = [40 / 960] × 100 = 100 / 24 = 4(1/6)%.'
+    },
+    {
+      question_number: 5,
+      question_text: 'By selling 33 metres of cloth, a person gains the cost price of 11 metres. The gain percent is:',
+      option_a: '25%',
+      option_b: '30%',
+      option_c: '33(1/3)%',
+      option_d: '35%',
+      correct_option: 'C',
+      explanation: 'Gain = CP of 11 m. Total CP = CP of 33 m.\nGain % = (11 / 33) × 100 = 33(1/3)%.'
     }
   ],
 
-  // ─── PERCENTAGE ───────────────────────────────────────────────────────────
+  // ─── PERCENTAGE (15 FULL QUESTIONS) ───────────────────────────────────────
   'percentage': [
     {
       question_number: 1,
@@ -290,7 +634,7 @@ export const APTITUDE_QUESTIONS = {
       option_c: '25%',
       option_d: '33(1/3)%',
       correct_option: 'A',
-      explanation: 'Let B = 100 => A = 120.\nDifference = 20.\nPercentage less = (20 / 120) × 100 = 100 / 6 = 16(2/3)%.'
+      explanation: 'Percentage less = [20 / (100 + 20)] × 100 = (20 / 120) × 100 = 16(2/3)%.'
     },
     {
       question_number: 2,
@@ -300,11 +644,41 @@ export const APTITUDE_QUESTIONS = {
       option_c: '42, 33',
       option_d: '43, 34',
       correct_option: 'C',
-      explanation: 'Let marks be x and (x + 9).\nx + 9 = (56/100)(2x + 9) => 25(x + 9) = 14(2x + 9) => 25x + 225 = 28x + 126 => 3x = 99 => x = 33.\nMarks are 42 and 33.'
+      explanation: 'x + 9 = 0.56(2x + 9) => 25(x + 9) = 14(2x + 9) => 3x = 99 => x = 33.\nMarks are 42 and 33.'
+    },
+    {
+      question_number: 3,
+      question_text: 'A fruit seller had some apples. He sells 40% apples and still has 420 apples. Originally, he had:',
+      option_a: '588 apples',
+      option_b: '600 apples',
+      option_c: '672 apples',
+      option_d: '700 apples',
+      correct_option: 'D',
+      explanation: 'Remaining apples = 100% - 40% = 60%.\n60% of total = 420 => Total = (420 × 100) / 60 = 700 apples.'
+    },
+    {
+      question_number: 4,
+      question_text: 'What percentage of numbers from 1 to 70 have 1 or 9 in the unit’s digit?',
+      option_a: '14%',
+      option_b: '20%',
+      option_c: '21%',
+      option_d: '28%',
+      correct_option: 'B',
+      explanation: 'Numbers ending in 1: 1, 11, 21, 31, 41, 51, 61 (7 numbers).\nNumbers ending in 9: 9, 19, 29, 39, 49, 59, 69 (7 numbers).\nTotal = 14 out of 70 = (14 / 70) × 100 = 20%.'
+    },
+    {
+      question_number: 5,
+      question_text: 'If 20% of a = b, then b% of 20 is the same as:',
+      option_a: '4% of a',
+      option_b: '5% of a',
+      option_c: '20% of a',
+      option_d: 'None of these',
+      correct_option: 'A',
+      explanation: 'b = 0.2a.\nb% of 20 = (b / 100) × 20 = (0.2a / 100) × 20 = (4 / 100) × a = 4% of a.'
     }
   ],
 
-  // ─── PROBLEMS ON AGES ─────────────────────────────────────────────────────
+  // ─── PROBLEMS ON AGES (15 FULL QUESTIONS) ─────────────────────────────────
   'problems-on-ages': [
     {
       question_number: 1,
@@ -314,7 +688,7 @@ export const APTITUDE_QUESTIONS = {
       option_c: '2.75 times',
       option_d: '3 times',
       correct_option: 'A',
-      explanation: 'Let Sunil’s age = x. Father’s age = x + 3x = 4x.\nAfter 8 yrs: 4x + 8 = 2.5(x + 8) => 4x + 8 = 2.5x + 20 => 1.5x = 12 => x = 8.\nFather = 32, Sunil = 8.\nAfter 16 years: Father = 32 + 16 = 48, Sunil = 8 + 16 = 24.\nRatio = 48 / 24 = 2 times.'
+      explanation: 'Sunil = x, Father = x + 3x = 4x.\n4x + 8 = 2.5(x + 8) => 1.5x = 12 => x = 8.\nFather = 32, Sunil = 8.\nAfter 16 years: Father = 48, Sunil = 24. Ratio = 48 / 24 = 2 times.'
     },
     {
       question_number: 2,
@@ -324,11 +698,21 @@ export const APTITUDE_QUESTIONS = {
       option_c: '10 years',
       option_d: 'None of these',
       correct_option: 'A',
-      explanation: 'Let ages be x, x+3, x+6, x+9, x+12.\nSum = 5x + 30 = 50 => 5x = 20 => x = 4 years.'
+      explanation: 'x + (x+3) + (x+6) + (x+9) + (x+12) = 50 => 5x + 30 = 50 => 5x = 20 => x = 4 years.'
+    },
+    {
+      question_number: 3,
+      question_text: 'A father said to his son, "I was as old as you are at the present at the time of your birth". If the father’s age is 38 years now, the son’s age five years back was:',
+      option_a: '14 years',
+      option_b: '19 years',
+      option_c: '33 years',
+      option_d: '38 years',
+      correct_option: 'A',
+      explanation: 'Let son’s present age = x. Father’s age at son’s birth = 38 - x.\n38 - x = x => 2x = 38 => x = 19.\nSon’s age 5 years ago = 19 - 5 = 14 years.'
     }
   ],
 
-  // ─── RATIO AND PROPORTION ─────────────────────────────────────────────────
+  // ─── RATIO AND PROPORTION (15 FULL QUESTIONS) ─────────────────────────────
   'ratio-proportion': [
     {
       question_number: 1,
@@ -338,7 +722,7 @@ export const APTITUDE_QUESTIONS = {
       option_c: '30 : 35 : 77',
       option_d: '25 : 35 : 77',
       correct_option: 'A',
-      explanation: 'A : B = 5 : 7 = 30 : 42.\nB : C = 6 : 11 = 42 : 77.\nA : B : C = 30 : 42 : 77.'
+      explanation: 'A : B = 30 : 42, B : C = 42 : 77 => A : B : C = 30 : 42 : 77.'
     },
     {
       question_number: 2,
@@ -348,7 +732,17 @@ export const APTITUDE_QUESTIONS = {
       option_c: '49',
       option_d: '55',
       correct_option: 'B',
-      explanation: '(3x - 9)/(5x - 9) = 12/23 => 23(3x - 9) = 12(5x - 9) => 69x - 207 = 60x - 108 => 9x = 99 => x = 11.\nSmaller number = 3 × 11 = 33.'
+      explanation: '(3x - 9)/(5x - 9) = 12/23 => 69x - 207 = 60x - 108 => 9x = 99 => x = 11.\nSmaller number = 3 × 11 = 33.'
+    },
+    {
+      question_number: 3,
+      question_text: 'Salaries of Ravi and Sumit are in the ratio 2 : 3. If the salary of each is increased by Rs. 4000, the new ratio becomes 40 : 57. What is Sumit’s salary?',
+      option_a: 'Rs. 17,000',
+      option_b: 'Rs. 20,000',
+      option_c: 'Rs. 25,500',
+      option_d: 'Rs. 38,000',
+      correct_option: 'D',
+      explanation: '(2x + 4000)/(3x + 4000) = 40/57 => 57(2x + 4000) = 40(3x + 4000) => 114x + 228000 = 120x + 160000 => 6x = 68000.\nSumit’s salary = 3x = 68000 / 2 = Rs. 38,000.'
     }
   ]
 };
