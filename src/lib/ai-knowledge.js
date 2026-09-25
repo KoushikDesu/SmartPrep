@@ -246,6 +246,77 @@ Here is how you can access every area of the platform:
    * Manage user accounts, create faculty logins, and reset passwords.
 
 Which module would you like to open today?`
+  },
+
+  // 10. Greetings & Capabilities
+  {
+    keywords: ['hello', 'hi', 'hey', 'greetings', 'who are you', 'what can you do', 'what can u do', 'help me'],
+    category: 'General',
+    topic: 'Assistant Capabilities',
+    solve: (query) => `### 👋 Hello! I'm your SmartPrep AI Placement Mentor
+
+I am here to guide your preparation and solve any questions across technical tests and campus interviews:
+
+* 📐 **Quantitative Aptitude:** Step-by-step solutions for *Problems on Trains, Relative Speed, Time & Work, Interest, Percentages, Ratio & Proportion*.
+* 🧠 **Logical Reasoning:** Deductions for *Blood Relations, Number Series, Coding-Decoding, Direction Sense*.
+* 💻 **Technical & Programming:** Execution tracing for *C Pointers, Control Loops, Recursion, Memory Allocation, SQL Queries & Joins*.
+* 🧭 **Platform Navigation:** Finding topic modules, practicing one question at a time, and checking your accuracy roster.
+
+What problem or topic would you like to solve right now?`
+  },
+
+  // 11. Representative Values & Central Tendency
+  {
+    keywords: ['representative value', 'representative', 'central tendency', 'mean', 'median', 'mode'],
+    category: 'Arithmetic Aptitude',
+    topic: 'Representative Values & Statistics',
+    solve: (query) => `### 📊 Representative Value (Measures of Central Tendency)
+
+In quantitative aptitude and statistics, a **representative value** is a single number that summarizes or represents the central point of an entire dataset.
+
+---
+
+### 1. Arithmetic Mean (Average):
+The sum of all values divided by the number of observations:
+$$\\text{Mean } (\\bar{x}) = \\frac{\\sum x_i}{n} = \\frac{x_1 + x_2 + \\dots + x_n}{n}$$
+* **Example:** The representative value for scores $10, 20, 30$ is $\\frac{10+20+30}{3} = 20$.
+
+---
+
+### 2. Median (Middle Value):
+The value dividing the ordered data into two equal halves:
+* **If $n$ is odd:** Middle term at position $\\frac{n + 1}{2}$.
+* **If $n$ is even:** Average of the two middle terms at positions $\\frac{n}{2}$ and $\\frac{n}{2} + 1$.
+
+---
+
+### 3. Mode (Most Frequent Value):
+The observation that appears with the highest frequency in the dataset.
+* **Empirical Relationship for Moderately Asymmetrical Distributions:**
+  $$\\text{Mode} = 3(\\text{Median}) - 2(\\text{Mean})$$
+
+👉 Practice standard average and data interpretation questions in **[Average](#/practice/average)**!`
+  },
+
+  // 12. Probability & Combinatorics
+  {
+    keywords: ['probability', 'permutation', 'combination', 'dice', 'cards', 'coin', 'coins', 'sample space'],
+    category: 'Arithmetic Aptitude',
+    topic: 'Probability & Combinations',
+    solve: (query) => `### 🎲 Probability & Combinatorics Shortcuts
+
+**1. Classical Probability Definition:**
+$$P(E) = \\frac{\\text{Number of favorable outcomes } n(E)}{\\text{Total number of exhaustive outcomes } n(S)}$$
+* $0 \\le P(E) \\le 1$ and $P(E) + P(\\text{not } E) = 1$.
+
+**2. Combinations Formula (Selection):**
+$$^nC_r = \\frac{n!}{r!(n - r)!}$$
+* *Example:* Selecting 2 cards from 52 cards: $^{52}C_2 = \\frac{52 \\times 51}{2 \\times 1} = 1326$.
+
+**3. Standard Sample Spaces:**
+* **Tossing $n$ coins:** Total outcomes $= 2^n$.
+* **Rolling $n$ dice:** Total outcomes $= 6^n$ (for 2 dice, $n(S) = 36$).
+* **Deck of 52 Cards:** 4 suits of 13 cards each (26 Red, 26 Black), 12 Face cards (4 Jacks, 4 Queens, 4 Kings).`
   }
 ];
 
@@ -278,10 +349,11 @@ export function getDomainResponse(query, categoryContext = '') {
 I can help you solve and understand any placement problem!
 
 **What I can do for you:**
-* 📐 **Aptitude Formulas:** Ask about *Relative Speed, Problems on Trains, Time & Work, Interest, Percentages, Speed & Distance*.
+* 📐 **Aptitude Formulas:** Ask about *Relative Speed, Representative Values, Problems on Trains, Time & Work, Interest, Percentages*.
 * 🧠 **Logical Reasoning:** Ask about *Blood Relations, Syllogisms, Number Series, Coding-Decoding*.
 * 💻 **Coding & Technical:** Ask about *C Pointers, Memory Allocation, Data Structures, SQL Joins, OOP in Java/C++*.
 * 🧭 **Platform Navigation:** Ask how to practice modules, track your profile accuracy, or access faculty tools.
 
 *Type your question or problem statement above to get started!*`;
 }
+

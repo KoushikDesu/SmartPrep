@@ -1,4 +1,4 @@
-import { sendMessage, getStoredApiKey, setStoredApiKey } from '../lib/ai.js';
+import { sendMessage, getStoredApiKey, setStoredApiKey, testGeminiConnection } from '../lib/ai.js';
 import { showToast } from './toast.js';
 
 let messages = [
@@ -39,9 +39,13 @@ export function initChatbot() {
       <!-- Settings Dropdown / Panel -->
       <div id="chatbot-settings-panel" class="hidden" style="padding: 10px 14px; background-color: var(--color-surface-alt); border-bottom: 1px solid var(--color-border); font-size: var(--text-xs);">
         <label style="display: block; font-weight: 600; margin-bottom: 4px; color: var(--color-text);">Google Gemini API Key:</label>
-        <div style="display: flex; gap: 6px;">
-          <input type="password" id="gemini-key-input" class="form-input" style="padding: 4px 8px; font-size: var(--text-xs);" placeholder="Paste AI Studio API Key..." />
+        <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+          <input type="password" id="gemini-key-input" class="form-input" style="padding: 4px 8px; font-size: var(--text-xs); flex: 1;" placeholder="Paste AI Studio API Key (AIzaSy...)" />
           <button id="save-gemini-key-btn" class="btn btn-primary" style="padding: 4px 10px; font-size: var(--text-xs);">Save</button>
+          <button id="test-gemini-key-btn" class="btn btn-secondary" style="padding: 4px 10px; font-size: var(--text-xs);" title="Test Live LLM Connection">Test</button>
+        </div>
+        <div style="color: var(--color-text-tertiary); font-size: 10.5px; line-height: 1.3;">
+          💡 Connects with Google Gemini 3.8 / 3.1 Flash LLMs. Paste your free Google AI Studio key to use your personal quota.
         </div>
       </div>
       
@@ -123,6 +127,7 @@ function bindChatbot() {
   const settingsPanel = document.getElementById('chatbot-settings-panel');
   const keyInput = document.getElementById('gemini-key-input');
   const saveKeyBtn = document.getElementById('save-gemini-key-btn');
+  const testKeyBtn = document.getElementById('test-gemini-key-btn');
   
   if (keyInput) {
     const existingKey = getStoredApiKey();
@@ -140,11 +145,24 @@ function bindChatbot() {
       const val = keyInput.value.trim();
       setStoredApiKey(val);
       if (val) {
-        showToast('Gemini API Key saved successfully! 🚀', 'success');
+        showToast('Gemini API Key saved successfully! 🚀', 'success', 1900);
       } else {
-        showToast('Using default built-in AI Tutor engine', 'info');
+        showToast('Reset to default Gemini placement engine', 'info', 1900);
       }
       settingsPanel.classList.add('hidden');
+    });
+  }
+
+  if (testKeyBtn && keyInput) {
+    testKeyBtn.addEventListener('click', async () => {
+      const val = keyInput.value.trim();
+      showToast('Testing connection with Gemini LLM...', 'info', 1900);
+      const res = await testGeminiConnection(val);
+      if (res.success) {
+        showToast(`✅ Connected to ${res.model}! Response: "${res.response}"`, 'success', 3500);
+      } else {
+        showToast(`❌ Connection issue: ${res.error}`, 'error', 3500);
+      }
     });
   }
 
