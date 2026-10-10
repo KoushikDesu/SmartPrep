@@ -17,6 +17,7 @@ import { renderSignup, bindSignup } from './pages/signup.js';
 import { renderCategories } from './pages/categories.js';
 import { renderTopics } from './pages/topics.js';
 import { renderPractice, bindPractice } from './pages/practice.js';
+import { renderMasteryTest, bindMasteryTest } from './pages/mastery-test.js';
 import { renderProfile } from './pages/profile.js';
 import { renderAdminDashboard } from './pages/admin/dashboard.js';
 import { renderAdminUsers, bindAdminUsers } from './pages/admin/users.js';
@@ -137,7 +138,7 @@ export async function renderApp() {
     </div>
   `;
 
-  bindNavbar();
+  bindNavbar(appState.profile);
 
   // If sidebar is collapsed on desktop, ensure sidebar element reflects it
   const sidebarEl = document.querySelector('.sidebar');
@@ -171,6 +172,12 @@ export async function renderApp() {
     if (segments[0] === 'practice' && segments[1]) {
       content.innerHTML = await renderPractice(segments[1]);
       bindPractice();
+      return;
+    }
+
+    if (segments[0] === 'mastery-test' && segments[1]) {
+      content.innerHTML = await renderMasteryTest(segments[1]);
+      bindMasteryTest();
       return;
     }
 

@@ -7,12 +7,14 @@ import { APTITUDE_QUESTIONS } from './questions-aptitude.js';
 import { PROGRAMMING_QUESTIONS } from './questions-programming.js';
 import { REASONING_QUESTIONS } from './questions-reasoning.js';
 import { VERBAL_QUESTIONS } from './questions-verbal.js';
+import { GATE_QUESTIONS } from './questions-gate.js';
 
 export const SEED_QUESTIONS = {
   ...APTITUDE_QUESTIONS,
   ...PROGRAMMING_QUESTIONS,
   ...REASONING_QUESTIONS,
   ...VERBAL_QUESTIONS,
+  ...GATE_QUESTIONS,
 
   // ─── PROBLEMS ON TRAINS (30 FULL QUESTIONS) ────────────────────────────────
   'problems-on-trains': [

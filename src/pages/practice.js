@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase.js';
 import { getSeedQuestions } from '../data/seed-questions.js';
 import { getTopicConcept } from '../data/topic-concepts.js';
 import { saveProgress, hasAnswered, getTopicProgressInfo } from '../lib/progress.js';
+import { recordDailyActivity } from '../lib/streak.js';
 import { appState } from '../main.js';
 
 function formatTitle(slug) {
@@ -123,7 +124,10 @@ export async function renderPractice(topicSlug) {
         </div>
 
         <!-- Top Action Buttons -->
-        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+          <a href="#/mastery-test/${topicSlug}" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #f59e0b, #d97706); border: none; font-weight: 700; color: #fff; box-shadow: 0 2px 8px rgba(217, 119, 6, 0.35);">
+            <span class="mdi mdi-trophy-variant"></span> 60Q Mastery Test
+          </a>
           <button id="toggle-concept-btn" class="btn btn-secondary btn-sm" style="background: rgba(37, 99, 235, 0.08); border-color: rgba(37, 99, 235, 0.25); color: var(--color-primary);">
             <span class="mdi mdi-book-open-outline"></span> Formulas & Concept
           </button>
@@ -208,8 +212,20 @@ function renderCurrentQuestion() {
   const q = questions[currentIndex];
   if (!q) return '<p class="text-center" style="padding: 2rem;">No questions found for this topic.</p>';
   
+  const diff = q.difficulty || (currentIndex % 3 === 0 ? 'Easy' : (currentIndex % 3 === 1 ? 'Medium' : 'Hard'));
+  const diffBadge = diff === 'Easy'
+    ? `<span class="badge badge-easy"><span class="mdi mdi-checkbox-blank-circle" style="font-size: 8px;"></span> Easy</span>`
+    : (diff === 'Hard'
+      ? `<span class="badge badge-hard"><span class="mdi mdi-checkbox-blank-circle" style="font-size: 8px;"></span> Hard</span>`
+      : `<span class="badge badge-medium"><span class="mdi mdi-checkbox-blank-circle" style="font-size: 8px;"></span> Medium</span>`);
+
   return `
     <div class="question-card" data-id="${q.id || currentIndex + 1}">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Difficulty Level</span>
+        ${diffBadge}
+      </div>
+
       <div class="question-text">
         <span class="q-number">Q${q.question_number || (currentIndex + 1)}.</span>
         <div>${q.question_text.replace(/\n/g, '<br>')}</div>
@@ -328,8 +344,9 @@ export function bindPractice() {
         try {
           const userId = appState.user?.id || 'guest';
           await saveProgress(userId, q.id || `local_${currentTopicSlug}_${currentIndex}`, selected, isCorrect, currentTopicSlug);
+          await recordDailyActivity(userId);
         } catch (e) {
-          console.warn('Progress save status:', e);
+          console.warn('Progress or streak save status:', e);
         }
       });
     });

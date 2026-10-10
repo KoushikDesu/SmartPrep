@@ -173,14 +173,24 @@ export function bindTeacherQuestions() {
               <input type="text" id="new-q-opt-d" class="form-control" placeholder="Option D text" required>
             </div>
           </div>
-          <div class="form-group">
-            <label>Correct Option</label>
-            <select id="new-q-correct" class="form-control">
-              <option value="A">Option A</option>
-              <option value="B">Option B</option>
-              <option value="C">Option C</option>
-              <option value="D">Option D</option>
-            </select>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label>Correct Option</label>
+              <select id="new-q-correct" class="form-control">
+                <option value="A">Option A</option>
+                <option value="B">Option B</option>
+                <option value="C">Option C</option>
+                <option value="D">Option D</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Question Hardness / Difficulty</label>
+              <select id="new-q-difficulty" class="form-control">
+                <option value="Easy">Easy (Basic / Fundamental)</option>
+                <option value="Medium" selected>Medium (Placement Standard)</option>
+                <option value="Hard">Hard (Advanced / GATE Level)</option>
+              </select>
+            </div>
           </div>
           <div class="form-group">
             <label>Mathematical Explanation / Solution</label>
@@ -197,6 +207,7 @@ export function bindTeacherQuestions() {
           const optC = document.getElementById('new-q-opt-c')?.value.trim();
           const optD = document.getElementById('new-q-opt-d')?.value.trim();
           const correctOpt = document.getElementById('new-q-correct')?.value;
+          const difficulty = document.getElementById('new-q-difficulty')?.value || 'Medium';
           const explanation = document.getElementById('new-q-exp')?.value.trim();
 
           if (!qText || !optA || !optB || !optC || !optD) {
@@ -214,15 +225,16 @@ export function bindTeacherQuestions() {
               option_c: optC,
               option_d: optD,
               correct_option: correctOpt,
+              difficulty: difficulty,
               explanation: explanation || 'Standard placement solution.',
               created_by: appState.user?.id
             }).select();
 
             if (error) throw error;
-            showToast('Question successfully added to bank! 🎉', 'success');
+            showToast('Question successfully added to bank! 🎉', 'success', 1900);
             setTimeout(() => window.location.reload(), 800);
           } catch (err) {
-            showToast(err.message || 'Failed to save question', 'error');
+            showToast(err.message || 'Failed to save question', 'error', 1900);
             return false;
           }
         }

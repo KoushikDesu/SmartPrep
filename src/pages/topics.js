@@ -1,6 +1,44 @@
 import { getSeedQuestions } from '../data/seed-questions.js';
 
 const FALLBACK_TOPICS = {
+  // GATE Previous Years Questions
+  'gate-cs-cat': [
+    { name: 'GATE CS (2020-2024 Past 5 Years)', slug: 'gate-cs' },
+    { name: 'Data Structures & Algorithms', slug: 'cs-dsa' },
+    { name: 'Operating Systems & Scheduling', slug: 'cs-os' },
+    { name: 'Computer Networks (CN)', slug: 'cs-cn' },
+    { name: 'Database Management Systems (DBMS)', slug: 'cs-dbms' },
+    { name: 'Theory of Computation (TOC)', slug: 'cs-toc' },
+  ],
+  'gate-ec-cat': [
+    { name: 'GATE EC (2020-2024 Past 5 Years)', slug: 'gate-ec' },
+    { name: 'Signals & Systems', slug: 'ece-signals' },
+    { name: 'Analog & Digital Communication', slug: 'ece-communication' },
+    { name: 'Microprocessors (8085/8086) & Embedded', slug: 'ece-microprocessors' },
+    { name: 'VLSI Design & CMOS', slug: 'ece-vlsi' },
+  ],
+  'gate-ee-cat': [
+    { name: 'GATE EE (2020-2024 Past 5 Years)', slug: 'gate-ee' },
+    { name: 'Electrical Circuit Analysis', slug: 'eee-circuits' },
+    { name: 'Electrical Machines (Transformers/Motors)', slug: 'eee-machines' },
+    { name: 'Power Systems & Grid Transmission', slug: 'eee-power-systems' },
+    { name: 'Control Systems', slug: 'eee-control-systems' },
+  ],
+  'gate-me-cat': [
+    { name: 'GATE ME (2020-2024 Past 5 Years)', slug: 'gate-me' },
+    { name: 'Thermodynamics & Heat Transfer', slug: 'mech-thermodynamics' },
+    { name: 'Fluid Mechanics & Hydraulics', slug: 'mech-fluids' },
+    { name: 'Strength of Materials (SOM)', slug: 'mech-som' },
+    { name: 'Theory of Machines & Kinematics', slug: 'mech-machines' },
+  ],
+  'gate-ce-cat': [
+    { name: 'GATE CE (2020-2024 Past 5 Years)', slug: 'gate-ce' },
+    { name: 'Building Materials & Construction', slug: 'civil-materials' },
+    { name: 'Surveying & Levelling', slug: 'civil-surveying' },
+    { name: 'Structural Analysis & RCC', slug: 'civil-structures' },
+    { name: 'Geotechnical & Soil Mechanics', slug: 'civil-soil' },
+  ],
+
   // General Aptitude
   'arithmetic-aptitude': [
     { name: 'Problems on Trains', slug: 'problems-on-trains' },
@@ -292,6 +330,13 @@ export async function renderTopics(categorySlug) {
 
   const topicCards = topics.map(topic => {
     const actualCount = getSeedQuestions(topic.slug).length;
+    let gateStars = 5;
+    if (categorySlug.startsWith('gate') || topic.slug.startsWith('gate')) gateStars = 6;
+    else if (['arithmetic-aptitude', 'data-interpretation', 'cse', 'ece', 'eee'].includes(categorySlug)) gateStars = 6;
+    else if (['c-programming', 'database', 'networking', 'digital-electronics'].includes(categorySlug)) gateStars = 5;
+    else if (['verbal-ability', 'logical-reasoning'].includes(categorySlug)) gateStars = 4;
+    else gateStars = 3;
+
     return `
       <a href="#/practice/${topic.slug}" class="topic-card no-underline">
         <div class="topic-card-inner">
@@ -300,7 +345,12 @@ export async function renderTopics(categorySlug) {
           </div>
           <div class="topic-content">
             <h4>${topic.name}</h4>
-            <span class="badge badge-primary">${actualCount} Questions</span>
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px; flex-wrap: wrap;">
+              <span class="badge badge-primary">${actualCount} Questions</span>
+              <span class="badge-gate-star" title="GATE Importance: ${gateStars}/6 Stars" style="font-size: 0.7rem; color: #f59e0b;">
+                ${'★'.repeat(gateStars)}${'☆'.repeat(6 - gateStars)}
+              </span>
+            </div>
           </div>
           <span class="mdi mdi-chevron-right topic-arrow"></span>
         </div>

@@ -1,12 +1,25 @@
 import { signOut } from '../lib/auth.js';
 import { navigateTo } from '../router.js';
 import { renderAvatar } from './avatar.js';
+import { getStreakInfo } from '../lib/streak.js';
 
 export function renderNavbar(profile) {
   const isAdmin = profile?.role === 'admin';
   const isTeacher = profile?.role === 'teacher';
   const homeHash = isAdmin ? '#/admin' : (isTeacher ? '#/teacher' : '#/categories');
   const avatarHtml = renderAvatar(profile, 'sm');
+
+  // Initial streak display from cache
+  let cachedStreak = 1;
+  let cachedFreezes = 4;
+  try {
+    const raw = localStorage.getItem(`smartprep_streak_${profile?.id || 'guest'}`);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      cachedStreak = parsed.streak || 1;
+      cachedFreezes = typeof parsed.freezes === 'number' ? parsed.freezes : 4;
+    }
+  } catch (e) {}
 
   return `
     <nav class="navbar">
@@ -21,6 +34,15 @@ export function renderNavbar(profile) {
           </a>
         </div>
         <div class="navbar-actions">
+          <!-- Streak & 4-Day Streak Freeze Display -->
+          <div class="streak-pill" id="navbar-streak-pill" title="Daily Streak: ${cachedStreak} Days | ${cachedFreezes}/4 Freezes remaining (miss up to 4 days without breaking streak)">
+            <span class="mdi mdi-fire" style="color: #f97316; font-size: 1.1rem;"></span>
+            <span id="navbar-streak-count">${cachedStreak}d</span>
+            <span style="opacity: 0.4; font-size: 0.75rem;">|</span>
+            <span class="mdi mdi-snowflake" style="color: #38bdf8; font-size: 0.95rem;"></span>
+            <span id="navbar-freeze-count" style="color: #38bdf8;">${cachedFreezes}/4</span>
+          </div>
+
           <button class="btn-icon" id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
             <span class="mdi mdi-theme-light-dark"></span>
           </button>
@@ -45,7 +67,7 @@ export function renderNavbar(profile) {
   `;
 }
 
-export function bindNavbar() {
+export function bindNavbar(profile) {
   const sidebarToggle = document.getElementById('sidebar-toggle');
   if (sidebarToggle) {
     sidebarToggle.addEventListener('click', () => {
@@ -82,4 +104,31 @@ export function bindNavbar() {
       navigateTo('/');
     });
   }
+
+  // Update streak dynamically
+  async function refreshStreakDisplay() {
+    try {
+      const streakInfo = await getStreakInfo(profile?.id || 'guest');
+      const countEl = document.getElementById('navbar-streak-count');
+      const freezeEl = document.getElementById('navbar-freeze-count');
+      const pill = document.getElementById('navbar-streak-pill');
+      if (countEl) countEl.textContent = `${streakInfo.streak || 1}d`;
+      if (freezeEl) freezeEl.textContent = `${streakInfo.freezes}/4`;
+      if (pill) {
+        pill.title = `Daily Streak: ${streakInfo.streak || 1} Days | ${streakInfo.freezes}/4 Freezes remaining (Protected for up to 4 missed days!)`;
+      }
+    } catch (e) {}
+  }
+
+  refreshStreakDisplay();
+
+  window.addEventListener('smartprep-streak-updated', (ev) => {
+    const detail = ev.detail;
+    if (detail) {
+      const countEl = document.getElementById('navbar-streak-count');
+      const freezeEl = document.getElementById('navbar-freeze-count');
+      if (countEl) countEl.textContent = `${detail.streak || 1}d`;
+      if (freezeEl) freezeEl.textContent = `${detail.freezes}/4`;
+    }
+  });
 }
